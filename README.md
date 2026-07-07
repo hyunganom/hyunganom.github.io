@@ -1,6 +1,12 @@
-# 이현재 웹 이력서
+# 이현재 웹 이력서 & 포트폴리오
 
-GitHub Pages 배포용 정적 웹 이력서입니다.
+GitHub Pages 배포용 정적 사이트입니다.
+
+## 주요 URL
+
+- 이력서: `/`
+- 포트폴리오 목록: `/portfolio/`
+- CITY_SIGNAL 상세: `/portfolio/city-signal/`
 
 ## 파일 구성
 
@@ -10,13 +16,19 @@ style.css
 assets/
   profile.png
   resume.pdf
-.nojekyll
-README.md
+  city-signal-java-spring.pdf
+  city-signal-architecture.png
+portfolio/
+  index.html
+  portfolio.css
+  city-signal/
+    index.html
 ```
 
-## 수정 방법
+## 수정 위치
 
-- 문구 수정: `index.html`
-- 디자인/간격/색상 수정: `style.css`
-- 프로필 사진 교체: `assets/profile.png`
-- PDF 이력서 교체: `assets/resume.pdf`
+- 이력서 내용: `index.html`
+- 공통 디자인: `style.css`
+- 포트폴리오 디자인: `portfolio/portfolio.css`
+- 포트폴리오 목록: `portfolio/index.html`
+- CITY_SIGNAL 상세: `portfolio/city-signal/index.html`
