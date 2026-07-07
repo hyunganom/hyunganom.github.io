@@ -159,3 +159,76 @@
   background: linear-gradient(180deg, #fbfbff 0%, #f5f1ff 100%);
   border-color: #ded6ff;
 }
+
+
+/* HTML print export */
+.button { cursor: pointer; font-family: inherit; }
+@page { size: A4; margin: 14mm; }
+@media print {
+  html { scroll-behavior: auto; }
+  body {
+    background: #fff !important;
+    color: #111827 !important;
+    font-size: 10pt;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { color: #111827 !important; text-decoration: none !important; }
+  .portfolio-header,
+  .safe-header,
+  .parking-header {
+    background: #fff !important;
+    color: #111827 !important;
+    padding: 0 0 8mm !important;
+    border-bottom: 1px solid #d8dee8;
+  }
+  .breadcrumb,
+  .portfolio-actions,
+  .back-top,
+  .footer,
+  .print-button { display: none !important; }
+  .portfolio-hero { max-width: none; margin: 0; }
+  .portfolio-hero h1 {
+    color: #111827 !important;
+    font-size: 22pt !important;
+    line-height: 1.24 !important;
+    letter-spacing: -0.035em;
+  }
+  .portfolio-hero p { color: #374151 !important; font-size: 10pt; }
+  .portfolio-main { max-width: none; margin: 0; padding: 8mm 0 0; }
+  .portfolio-card { grid-template-columns: minmax(0,1fr) 48mm; gap: 6mm; padding: 5mm; }
+  .project-period { justify-self: end; border: 1px solid #cbd5e1; }
+  .meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4mm; }
+  .meta-card {
+    background: #fff !important;
+    border: 1px solid #d8dee8 !important;
+    border-radius: 10px !important;
+    padding: 4mm;
+  }
+  .meta-card dt, .meta-card dd { color: #111827 !important; }
+  .meta-card dt { color: #4b5563 !important; }
+  .detail-section { margin-top: 8mm; break-inside: auto; }
+  .detail-section h2 { font-size: 15pt; margin-bottom: 4mm; }
+  .detail-section h3 { font-size: 11.5pt; }
+  .card,
+  .summary-box,
+  .detail-card,
+  .decision-card,
+  .table-wrap,
+  .portfolio-card {
+    box-shadow: none !important;
+    border: 1px solid #d8dee8 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+  }
+  .summary-box, .detail-card, .decision-card { padding: 5mm; }
+  .decision-card, .summary-box, .table-wrap, .architecture-figure, .portfolio-card { break-inside: avoid; page-break-inside: avoid; }
+  .decision-row { grid-template-columns: 22mm 1fr; gap: 4mm; }
+  .architecture-figure img { border-radius: 8px; max-height: 122mm; object-fit: contain; }
+  .portfolio-table { min-width: 0; font-size: 9.2pt; }
+  .portfolio-table th, .portfolio-table td { padding: 3mm; }
+  .two-col { grid-template-columns: 1fr; gap: 4mm; }
+  .chips span, .inline-code { background: #eef4ff !important; color: #163f83 !important; }
+  .code-block { white-space: pre-wrap; overflow: visible; background: #f4f7fb !important; color: #111827 !important; border: 1px solid #d8dee8; }
+}

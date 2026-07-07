@@ -364,3 +364,84 @@ time {
   .button { width: 100%; }
   .profile-card { width: 100%; }
 }
+
+
+/* HTML print export */
+.button { cursor: pointer; font-family: inherit; }
+@page { size: A4; margin: 14mm; }
+@media print {
+  html { scroll-behavior: auto; }
+  body {
+    background: #fff !important;
+    color: #111827 !important;
+    font-size: 10pt;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { color: #111827 !important; text-decoration: none !important; }
+  .site-header {
+    background: #fff !important;
+    color: #111827 !important;
+    padding: 0 0 8mm !important;
+    border-bottom: 1px solid #d8dee8;
+  }
+  .nav,
+  .hero-actions,
+  .contact-actions,
+  .footer,
+  .print-button { display: none !important; }
+  .hero { max-width: none; margin: 0; }
+  .hero-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 55mm;
+    gap: 8mm;
+    align-items: start;
+  }
+  .hero-copy { padding: 0 !important; }
+  .eyebrow { color: #244c8f !important; margin-bottom: 2mm; font-size: 9pt; }
+  .hero h1 {
+    color: #111827 !important;
+    font-size: 19pt !important;
+    line-height: 1.28 !important;
+    letter-spacing: -0.03em;
+  }
+  .hero-desc { color: #374151 !important; font-size: 10pt; margin-top: 4mm; }
+  .profile-card {
+    background: #fff !important;
+    color: #111827 !important;
+    border: 1px solid #d8dee8 !important;
+    box-shadow: none !important;
+    border-radius: 10px;
+    padding: 5mm;
+  }
+  .profile-photo { width: 34mm; height: 43mm; border-radius: 8px; border-color: #d8dee8; }
+  .profile-card h2, .profile-card p, .contact-list dd, .contact-list dt { color: #111827 !important; }
+  .profile-card p, .contact-list dt { color: #4b5563 !important; }
+  .contact-list { gap: 2mm; margin-top: 3mm; }
+  .contact-list div { grid-template-columns: 1fr; gap: 0.5mm; padding-top: 2mm; border-top-color: #e5e7eb; }
+  .section { max-width: none; margin: 0; padding: 8mm 0 0; }
+  .section-title { margin-bottom: 4mm; }
+  .section-title h2 { font-size: 15pt; }
+  .section-title span { color: #244c8f !important; }
+  .section-desc { color: #4b5563 !important; }
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #d8dee8 !important;
+    border-radius: 10px !important;
+    background: #fff !important;
+  }
+  .about-card { grid-template-columns: 28mm minmax(0,1fr); gap: 5mm; padding: 5mm; }
+  .about-photo { width: 25mm; height: 32mm; border-radius: 8px; }
+  .skill-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4mm; }
+  .info-grid, .career-grid, .project-grid { grid-template-columns: 1fr !important; gap: 4mm; }
+  .info-card, .career-card, .project-card, .education-card, .contact-card, .skill-card { padding: 5mm; }
+  .info-card, .career-card, .project-card, .education-card, .skill-card, .about-card { break-inside: avoid; page-break-inside: avoid; }
+  .card-head, .project-head { margin-bottom: 3mm; }
+  .tag, .chips span { background: #eef4ff !important; color: #163f83 !important; }
+  time { color: #374151 !important; }
+  .contact-section { padding-bottom: 0; }
+  .contact-card { background: #fff !important; color: #111827 !important; text-align: left; }
+  .contact-card p { color: #374151 !important; }
+  .education-row { grid-template-columns: 36mm 42mm 1fr; gap: 4mm; }
+}
