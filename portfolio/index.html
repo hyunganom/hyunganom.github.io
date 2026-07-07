@@ -25,12 +25,13 @@
       <p class="eyebrow">Backend Portfolio</p>
       <h1>운영 환경의 문제를 구조적으로 해결한 프로젝트 기록입니다.</h1>
       <p>
-        실시간 데이터 처리, 외부 서버 연동, WebSocket 스트리밍, 분석 리포팅처럼
-        백엔드에서 맡은 역할과 기술적 의사결정을 프로젝트별로 정리했습니다.
+        실시간 데이터 처리, 외부 서버 연동, WebSocket 스트리밍, 분석 리포팅, CV 알고리즘처럼
+        직접 맡은 역할과 기술적 의사결정을 프로젝트별로 정리했습니다.
       </p>
       <div class="portfolio-actions">
         <a class="button primary" href="city-safe/">CITY_SAFE 상세 보기</a>
         <a class="button ghost" href="city-signal/">CITY_SIGNAL 상세 보기</a>
+        <a class="button ghost" href="thermal-parking/">주차 감지 상세 보기</a>
         <a class="button ghost" href="../">이력서로 돌아가기</a>
       </div>
     </section>
@@ -76,6 +77,26 @@
           </div>
         </div>
         <time class="project-period">2025.09 ~ 2025.12</time>
+      </article>
+
+      <article class="card portfolio-card parking-card">
+        <div>
+          <span class="tag">Python / Computer Vision</span>
+          <h2>열화상 주차 감지 시스템 - 실시간 CV 알고리즘</h2>
+          <p>
+            바닥에서 천장 방향으로 설치한 열화상 카메라로 주차면 입출차를 감지하는 알고리즘을 설계했습니다.
+            절대 온도 임계값의 한계를 NCC 패턴 매칭으로 대체하고, ROI마다 임계값을 다시 잡아야 하는 문제를
+            σ맵 기반 baseline 예측과 occ 점수화로 해결했습니다.
+          </p>
+          <div class="chips">
+            <span>Python</span><span>NumPy</span><span>OpenCV</span><span>WebSocket</span><span>tkinter</span><span>matplotlib</span><span>npz</span><span>NCC</span>
+          </div>
+          <div class="portfolio-actions">
+            <a class="button primary" href="thermal-parking/">상세 보기</a>
+            <a class="button" href="../assets/thermal-parking-python.pdf" target="_blank" rel="noopener noreferrer">원본 PDF 보기</a>
+          </div>
+        </div>
+        <time class="project-period">약 2개월+</time>
       </article>
     </section>
   </main>

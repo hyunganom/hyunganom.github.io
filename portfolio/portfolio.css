@@ -151,3 +151,11 @@
   background: linear-gradient(180deg, #f7fbff 0%, #f0fff8 100%);
   border-color: #cce8db;
 }
+
+.parking-header {
+  background: linear-gradient(135deg, #172033 0%, #26315c 48%, #6b4fd6 100%);
+}
+.parking-card {
+  background: linear-gradient(180deg, #fbfbff 0%, #f5f1ff 100%);
+  border-color: #ded6ff;
+}
