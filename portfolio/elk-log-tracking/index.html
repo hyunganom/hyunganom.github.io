@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Spring Boot MSA 환경에서 ELK와 MDC를 활용해 요청 단위 로그 추적 구조를 구축한 포트폴리오" />
+  <meta property="og:title" content="ELK RequestId 로그 트래킹 전략 | 이현재 Portfolio" />
+  <meta property="og:description" content="Spring Boot MSA 환경에서 ELK와 MDC를 활용해 요청 단위 로그 추적 구조를 구축한 포트폴리오" />
+  <title>ELK RequestId 로그 트래킹 전략 | 이현재 Portfolio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <link rel="stylesheet" href="../portfolio.css" />
+</head>
+<body id="top">
+  <header class="portfolio-header elk-header">
+    <nav class="nav" aria-label="주요 메뉴">
+      <a class="brand" href="../../">이현재</a>
+      <div class="nav-links">
+        <a href="../../">Resume</a>
+        <a href="../">Portfolio</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#decisions">Decision</a>
+        <a href="#roadmap">Roadmap</a>
+      </div>
+    </nav>
+    <section class="portfolio-hero">
+      <div class="breadcrumb"><a href="../../">Resume</a><span>/</span><a href="../">Portfolio</a><span>/</span><span>ELK RequestId 로그 트래킹 전략</span></div>
+      <p class="eyebrow">ELK · Observability</p>
+      <h1>RequestId와 MDC 히스토리 기반 구조화 로그 트래킹 전략</h1>
+      <p>JSON 구조화 로그, Filebeat, Kafka, Logstash, Elasticsearch, Kibana를 연결해 요청 단위 원인 분석 흐름을 만들었습니다.</p>
+      <div class="portfolio-actions">
+        <a class="button primary" href="../../assets/html-pdf/ELK_로그트래킹_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML 기준 PDF 보기</a>
+        <a class="button ghost" href="../../assets/elk-log-tracking.pdf" target="_blank" rel="noopener noreferrer">원본 PDF 보기</a>
+        <a class="button ghost" href="../">포트폴리오 목록</a>
+        <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
+      </div>
+      <dl class="meta-grid">
+        <div class="meta-card"><dt>도메인</dt><dd>운영 로그 / 장애 분석</dd></div>
+<div class="meta-card"><dt>담당 영역</dt><dd>구조화 로그·MDC 추적 설계</dd></div>
+<div class="meta-card"><dt>핵심 문제</dt><dd>파일 로그 수동 분석 / 요청 흐름 추적 어려움</dd></div>
+<div class="meta-card"><dt>주요 기술</dt><dd>ELK / Filebeat / Kafka / MDC</dd></div>
+      </dl>
+    </section>
+  </header>
+
+  <main class="portfolio-main">
+    
+    <section class="detail-section">
+      <h2>프로젝트 개요</h2>
+      <div class="summary-box">
+        <p>
+          MSA 환경에서 장애 원인을 찾기 위해 로그를 직접 파일 단위로 뒤지는 방식은 요청 흐름 추적과 통계 집계에 한계가 있었습니다.
+          단순 텍스트 로그는 Kibana에 적재하더라도 requestId나 에러 유형으로 빠르게 필터링하기 어렵기 때문입니다.
+        </p>
+        <p>
+          이를 해결하기 위해 Spring Boot 서비스에서 JSON 구조화 로그를 생성하고, Filebeat → Kafka → Logstash → Elasticsearch → Kibana로 이어지는 로그 수집·분석 파이프라인을 구성했습니다.
+          RequestLoggingFilter와 MDC 기반 requestId, debug 히스토리를 결합해 요청 단위로 처리 흐름을 추적할 수 있게 했습니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>기술 스택</h2>
+      <div class="chips">
+        <span>Spring Boot 3.x</span><span>Logback</span><span>Logstash Logback Encoder</span><span>Filebeat</span><span>Kafka</span><span>Logstash</span><span>Elasticsearch 7.17</span><span>Kibana</span><span>MDC</span><span>ContentCachingWrapper</span><span>Docker</span>
+      </div>
+    </section>
+
+    <section class="detail-section" id="architecture">
+      <h2>전체 로그 수집 파이프라인</h2>
+      <figure class="architecture-figure card detail-card">
+        <img src="../../assets/elk-log-pipeline.png" alt="Spring JSON 로그가 Filebeat, Kafka, Logstash를 거쳐 Elasticsearch와 Kibana로 전달되는 구조" />
+        <figcaption>
+          Spring 서비스는 Logback + Logstash Encoder로 JSON 로그 파일을 만들고, Filebeat가 이를 수집해 Kafka로 전달합니다.
+          Logstash는 Kafka 메시지를 소비해 Elasticsearch에 저장하고, Kibana에서 검색·시각화합니다.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="detail-section">
+      <h2>Request Logging Filter</h2>
+      <figure class="architecture-figure card detail-card">
+        <img src="../../assets/elk-request-filter.png" alt="Client 요청이 Servlet Filter, Dispatcher Servlet, Interceptor, Controller를 거치는 흐름" />
+        <figcaption>
+          Servlet Filter는 DispatcherServlet 앞단에서 동작하므로 요청/응답 전체를 감싸고, requestId와 요청·응답 데이터를 구조화 로그로 남기기에 적합합니다.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="detail-section" id="decisions">
+      <h2>핵심 기술 의사결정</h2>
+      <div class="decision-list">
+        <article class="card decision-card">
+          <h3>1. 단순 텍스트 로그에서 구조화 JSON 로그로 전환</h3>
+          <div class="decision-row"><span class="decision-label">문제</span><p>텍스트 로그만 저장하면 Kibana에서도 필드 검색, 필터링, 집계가 어렵고 장애 흐름을 눈으로 따라가야 했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p><span class="inline-code">logstash-logback-encoder</span>를 사용해 request, response, metadata, exception을 JSON 필드로 저장했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>Elasticsearch에 구조화 필드로 저장되어 requestId, status, elapsedTime, exception 등으로 검색·집계할 수 있게 했습니다.</p></div>
+        </article>
+        <article class="card decision-card">
+          <h3>2. RequestLoggingFilter + ContentCachingWrapper</h3>
+          <div class="decision-row"><span class="decision-label">문제</span><p>HTTP body stream은 한 번 읽히면 다시 읽을 수 없어, 로그 출력 과정에서 요청/응답 body를 읽으면 정상 응답이 깨질 수 있습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p><span class="inline-code">ContentCachingRequestWrapper</span>와 <span class="inline-code">ContentCachingResponseWrapper</span>로 요청/응답을 감싸고, 필터 종료 시 <span class="inline-code">copyBodyToResponse()</span>를 호출했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">근거</span><p>로그를 위해 body를 읽더라도 실제 클라이언트 응답이 유실되지 않도록 보장했습니다.</p></div>
+        </article>
+        <article class="card decision-card">
+          <h3>3. MDC requestId와 debug 히스토리</h3>
+          <div class="decision-row"><span class="decision-label">문제</span><p>로그가 여러 서비스와 여러 클래스에 흩어지면 특정 요청의 전체 흐름을 연결하기 어렵습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>요청마다 UUID requestId를 생성해 MDC에 저장하고, 비즈니스 로직의 주요 단계는 <span class="inline-code">MDCHelper.appendDebug()</span>로 누적했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>Kibana에서 requestId 하나로 요청 로그, 예외, 중간 상태, 변수 값을 한 번에 추적할 수 있게 했습니다.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>구현 포인트</h2>
+      <div class="two-col">
+        <article class="card detail-card">
+          <h3>RequestLog 모델</h3>
+          <p>requestId, request 정보, response 정보, metadata, exception을 하나의 구조화 객체로 묶어 로그에 남겼습니다.</p>
+        </article>
+        <article class="card detail-card">
+          <h3>MDC clear 처리</h3>
+          <p>요청 종료 후 <span class="inline-code">MDC.clear()</span>를 호출해 스레드 재사용 환경에서 이전 요청의 requestId와 debug 값이 오염되지 않도록 했습니다.</p>
+        </article>
+        <article class="card detail-card">
+          <h3>Kibana 검색성</h3>
+          <p>로그 필드가 JSON으로 분리되어 requestId, status, exception, elapsedTime 등 운영자가 실제로 찾는 조건으로 검색할 수 있습니다.</p>
+        </article>
+        <article class="card detail-card">
+          <h3>원인 분석 속도 개선</h3>
+          <p>파일 로그를 직접 뒤지는 대신 Kibana에서 요청 단위로 흐름을 추적해 장애 원인 분석과 트러블슈팅 시간을 줄일 수 있습니다.</p>
+        </article>
+      </div>
+      <figure class="architecture-figure card detail-card" style="margin-top:1rem;">
+        <img src="../../assets/elk-kibana-dashboard.png" alt="Kibana에서 requestId와 구조화 로그를 검색하는 화면" />
+        <figcaption>Kibana 대시보드에서 구조화 필드 기반으로 로그를 검색하고 요청 흐름을 추적하는 운영 화면입니다.</figcaption>
+      </figure>
+    </section>
+
+    <section class="detail-section" id="roadmap">
+      <h2>정리</h2>
+      <div class="table-wrap">
+        <table class="portfolio-table">
+          <thead><tr><th>구분</th><th>개선 전</th><th>개선 후</th></tr></thead>
+          <tbody>
+            <tr><td>로그 형식</td><td>단순 텍스트 로그</td><td>JSON 구조화 로그</td></tr>
+            <tr><td>추적 기준</td><td>시간·문자열 검색 중심</td><td>requestId 기반 요청 단위 추적</td></tr>
+            <tr><td>요청 흐름</td><td>여러 로그를 수동 연결</td><td>MDC + debug 히스토리로 단계별 흐름 기록</td></tr>
+            <tr><td>분석 도구</td><td>파일 로그 직접 확인</td><td>Elasticsearch/Kibana 검색·시각화</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="back-top"><a class="button dark" href="#top">맨 위로</a></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">© 이현재. ELK RequestId 로그 트래킹 전략 Portfolio.</footer>
+</body>
+</html>

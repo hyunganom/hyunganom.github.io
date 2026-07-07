@@ -232,3 +232,15 @@
   .chips span, .inline-code { background: #eef4ff !important; color: #163f83 !important; }
   .code-block { white-space: pre-wrap; overflow: visible; background: #f4f7fb !important; color: #111827 !important; border: 1px solid #d8dee8; }
 }
+
+
+/* Additional portfolio groups */
+.kafka-header { background: linear-gradient(135deg, #1b1b2f 0%, #263159 50%, #f08a24 100%); }
+.elk-header { background: linear-gradient(135deg, #14213d 0%, #2b4162 48%, #7f52ff 100%); }
+.es-header { background: linear-gradient(135deg, #13231f 0%, #1f4d43 50%, #00a884 100%); }
+.kafka-card { background: linear-gradient(180deg, #fffaf3 0%, #fff3df 100%); border-color: #f4d3a4; }
+.elk-card { background: linear-gradient(180deg, #fbf9ff 0%, #f2eeff 100%); border-color: #d8ceff; }
+.es-card { background: linear-gradient(180deg, #f8fffd 0%, #ecfff9 100%); border-color: #bfeadf; }
+.image-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+@media (max-width: 820px) { .image-pair { grid-template-columns: 1fr; } }
+@media print { .kafka-header, .elk-header, .es-header { background: #fff !important; color: #111827 !important; } }

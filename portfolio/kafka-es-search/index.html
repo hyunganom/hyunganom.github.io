@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="RDB 조인 기반 조회를 Kafka 이벤트 동기화와 Elasticsearch 검색 인덱스로 전환한 포트폴리오" />
+  <meta property="og:title" content="Kafka + Elasticsearch 검색 아키텍처 | 이현재 Portfolio" />
+  <meta property="og:description" content="RDB 조인 기반 조회를 Kafka 이벤트 동기화와 Elasticsearch 검색 인덱스로 전환한 포트폴리오" />
+  <title>Kafka + Elasticsearch 검색 아키텍처 | 이현재 Portfolio</title>
+  <link rel="stylesheet" href="../../style.css" />
+  <link rel="stylesheet" href="../portfolio.css" />
+</head>
+<body id="top">
+  <header class="portfolio-header es-header">
+    <nav class="nav" aria-label="주요 메뉴">
+      <a class="brand" href="../../">이현재</a>
+      <div class="nav-links">
+        <a href="../../">Resume</a>
+        <a href="../">Portfolio</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#decisions">Decision</a>
+        <a href="#roadmap">Roadmap</a>
+      </div>
+    </nav>
+    <section class="portfolio-hero">
+      <div class="breadcrumb"><a href="../../">Resume</a><span>/</span><a href="../">Portfolio</a><span>/</span><span>Kafka + Elasticsearch 검색 아키텍처</span></div>
+      <p class="eyebrow">Kafka · Elasticsearch · CQRS</p>
+      <h1>RDB 조인에서 Kafka 이벤트 동기화 기반 Elasticsearch 검색 인덱스로 전환</h1>
+      <p>MySQL은 정합성, Elasticsearch는 검색과 조회 성능을 담당하도록 CQRS 관점으로 조회 모델을 분리했습니다.</p>
+      <div class="portfolio-actions">
+        <a class="button primary" href="../../assets/html-pdf/Kafka_ES_검색아키텍처_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML 기준 PDF 보기</a>
+        <a class="button ghost" href="../../assets/kafka-es-search.pdf" target="_blank" rel="noopener noreferrer">원본 PDF 보기</a>
+        <a class="button ghost" href="../">포트폴리오 목록</a>
+        <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
+      </div>
+      <dl class="meta-grid">
+        <div class="meta-card"><dt>도메인</dt><dd>WMS 상품 검색</dd></div>
+<div class="meta-card"><dt>담당 영역</dt><dd>검색 인덱스 설계·색인/조회 경로</dd></div>
+<div class="meta-card"><dt>핵심 문제</dt><dd>다중 LIKE/OR 조인 조회 비용</dd></div>
+<div class="meta-card"><dt>주요 기술</dt><dd>Kafka / Elasticsearch / Spring Data</dd></div>
+      </dl>
+    </section>
+  </header>
+
+  <main class="portfolio-main">
+    
+    <section class="detail-section">
+      <h2>프로젝트 개요</h2>
+      <div class="summary-box">
+        <p>
+          WMS 도메인에서는 운영자가 상품 × 화주 정보를 다중 필드 조건, 부분일치, OR 조합, 정렬, 페이징으로 빠르게 검색해야 했습니다.
+          초기에는 MySQL 조인 기반 통합 조회로 구현했지만, 다중 LIKE/OR와 정렬·페이징이 겹치며 인덱스를 효율적으로 사용하기 어려웠습니다.
+        </p>
+        <p>
+          쓰기와 정합성은 MySQL이 담당하고, 검색과 조회는 Elasticsearch가 담당하도록 CQRS 관점으로 조회 경로를 분리했습니다.
+          Kafka 이벤트로 변경을 전달하고, 검색 전용 문서를 업서트하여 RDB 조인에서 검색 인덱스 기반 조회 구조로 전환했습니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>기술 스택</h2>
+      <div class="chips">
+        <span>Spring Boot 3.x</span><span>Spring Data Elasticsearch</span><span>Spring Kafka</span><span>Spring Data JPA</span><span>MySQL 8</span><span>Elasticsearch 8.13</span><span>Kafka</span><span>Redis</span><span>Docker</span><span>MDC</span><span>JMeter</span>
+      </div>
+    </section>
+
+    <section class="detail-section" id="architecture">
+      <h2>전체 아키텍처 설계</h2>
+      <figure class="architecture-figure card detail-card">
+        <img src="../../assets/kafka-es-architecture.png" alt="Command 모델은 MySQL, Query 모델은 Elasticsearch로 분리한 CQRS 구조" />
+        <figcaption>
+          ProductService의 Command 경로는 MySQL 정합성을 담당하고, Kafka 이벤트를 통해 Query 경로의 Elasticsearch 검색 문서를 갱신합니다.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="detail-section">
+      <h2>인덱스 모델 설계</h2>
+      <div class="summary-box">
+        <p>
+          RDB 스키마를 그대로 복제하지 않고 화면과 검색에 실제로 필요한 속성만 선별해 <span class="inline-code">ProductSearchDoc</span> 검색 전용 문서로 재구성했습니다.
+          문서 ID는 <span class="inline-code">productCode</span>로 고정해 동일 상품은 항상 같은 문서를 갱신하도록 했고, 주요 필터인 <span class="inline-code">clientCode</span>는 라우팅 키로 사용했습니다.
+        </p>
+        <p>
+          역순·중복 이벤트를 막기 위해 애플리케이션 레벨의 <span class="inline-code">version</span>을 문서에 저장하고, 기존 버전보다 오래된 이벤트는 건너뛰도록 했습니다.
+          <span class="inline-code">lastEventAt</span>을 남겨 색인 지연이나 누락도 추적할 수 있게 했습니다.
+        </p>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>라우팅 최적화</h2>
+      <figure class="architecture-figure card detail-card">
+        <img src="../../assets/kafka-es-routing.png" alt="Elasticsearch 라우팅 미사용 fan-out과 clientCode 라우팅 사용 single-route 비교" />
+        <figcaption>
+          검색 요청에 clientCode 라우팅 값을 명시해 쿼리가 모든 샤드로 확산되는 fan-out을 줄이고, 필요한 샤드 중심으로 조회되도록 했습니다.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="detail-section" id="decisions">
+      <h2>핵심 기술 의사결정</h2>
+      <div class="decision-list">
+        <article class="card decision-card">
+          <h3>1. RDB 조인 조회에서 ES 검색 인덱스로 전환</h3>
+          <div class="decision-row"><span class="decision-label">문제</span><p>다중 LIKE/OR, 정렬, 페이징, 조인이 겹치며 임시 테이블, 광범위한 인덱스 스캔, CPU/IO 스파이크가 발생했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>명령 모델은 MySQL, 조회 모델은 Elasticsearch로 분리해 검색 전용 인덱스를 구축했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>트랜잭션 워크로드와 검색 워크로드를 분리하여 인덱스 경합과 버퍼 풀 압박을 구조적으로 줄였습니다.</p></div>
+        </article>
+        <article class="card decision-card">
+          <h3>2. 문서 ID 고정 + 버전 비교로 멱등 업서트</h3>
+          <div class="decision-row"><span class="decision-label">문제</span><p>Kafka 이벤트는 중복 전달이나 재처리, 역순 처리가 발생할 수 있어 같은 상품 문서가 잘못 갱신될 위험이 있었습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>문서 ID를 <span class="inline-code">productCode</span>로 고정하고, 기존 문서의 <span class="inline-code">version</span>과 이벤트 버전을 비교했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>이미 최신 버전이 존재하면 skip 처리해 중복/역순 이벤트에도 같은 결과를 유지했습니다.</p></div>
+        </article>
+        <article class="card decision-card">
+          <h3>3. 검색 비용 절감 옵션 적용</h3>
+          <div class="decision-row"><span class="decision-label">문제</span><p>검색 응답에서 불필요한 필드와 전체 건수 집계는 네트워크, 역직렬화, 카운트 비용을 증가시켰습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p><span class="inline-code">_source include</span>로 필요한 필드만 반환하고, 목록 화면에서는 <span class="inline-code">track_total_hits(false)</span>를 적용했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>검색 응답 비용을 줄이고, 페이지네이션은 <span class="inline-code">search_after</span> 기반으로 확장 가능한 구조를 고려했습니다.</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="detail-section">
+      <h2>업서트 흐름</h2>
+      <figure class="architecture-figure card detail-card">
+        <img src="../../assets/kafka-es-upsert-sequence.png" alt="Kafka 이벤트 기반 Elasticsearch 문서 업서트 시퀀스" />
+        <figcaption>
+          ProductService가 이벤트를 발행하면 Consumer/Indexer가 기존 ES 문서 버전을 확인하고, 최신 이벤트일 때만 MySQL 원천 데이터를 읽어 검색 문서를 업서트합니다.
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="detail-section" id="roadmap">
+      <h2>성과 요약</h2>
+      <div class="table-wrap">
+        <table class="portfolio-table">
+          <thead><tr><th>구분</th><th>개선 전</th><th>개선 후</th></tr></thead>
+          <tbody>
+            <tr><td>조회 경로</td><td>MySQL 조인 + 다중 LIKE/OR</td><td>Elasticsearch 검색 전용 문서</td></tr>
+            <tr><td>정합성</td><td>RDB 중심</td><td>MySQL 정합성 + Kafka 이벤트 동기화</td></tr>
+            <tr><td>멱등성</td><td>재처리/역순 이벤트 위험</td><td>문서 ID 고정 + version 비교</td></tr>
+            <tr><td>검색 비용</td><td>전체 필드, 전체 건수 집계 부담</td><td>_source include, track_total_hits(false), routing 적용</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="back-top"><a class="button dark" href="#top">맨 위로</a></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">© 이현재. Kafka + Elasticsearch 검색 아키텍처 Portfolio.</footer>
+</body>
+</html>
