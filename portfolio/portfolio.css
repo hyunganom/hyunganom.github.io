@@ -143,3 +143,11 @@
   .meta-grid { grid-template-columns: 1fr; }
   .decision-row { grid-template-columns: 1fr; gap: .2rem; }
 }
+
+.safe-header {
+  background: linear-gradient(135deg, #091b21 0%, #12302d 50%, #1f6f58 100%);
+}
+.highlight-card {
+  background: linear-gradient(180deg, #f7fbff 0%, #f0fff8 100%);
+  border-color: #cce8db;
+}
