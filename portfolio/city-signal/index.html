@@ -101,24 +101,6 @@
       </figure>
     </section>
 
-    <section class="detail-section">
-      <h2>설계 상수와 근거</h2>
-      <p class="section-desc">값 자체보다 그 값을 고른 이유가 설계 판단에 해당한다고 보고 함께 정리했습니다.</p>
-      <div class="table-wrap">
-        <table class="portfolio-table">
-          <thead><tr><th>항목</th><th>값</th><th>그 값인 이유</th></tr></thead>
-          <tbody>
-            <tr><td>스트리밍 송신 주기</td><td>150 ms</td><td>33ms는 매 프레임 DB 조회 부하가 과도하고, 500ms 이상은 끊겨 보였습니다. 6~7fps 수준에서 부하와 체감의 균형</td></tr>
-            <tr><td>데이터 기준 시각 증가</td><td>1초 / 송신</td><td>시뮬레이션 출력이 1초 단위. 150ms마다 1초씩 진행하므로 <strong>실제보다 약 6.7배 빠르게 재생</strong>되어 긴 시뮬레이션을 짧게 검토</td></tr>
-            <tr><td>스케줄러</td><td>단일 스레드</td><td>단일 세션 전제. 태스크 재등록 전 기존 태스크를 취소해 중복 스트리밍 방지</td></tr>
-            <tr><td>재생 종료 처리</td><td>0으로 순환</td><td>구간 끝에 도달하면 처음으로 돌아가 반복 재생. 검토자가 같은 구간을 여러 번 볼 수 있도록</td></tr>
-            <tr><td>Excel 시트</td><td>4종</td><td>15분 단위 종합, 교차로별 지표, 신호 변경, 황색·전적색 안전시간 — 관점별로 분리</td></tr>
-            <tr><td>DDL 정책</td><td><span class="inline-code">ddl-auto: validate</span></td><td>운영 스키마를 애플리케이션이 자동 변경하지 못하도록 차단. 엔티티와 실제 테이블의 일치 여부만 검증</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
     <section class="detail-section" id="decisions">
       <h2>핵심 기술 의사결정</h2>
       <div class="decision-list">
@@ -232,7 +214,7 @@ jdbcTemplate.update("DELETE FROM metric_intersection_summary WHERE opt_uuid = ?"
         </article>
       </div>
 
-      <h3>Phase 번호만으로 키를 만들면 데이터가 사라진다</h3>
+      <h3>Phase 번호만으로 키를 만들면 데이터가 사라지는 현상</h3>
       <div class="card detail-card">
         <p>
           시범 운영 데이터를 변환하다가 일부 현시의 운영 시간이 통째로 뒤바뀌는 문제가 있었습니다.

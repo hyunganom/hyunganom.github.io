@@ -110,15 +110,15 @@
         <figcaption>C++ 실시간 연산 서버와 Python 관리 서버의 책임 분리 구조</figcaption>
       </figure>
 
-      <h3>두 개의 평면</h3>
+      <h3>두 개의 기준 영역</h3>
       <div class="summary-box">
         <p>
-          <strong>데이터 평면 (C++ → Python, WebSocket):</strong>
+          <strong>데이터 영역 (C++ → Python, WebSocket):</strong>
           thermal·anomaly·flame·gas 이벤트를 publish 방식으로 push합니다.
           유실이 허용되는 대신 최신성이 우선입니다.
         </p>
         <p>
-          <strong>제어 평면 (Python → C++, REST):</strong>
+          <strong>제어 영역 (Python → C++, REST):</strong>
           카메라·센서 connect/reconnect, ROI reload, mount_type 변경을 요청합니다.
           정합성이 중요하므로 요청-응답으로 결과를 확인합니다.
         </p>
@@ -152,23 +152,15 @@ ThreadPool   ── enc 4   JPEG · Base64 인코딩 (CPU 바운드)</code></pre
     </section>
 
     <section class="detail-section">
-      <h2>운영 파라미터와 산정 근거</h2>
-      <p class="section-desc">값 자체보다 그 값을 고른 이유가 설계 판단에 해당한다고 보고 함께 정리했습니다.</p>
-      <div class="table-wrap">
-        <table class="portfolio-table">
-          <thead><tr><th>항목</th><th>값</th><th>그 값인 이유</th></tr></thead>
-          <tbody>
-            <tr><td>IO 스레드</td><td><span class="inline-code">max(4, hw/4)</span></td><td>네트워크·타이머만 담당하므로 가볍다. 40대 카메라 폴링에도 최소선이면 충분</td></tr>
-            <tr><td>ROI 스레드</td><td><span class="inline-code">max(8, hw/2)</span></td><td>CPU 바운드 작업. 코어 절반을 배정해 처리량 확보</td></tr>
-            <tr><td>인코딩 스레드</td><td><span class="inline-code">max(4, hw/4)</span></td><td>구독자가 있는 카메라만 처리하므로 부하가 간헐적</td></tr>
-            <tr><td>WS 송신 큐</td><td><span class="inline-code">MAX_QUEUE = 2</span></td><td>느린 클라이언트에 맞춰 밀리는 대신 오래된 프레임을 폐기. 최신 상태가 지연된 완전성보다 중요</td></tr>
-            <tr><td>Python DB 큐</td><td><span class="inline-code">maxsize = 10</span>, 초과 시 drop</td><td>알람 즉시성 &gt; 통계 완전성. drop돼도 캐시는 갱신되므로 사용자 알림에는 영향 없음</td></tr>
-            <tr><td>WS 재연결 백오프</td><td>3초 → 30초 cap</td><td>C++ 부팅 중 재시도가 몰려 부하를 주지 않도록. 상한을 둬 복구 지연도 제한</td></tr>
-            <tr><td>ROI ring buffer</td><td>슬롯 4개</td><td>수신이 처리보다 빠를 때 최신 프레임 우선. 과거 프레임 보관은 목적이 아님</td></tr>
-            <tr><td>녹화 세그먼트</td><td>300초</td><td>재생·복기 편의. 경계까지 채우고 stop해 파일 길이를 일정하게 유지</td></tr>
-            <tr><td>종료 타임아웃</td><td>단계별 5초 + 강제 cancel</td><td>정상 종료를 시도하되 무한 대기는 차단</td></tr>
-          </tbody>
-        </table>
+      <h2>운영 설계의 핵심 판단</h2>
+      <div class="card detail-card">
+        <ul class="plain-list">
+          <li>· CPU 바운드 작업과 I/O 작업을 분리해 스레드 풀 구성</li>
+          <li>· 실시간성을 위해 오래된 프레임을 폐기하고 최신 프레임 우선 처리</li>
+          <li>· 느린 클라이언트로 인한 WebSocket 송신 지연 방지</li>
+          <li>· 재연결 시 백오프를 적용해 서버 부팅·장애 상황에서 재시도 폭주 방지</li>
+          <li>· 종료 시 단계적 graceful shutdown 후 강제 종료 fallback 적용</li>
+        </ul>
       </div>
     </section>
 
@@ -178,10 +170,10 @@ ThreadPool   ── enc 4   JPEG · Base64 인코딩 (CPU 바운드)</code></pre
 
         <article class="card decision-card">
           <h3>1. 공유 상태와 락의 1:1 매칭</h3>
-          <div class="decision-row"><span class="decision-label">증상</span><p>검출 상태 불일치와 간헐적 access violation. 모니터링 스레드와 스트리밍 경로가 같은 맵을 동시에 읽고 썼습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>검출 상태·배경온도·홀드 카운터 등 10여 개의 <span class="inline-code">unordered_map</span>이 뮤텍스 선언 없이 멤버로 흩어져 있었습니다. 동시 insert로 rehash가 일어나면 다른 스레드가 들고 있던 참조가 전부 무효화됩니다.</p></div>
-          <div class="decision-row"><span class="decision-label">선택</span><p>공유 상태를 <span class="inline-code">PipelineState</span> 하나로 응집하고 카테고리별 뮤텍스로 나눴습니다. 카메라별 상태에는 카메라마다 독립 락을 부여했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>어떤 락이 무엇을 보호하는지가 타입에 드러납니다. 카메라 A의 갱신이 카메라 B의 송신을 막지 않아, 대수가 늘어도 락 객체가 함께 늘어 선형 확장합니다.</p></div>
+          <div class="decision-row"><span class="decision-label">증상</span><p>모니터링 스레드와 스트리밍 경로가 동일한 맵을 동시에 읽고 쓰면서, 검출 상태 불일치와 메모리 접근 오류가 발생했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>검출 상태·배경온도 등 10여 개의 <span class="inline-code">unordered_map</span>이 뮤텍스 선언 없이 멤버로 흩어져 있었습니다. 동시 insert로 rehash가 일어나면 다른 스레드가 들고 있던 참조가 전부 무효화됩니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>공유 상태를 하나로 응집하고 카테고리별 뮤텍스로 나눴습니다. 카메라별 상태에는 카메라마다 독립 락을 부여했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>어떤 락이 무엇을 보호하는지가 타입에 드러납니다. 카메라 A의 갱신이 카메라 B의 송신을 막지 않으며, 카메라별로 독립된 락을 사용해 카메라 수가 늘어나도 서로 간의 경합을 최소화했습니다.</p></div>
           <pre class="code-block"><code>struct PipelineState {
     struct PerCameraROI {
         mutable std::mutex mtx;                 // 카메라별 독립 락
@@ -203,10 +195,10 @@ ThreadPool   ── enc 4   JPEG · Base64 인코딩 (CPU 바운드)</code></pre
 
         <article class="card decision-card">
           <h3>2. 락 자체를 shared_ptr로 공유 소유</h3>
-          <div class="decision-row"><span class="decision-label">증상</span><p>카메라를 제거한 직후 크래시가 발생할 수 있었습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>기존 <span class="inline-code">removeCamera()</span>가 큐와 함께 <strong>락 객체까지 erase</strong>했습니다. 이미 예약된 비동기 콜백이 그 뮤텍스에 대한 참조를 캡처하고 있으면 소멸된 락을 잠그게 됩니다.</p></div>
+          <div class="decision-row"><span class="decision-label">증상</span><p>카메라를 제거한 직후 프로그램이 비정상 종료될 수 있었습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>기존 <span class="inline-code">removeCamera()</span>는 카메라는 제거할 때 <strong>락 객체까지 삭제</strong>했습니다. 하지만 이미 실행 대기 중인 비동기 작업이 이 락을 사용하려고 하면, 삭제된 객체에 접근하면서 오류가 발생할 수 있었습니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>카메라별 상태를 <span class="inline-code">shared_ptr&lt;PerCameraROI&gt;</span>로 공유 소유했습니다. 콜백은 시작 시점에 shared_ptr을 한 부 확보합니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>맵에서 erase되어도 콜백이 보유한 참조가 남아 있어 락이 살아 있습니다. 소유권을 분리해 use-after-free를 구조적으로 차단했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>맵에서 제거된 이후에도 이미 실행 중이거나 대기 중인 비동기 작업에서는 해당 락을 안전하게 사용할 수 있도록 구조를 변경했습니다. 이를 통해 삭제된 객체에 다시 접근하는 문제를 방지했습니다.</p></div>
         </article>
 
         <article class="card decision-card">
@@ -218,11 +210,11 @@ ThreadPool   ── enc 4   JPEG · Base64 인코딩 (CPU 바운드)</code></pre
         </article>
 
         <article class="card decision-card">
-          <h3>4. 락프리 백프레셔 — compare_exchange 스킵</h3>
-          <div class="decision-row"><span class="decision-label">증상</span><p>느린 클라이언트나 처리 지연 시 메모리가 계속 증가했고, 이전 프레임을 처리하는 중에도 같은 카메라의 분석 작업이 중첩 제출됐습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>송신 큐와 분석 경로 어디에도 상한이 없었습니다. 생산 속도가 소비 속도를 넘으면 큐가 무한히 자랍니다.</p></div>
-          <div class="decision-row"><span class="decision-label">선택</span><p>WS 송신 큐에는 상한과 오래된 프레임 폐기 정책을 두고, ROI 분석은 카메라별 in-flight 플래그를 <span class="inline-code">compare_exchange_strong</span>으로 제어했습니다. 락을 쓰지 않으므로 경합 비용이 없습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>메모리 상한이 생겼고, 예외가 발생해도 플래그를 release하므로 영구 스킵 상태에 빠지지 않습니다.</p></div>
+          <h3>4. 처리 지연 시 중복 작업 제어</h3>
+          <div class="decision-row"><span class="decision-label">증상</span><p>클라이언트의 처리 속도가 느려지면 송신 대기 데이터가 계속 쌓여 메모리 사용량이 증가했습니다. 또한 이전 프레임의 분석이 끝나기 전에 같은 카메라의 다음 분석 작업이 다시 실행되는 문제가 있었습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>송신 큐의 크기 제한이 없었고, 동일 카메라의 분석 작업이 동시에 실행되는 것을 막는 장치도 없었습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>WebSocket 송신 큐에 최대 크기를 두고, 오래된 프레임은 버려 최신 프레임을 우선 전송하도록 변경했습니다. </p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>처리 지연이 발생해도 데이터가 계속 쌓이지 않아 메모리 사용량을 제한할 수 있었고, 동일 카메라의 분석 작업이 중복 실행되는 것도 방지했습니다.</p></div>
           <pre class="code-block"><code>auto&amp; flag = getFlag(camId);
 bool expected = false;
 if (!flag.compare_exchange_strong(expected, true,
@@ -300,26 +292,26 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
     <section class="detail-section">
       <h2>Python 관리 서버 설계</h2>
 
-      <h3>캐시·DB 삼각 갱신</h3>
+      <h3>캐시 우선 갱신과 DB 비동기 처리</h3>
       <div class="card detail-card">
         <p>
-          이벤트가 들어오면 <strong>캐시는 즉시 동기 갱신</strong>하고 <strong>DB는 큐에 넣어 비동기 처리</strong>합니다.
-          큐가 가득 차 drop되더라도 캐시는 이미 갱신됐으므로 사용자에게 가는 알림은 정상입니다.
-          영속화 결과의 통계 정확도만 조금 떨어질 뿐, 알람의 즉시성에는 영향이 없습니다.
+          이벤트가 들어오면 <strong>캐시는 즉시 갱신</strong>하고 <strong>DB는 큐에 넣어 비동기 처리</strong>합니다.
+          DB 처리량이 순간적으로 증가해 일부 저장 요청이 누락되더라도 캐시에는 최신 상태가 반영되어 있기 때문에 사용자 알림에는 영향을 주지 않습니다.
         </p>
         <p>
-          “최신 상태 우선, 손실 허용”이라는 C++ 측 정책을 Python에서도 그대로 관철한 지점입니다.
-          어느 쪽을 희생할지 미리 정해두면 장애 상황에서의 동작이 예측 가능해집니다.
+          실시간 알람 시스템의 특성을 고려해 데이터 저장의 완전성보다 최신 상태와 알림의 즉시성을 우선하도록 설계했습니다. 
+          이를 통해 DB 처리가 지연되는 상황에서도 알람 기능은 정상적으로 동작하도록 했습니다.
         </p>
       </div>
 
-      <h3>진행 중 이벤트를 NULL 하나로 표현</h3>
+      <h3>이벤트 진행 상태 관리 단순화</h3>
       <div class="card detail-card">
         <p>
-          별도의 status 컬럼이나 is_active 플래그를 두지 않고, 종료 시각
-          <span class="inline-code">event_et IS NULL</span> 하나로 “진행 중 이벤트”를 표현했습니다.
-          같은 키로 두 개가 열리지 않도록 하는 멱등 INSERT, 감지 신호가 끊겼을 때의 타임아웃 자동 종료,
-          비정상 종료 후 재기동 시의 잔여 이벤트 정리가 모두 이 하나의 불변식 위에 올라갑니다.
+          별도의 status 컬럼이나 is_active 플래그를 두지 않고, 종료 시각인 event_et이 NULL인지 여부로 진행 중인 이벤트를 판단했습니다.
+
+          이를 기준으로 동일 이벤트의 중복 생성을 방지하고, 감지 신호가 일정 시간 동안 들어오지 않으면 자동으로 종료 처리하도록 구성했습니다. 또한 서버가 비정상 종료된 뒤 재시작되는 경우에도 남아 있는 진행 중 이벤트를 동일한 기준으로 정리할 수 있도록 했습니다.
+
+          이벤트 상태를 여러 컬럼에 중복해서 저장하지 않아 상태 불일치 가능성을 줄이고, 관련 처리 로직도 event_et IS NULL이라는 하나의 기준으로 통일했습니다.
         </p>
         <p>
           상태를 두 곳에 저장하면 반드시 어긋납니다. 표현 수단을 하나로 줄인 결과
@@ -413,10 +405,10 @@ ROI · 이상감지 · DB · WebSocket · 알람</code></pre>
         </p>
       </div>
 
-      <h3>공유 메모리 ring buffer — 락 없이 torn frame 막기</h3>
+      <h3>공유 메모리 프레임 일관성 보장</h3>
       <div class="card detail-card">
         <p>
-          카메라마다 Windows named shared memory와 named event를 하나씩 두고, 4개 슬롯의 ring buffer를 사용합니다.
+          카메라마다 shared memory와 named event를 하나씩 두고, 4개 슬롯을 순환하면서 ring buffer를 사용합니다.
           producer(C++ 콜백)와 consumer(Python)가 서로 다른 프로세스에 있으므로 뮤텍스를 공유할 수 없습니다.
           대신 <strong>sequence 번호를 이용한 검증</strong>으로 찢어진 프레임을 걸러냅니다.
         </p>
@@ -467,37 +459,11 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
         </p>
       </div>
 
-      <h3>레이아웃 계약</h3>
+      <h3>C++ → Python 단계적 이관</h3>
       <div class="card detail-card">
         <p>
-          두 언어가 같은 메모리를 읽으므로 구조체 레이아웃이 계약이 됩니다.
-          C++ ABI나 CRT에 의존하지 않도록 <strong>고정 폭 정수 필드만</strong> 사용하고,
-          <span class="inline-code">static_assert</span>로 크기를 컴파일 타임에 고정했습니다.
-        </p>
-        <div class="table-wrap">
-          <table class="portfolio-table">
-            <thead><tr><th>항목</th><th>값</th></tr></thead>
-            <tbody>
-              <tr><td>Header</td><td>40 bytes (magic, version, 해상도, slot_count, latest_sequence, overwritten_frames)</td></tr>
-              <tr><td>Slot 메타</td><td>32 bytes (sequence, timestamp_ms, 해상도, pixel_type, payload_bytes)</td></tr>
-              <tr><td>Payload</td><td>little-endian float32 × width × height (160×120 기준 76,800 bytes)</td></tr>
-              <tr><td>온도 변환</td><td><span class="inline-code">(raw - 2731.0) / 10.0</span> — SDK의 uint16을 C++ 측에서 섭씨로 변환</td></tr>
-              <tr><td>매핑 이름</td><td><span class="inline-code">Local\CitySafe.SicSdk.Thermal.&lt;camera_id&gt;.v1</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p>
-          Python 쪽에서도 헤더의 magic·version과 slot 레이아웃을 매 읽기마다 검증해,
-          브리지와 클라이언트의 버전이 어긋나면 조용히 잘못된 값을 읽는 대신 즉시 실패하도록 했습니다.
-        </p>
-      </div>
-
-      <h3>한 번에 옮기지 않았다</h3>
-      <div class="card detail-card">
-        <p>
-          운영 중인 시스템이므로 빅뱅 전환은 선택지가 아니었습니다.
-          기능 단위로 Python에 포팅해 C++와 병행 운영하며 결과를 비교하고,
-          동작이 확인된 기능부터 C++ 측을 비활성화하는 순서로 진행했습니다.
+          운영 중인 시스템이었기 때문에 전체 기능을 한 번에 전환하지 않고, 기능 단위로 Python에 이관했습니다. 
+          기존 C++ 로직과 병행 운영하며 결과를 비교한 뒤, 동작이 검증된 기능부터 C++ 측 처리를 순차적으로 비활성화했습니다.
         </p>
         <div class="table-wrap">
           <table class="portfolio-table">
@@ -512,9 +478,9 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
           </table>
         </div>
         <p>
-          ROI 연산이 Python으로 넘어가면서 C++ 측 ROI 전용 스레드 풀은 제거됐고,
-          현재 C++ 브리지는 SDK 수신과 공유 메모리 기록에만 집중합니다.
-          단계마다 되돌릴 수 있는 지점을 남긴 것이 이 이관에서 가장 신경 쓴 부분입니다.
+          ROI 연산이 Python으로 이전되면서 C++의 ROI 전용 스레드 풀을 제거했고, 현재 C++ 브리지는 SDK 데이터 수신과 공유 메모리 기록에 집중하도록 역할을 단순화했습니다.
+
+          각 단계별로 기존 처리 경로를 유지한 상태에서 검증한 뒤 전환해, 문제가 발생하더라도 이전 방식으로 되돌릴 수 있도록 구성했습니다.
         </p>
       </div>
     </section>
@@ -524,24 +490,10 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
       <div class="decision-list">
 
         <article class="card detail-card">
-          <h3>좀비 FFmpeg 근절 — Windows Job Object</h3>
+          <h3>녹화 파일 길이 일관성 유지</h3>
           <p>
-            이벤트 녹화는 FFmpeg를 자식 프로세스로 띄웁니다.
-            문제는 <strong>Windows에는 POSIX의 <span class="inline-code">prctl(PR_SET_PDEATHSIG)</span>에 해당하는 기능이 없다</strong>는 점이었습니다.
-            운영자가 작업관리자에서 Python 프로세스를 강제 종료하면 FFmpeg가 살아남아 RTSP와 디스크를 계속 점유했습니다.
-          </p>
-          <p>
-            <span class="inline-code">JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE</span> 플래그를 가진 Job Object를 만들고
-            자식 PID를 편입시키면, Job 핸들이 닫히는 시점 — 즉 부모가 죽는 시점 — 에 OS가 Job 안의 모든 프로세스를 정리합니다.
-            부모 종료와 자식 정리를 OS 레벨에서 결합한 것으로, 추가 의존성 없이 <span class="inline-code">ctypes</span>로 kernel32를 직접 호출해 해결했습니다.
-          </p>
-        </article>
-
-        <article class="card detail-card">
-          <h3>세그먼트 경계 stop — monotonic clock</h3>
-          <p>
-            이벤트가 4분 57초에 끝났다고 즉시 녹화를 끊으면 마지막 파일만 4분 57초짜리가 됩니다.
-            운영자가 영상을 되짚어 볼 때 파일 길이가 들쭉날쭉하면 헷갈립니다.
+            이벤트가 종료되는 즉시 녹화를 중단하면 마지막 녹화 파일의 길이가 매번 달라질 수 있습니다. 
+            운영자가 영상을 확인할 때 파일 단위가 일정하도록, 이벤트가 종료되더라도 다음 5분 구간까지 녹화를 유지한 뒤 종료하도록 구성했습니다.
           </p>
           <p>
             그래서 이벤트가 끝나도 <strong>다음 5분 경계까지 채운 뒤 stop</strong>하도록 예약합니다.
@@ -553,28 +505,25 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
         </article>
 
         <article class="card detail-card">
-          <h3>종료 순서가 물리 세계에 미치는 영향</h3>
+          <h3>안전한 서버 종료 및 릴레이 초기화</h3>
           <p>
-            서버를 내릴 때 무엇을 먼저 끄는지가 중요했습니다.
-            <strong>알람 릴레이가 ON 상태로 남으면 현장 사이렌이 계속 울립니다.</strong>
-            그래서 종료 순서를 알람 릴레이 → 외부 PLC 연결 → 내부 asyncio 워커로 잡았습니다.
+            서버가 종료되는 과정에서 릴레이가 ON 상태로 남으면 현장의 경광등이나 사이렌이 계속 동작할 수 있습니다. 
+            이를 방지하기 위해 서버 종료 시 알람 릴레이를 가장 먼저 OFF 처리한 뒤 외부 장치 연결과 내부 작업을 순차적으로 종료하도록 구성했습니다.
           </p>
           <p>
-            릴레이 컨트롤러는 시작할 때도 모든 채널을 OFF로 초기화합니다.
-            이전 실행이 비정상 종료되어 잔여 상태가 남아 있을 수 있기 때문입니다.
-            실제로 알람 조건이 유지 중이라면 다음 폴링에서 곧바로 다시 켜지므로 안전 쪽으로 기울여도 손해가 없습니다.
+            서버 시작 시에도 모든 릴레이 채널을 OFF 상태로 초기화해 이전 실행의 비정상 종료로 남아 있을 수 있는 상태를 제거했습니다. 
+            이후 실제 알람 조건이 유지되고 있다면 다음 감지 주기에서 다시 정상적으로 활성화되도록 했습니다.
           </p>
         </article>
 
         <article class="card detail-card">
-          <h3>psycopg2 인코딩 오류 — PGPASSFILE</h3>
+          <h3>Windows 환경의 DB 연결 오류 대응</h3>
           <p>
-            시스템 로케일이 CP949인 Windows 환경에서 psycopg2가 기본 pgpass 경로를 파싱하다 인코딩 오류를 내는 사례가 있었습니다.
-            비밀번호 파일을 쓰지 않는데도 경로 탐색 자체에서 실패합니다.
+            Windows의 CP949 환경에서 psycopg2가 비밀번호 파일 경로를 확인하는 과정에서 인코딩 오류가 발생하는 문제가 있었습니다.
           </p>
           <p>
-            <span class="inline-code">PGPASSFILE</span>을 <span class="inline-code">NUL</span>로 지정해 우회하되,
-            <span class="inline-code">os.environ.setdefault</span>를 써서 배포 환경에서 이미 설정돼 있으면 덮어쓰지 않도록 했습니다.
+            해당 기능을 사용하지 않는 환경에서는 PGPASSFILE을 NUL로 지정해 불필요한 파일 탐색을 막았습니다. 
+            또한 os.environ.setdefault()를 사용해 배포 환경에 이미 설정된 값이 있는 경우에는 기존 설정을 유지하도록 했습니다.
           </p>
         </article>
 
@@ -585,15 +534,14 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
       <h2>설계 원칙</h2>
       <div class="summary-box">
         <p>
-          이 프로젝트를 관통한 판단 기준은 <strong>“최신 상태 우선, 손실 허용, 영구 다운 금지”</strong> 하나였습니다.
-          무엇을 희생할지 미리 정해두면 큐 상한, drop 정책, 재연결 백오프, 종료 순서 같은 개별 결정이 자동으로 따라옵니다.
-          C++와 Python이라는 다른 언어를 쓰면서도 두 서버의 장애 시 동작이 같은 이유가 여기에 있습니다.
+          실시간 모니터링 시스템의 특성을 고려해 과거 데이터의 완전성보다 최신 상태와 빠른 복구를 우선했습니다. 
+          이를 기준으로 큐 크기를 제한하고 오래된 데이터를 폐기했으며, 재연결 백오프와 안전한 종료 순서를 적용했습니다. 
+          C++과 Python 영역에서도 동일한 기준을 적용해 장애나 처리 지연 상황에서 일관된 방식으로 동작하도록 구성했습니다.
         </p>
         <p>
-          또 하나는 <strong>결함을 개별 증상이 아니라 구조로 다루는 것</strong>이었습니다.
-          "공유 상태에 락이 대응되지 않는다"는 원인 하나를 잡자 data race, dangling 참조, deadlock이 함께 사라졌습니다.
-          lock ordering 문제는 락을 하나로 합쳐 순서 자체를 없앴고, 순환 참조는 소유 방향을 단방향으로 강제해 제거했습니다.
-          발생 가능성을 낮추는 대신 <strong>구조적으로 불가능하게 만드는 쪽</strong>을 택했습니다.
+          또한 발생한 오류를 개별적으로 수정하기보다 문제를 만드는 구조 자체를 개선하는 방향으로 접근했습니다. 
+          공유 데이터마다 동기화 범위를 명확히 하고, 여러 락이 필요한 구조는 단순화해 교착 상태 가능성을 줄였습니다. 
+          객체 간 참조 관계도 한쪽 방향으로 정리해 수명 관리 과정에서 발생할 수 있는 잘못된 메모리 접근을 방지했습니다.
         </p>
       </div>
       <div class="back-top"><a class="button dark" href="#top">맨 위로</a></div>
