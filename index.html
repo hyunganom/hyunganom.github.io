@@ -3,392 +3,187 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="이현재 Backend Developer 웹 이력서" />
+  <meta name="description" content="Java/Spring, Python, C++ 기반 백엔드 개발자 이현재. 데이터 연동, 조회·배치 처리, 실시간 안전관제 시스템 개발 경험." />
   <meta property="og:title" content="이현재 | Backend Developer" />
-  <meta property="og:description" content="운영 환경에서 발생하는 데이터 처리 문제를 해결하며 성장해 온 백엔드 개발자입니다." />
+  <meta property="og:description" content="데이터 연동과 조회·배치 처리부터 실시간 안전관제 시스템까지, 백엔드 개발 경험과 문제 해결 사례를 소개합니다." />
   <meta property="og:type" content="website" />
   <title>이현재 | Backend Developer</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <header class="site-header" id="top">
-    <nav class="nav" aria-label="주요 메뉴">
-      <a class="brand" href="#top">이현재</a>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#experience">Experience</a>
-        <a href="#career">Career</a>
-        <a href="#projects">Projects</a>
-        <a href="portfolio/">Portfolio</a>
-        <a href="#education">Education</a>
+<body class="resume">
+  <nav class="resume-nav" aria-label="주요 메뉴">
+    <a href="#top" class="brand">이현재</a>
+    <div><a href="#career">경력</a><a href="#skills">기술</a><a href="#education">활동·교육</a><a href="portfolio/">포트폴리오</a></div>
+  </nav>
+  <main class="resume-sheet" id="top">
+    <header class="resume-header" id="about">
+      <div class="resume-heading">
+        <div>
+          <p class="resume-kicker">BACKEND DEVELOPER</p>
+          <h1>이현재</h1>
+          <p class="resume-stack">Java / Spring · Python · C++</p>
+        </div>
+        <img src="assets/profile.png" alt="이현재 프로필 사진" class="resume-photo" width="88" height="110" />
       </div>
-    </nav>
-
-    <section class="hero">
-      <div class="hero-main">
-        <div class="hero-copy">
-          <p class="eyebrow">Backend Developer</p>
-          <h1>운영 환경의 데이터 처리 문제를 해결하고,<br />실시간 시스템을 안정적으로 만드는 백엔드 개발자 이현재입니다.</h1>
-          <p class="hero-desc">
-            대용량 조회 성능 개선, 배치 데이터 누락 보완, 외부 시스템 연동 경험을 바탕으로
-            현재는 열화상·가스 센서 기반 안전관제 시스템의 데이터 수집·저장·분석 흐름을 개발하고 있습니다.
-          </p>
-          <div class="hero-actions">
-            <a class="button primary" href="assets/html-pdf/이현재_이력서_HTML기준.pdf" download>HTML 기준 PDF 다운로드</a>
-            <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
-            <a class="button" href="portfolio/">포트폴리오 보기</a>
-            <a class="button" href="https://github.com/hyunganom" target="_blank" rel="noopener noreferrer">GitHub 보기</a>
-            <a class="button ghost" href="mailto:dlguswo0504@naver.com">이메일 보내기</a>
+      <address class="resume-contact" aria-label="연락처">
+        <a href="mailto:dlguswo0504@naver.com">dlguswo0504@naver.com</a>
+        <a href="tel:01022265523">010-2226-5523</a>
+        <a href="https://github.com/hyunganom" target="_blank" rel="noopener noreferrer">github.com/hyunganom</a>
+      </address>
+      <p class="resume-intro">Java/Spring, Python, C++ 기반 백엔드 개발자입니다. 엔터프라이즈 운영 시스템의 데이터 연동·배치 처리부터 실시간 안전관제 시스템의 수집·저장·스트리밍까지 개발해 왔습니다. 안전관제 개발에서는 요구사항을 명시해 AI에 분석·구현을 맡기고, 코드·테스트 검토와 실제 장치 입력으로 결과를 검증한 경험이 있습니다.</p>
+      <ul class="resume-highlights" aria-label="대표 성과">
+        <li><strong>조회 성능</strong> LG전자 PLUS+ · 250만 건 이상 데이터 조인 조회 <strong>8초 이상 → 2초 이내</strong></li>
+        <li><strong>실시간 처리</strong> FastAPI의 실시간 입력과 DB 저장을 큐 기반으로 분리해 처리 구조 개선</li>
+        <li><strong>동시성 처리</strong> C++ 다중 카메라 서버에 카메라별 락·작업별 스레드 풀을 적용해 동시성 구조 개선</li>
+      </ul>
+      <div class="resume-actions">
+        <button type="button" onclick="window.print()">PDF로 저장 / 인쇄</button>
+        <a href="portfolio/">포트폴리오 보기 <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+    <section class="resume-section" id="career" aria-labelledby="career-title">
+      <h2 id="career-title">경력 및 프로젝트</h2>
+      <article class="resume-company">
+        <header class="resume-company-head">
+          <div><h3>시티아이랩(주)</h3><p>기업부설연구소 · 백엔드 개발자·연구원</p></div>
+          <span class="resume-period">2025.09 ~ 현재</span>
+        </header>
+        <section class="resume-project" aria-labelledby="city-safe-title">
+          <div class="resume-project-head">
+            <h4 id="city-safe-title">CITY_SAFE <span>전기차 화재 징후 안전관제</span></h4>
+            <span class="resume-period">2025.10 ~ 현재</span>
           </div>
-        </div>
-
-        <aside class="profile-card" aria-label="프로필 정보">
-          <img src="assets/profile.png" alt="이현재 프로필 사진" class="profile-photo" />
-          <div>
-            <h2>이현재</h2>
-            <p>Backend Developer</p>
+          <p class="resume-project-intro">열화상 카메라와 가스 센서 데이터를 수집·분석해 전기차 화재 징후를 감지하고, 관제 화면에 실시간 상태를 전달하는 시스템입니다. C++ 기반 다중 카메라 수집·ROI 분석·스트리밍과 Python/FastAPI 기반 이벤트 저장·상태 집계·외부 장비 연동을 담당했습니다.</p>
+          <div class="resume-case">
+            <h5>감지 상태와 DB 이벤트 수명 불일치 수정</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">문제·원인:</span> 열화상 감지가 지속되는데 DB 이벤트가 먼저 종료되는 현상을 확인했습니다. 주차 처리 경로에서 온도가 스트리밍 기준보다 낮아지면 이벤트 유지 갱신까지 생략되어, 활성 감지 중에도 타임아웃으로 종료되고 있었습니다.</li>
+              <li><span class="resume-case-label">해결:</span> 활성 감지 중 이벤트를 유지하도록 요구사항을 명시하고, 주차 조건을 통과한 이벤트의 유지 갱신을 온도·스트리밍 제한보다 먼저 수행하도록 변경했습니다. AI에 분석·수정·회귀 테스트 작성을 맡기고 코드 흐름과 테스트 결과를 검토했습니다.</li>
+              <li><span class="resume-case-label">검증·결과:</span> 회귀 테스트로 저온에서의 이벤트 유지와 감지·프레임 입력 중단 후 타임아웃 종료를 확인했습니다. 실제 카메라 입력에서도 감지가 지속되는 동안 DB 종료시간이 비어 있는 것을 확인했습니다.</li>
+            </ul>
           </div>
-          <dl class="contact-list">
-            <div>
-              <dt>Github</dt>
-              <dd><a href="https://github.com/hyunganom" target="_blank" rel="noopener noreferrer">hyunganom</a></dd>
-            </div>
-            <div>
-              <dt>Email</dt>
-              <dd><a href="mailto:dlguswo0504@naver.com">dlguswo0504@naver.com</a></dd>
-            </div>
-            <div>
-              <dt>Phone</dt>
-              <dd><a href="tel:01022265523">010-2226-5523</a></dd>
-            </div>
-          </dl>
-        </aside>
-      </div>
-    </section>
-  </header>
-
-  <main>
-    <section class="section" id="about">
-      <div class="section-title">
-        <span>01</span>
-        <h2>About Me</h2>
-      </div>
-      <article class="card about-card">
-        <div class="about-photo-wrap">
-          <img src="assets/profile.png" alt="이현재 프로필 사진" class="about-photo" />
-        </div>
-        <div class="about-text">
-          <p>
-            Java/Spring과 Python, C++를 기반으로 대용량 데이터 처리와 실시간 시스템을 개발해 온 백엔드 개발자입니다.
-            엔터프라이즈 운영 시스템부터 열화상·가스 센서 기반 안전관제 시스템까지 경험하며, API 개발뿐 아니라 데이터 수집·저장·분석과 실시간 스트리밍 등 백엔드 전반의 개발을 담당해 왔습니다.
-          </p>
-          <p>
-            대기업 운영 시스템에서는 250만 건 이상의 데이터를 조회하는 쿼리를 8초 이상에서 2초 이내로 개선하고, 대량 배치 과정에서 발생하던 데이터 누락 문제를 Chunk 단위 처리와 검증 로직을 통해 보완했습니다.
-            현재는 실시간 안전관제 시스템에서 C++ 기반 다중 카메라 서버의 데이터 경합과 교착 상태를 개선하고, FastAPI 서버의 실시간 입력과 DB 저장을 분리해 데이터가 집중되는 상황에서도 안정적으로 처리할 수 있는 구조를 개발하고 있습니다.
-          </p>
-          <p>
-            단순히 기능을 구현하는 것보다 운영 환경에서 발생하는 문제의 원인을 분석하고, 성능·안정성·유지보수성을 함께 개선하는 백엔드 개발을 지향합니다.
-          </p>
-        </div>
+          <div class="resume-case">
+            <h5>동기 DB 작업으로 인한 실시간 수신 지연 분리</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">문제·원인:</span> DB 쓰기가 지연되면 다른 메시지 수신도 함께 밀렸습니다. 비동기 이벤트 루프에서 동기 SQLAlchemy 작업을 직접 실행하는 구조가 원인이었습니다.</li>
+              <li><span class="resume-case-label">해결·결과:</span> 수신 경로는 큐에 작업을 넣고, 별도 작업자가 DB 저장을 수행하도록 분리했습니다. 카테고리별 큐와 작업자를 나누어 기존 동기 DB 코드를 유지하면서 수신과 저장의 실행 경로를 분리했습니다.</li>
+            </ul>
+          </div>
+          <div class="resume-case">
+            <h5>다중 카메라의 공유 상태·재연결 경합 개선</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">문제·원인:</span> 여러 처리 경로가 공유 상태를 동시에 접근해 검출 상태 불일치와 메모리 접근 오류가 발생했습니다. 카메라 재연결 시에는 동기 SDK 호출이 글로벌 락을 점유해 다른 카메라의 API도 지연됐습니다.</li>
+              <li><span class="resume-case-label">해결·결과:</span> 공유 상태의 보호 범위를 정리하고 카메라별 독립 락을 적용했습니다. 작업 성격에 따라 스레드 풀을 분리하고, SDK 연결 호출 전에 글로벌 락을 해제해 재연결 대기 중에도 다른 카메라의 콜백과 API가 동작하도록 변경했습니다.</li>
+            </ul>
+          </div>
+          <div class="resume-case">
+            <h5>기타 구현</h5>
+            <p>설치 방향 변경이 주차 처리 대상 목록에 반영되지 않는 경로를 수정하고, 주차 감지 사용 여부를 API·WebSocket 응답과 변경 발행 조건에 반영했습니다. 영상 녹화와 열화상·가스 데이터의 품질 점검·변환·분석·리포팅 도구도 개발했습니다.</p>
+          </div>
+          <a class="resume-detail-link" href="portfolio/city-safe/">프로젝트 상세 <span aria-hidden="true">↗</span></a>
+        </section>
+        <section class="resume-project" aria-labelledby="city-signal-title">
+          <div class="resume-project-head">
+            <h4 id="city-signal-title">CITY_SIGNAL <span>교통 신호 운영 분석</span></h4>
+            <span class="resume-period">2025.09 ~ 2025.12</span>
+          </div>
+          <p class="resume-project-intro">교차로 신호 계획을 최적화하고 SUMO 시뮬레이션 결과를 Unity 화면에서 비교·분석하는 시스템입니다. Java/Spring 백엔드에서 모델·실행 이력 관리, Python 연산 서버 연동, 차량 위치 스트리밍과 분석 리포트를 담당했습니다.</p>
+          <div class="resume-case">
+            <h5>장시간 연산과 운영 API의 응답 흐름 분리</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">문제·원인:</span> 학습·최적화 결과를 동기적으로 기다리면서 작업 접수 확인과 다른 요청 처리가 지연됐습니다.</li>
+              <li><span class="resume-case-label">해결·결과:</span> 메타데이터를 먼저 저장한 뒤 WebClient로 연산을 비동기 요청하고 접수 응답을 반환하도록 변경했습니다. 연산 완료 후 결과와 상태를 갱신하되, 삭제는 외부 정리와 종속 데이터·메타데이터 삭제 순서를 지키도록 처리했습니다.</li>
+            </ul>
+          </div>
+          <div class="resume-case">
+            <h5>시뮬레이션별 동적 결과 테이블 처리</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">제약:</span> 연산 서버가 실행마다 이름이 다른 결과 테이블을 생성해 고정 테이블 매핑만으로 조회·삭제를 처리하기 어려웠습니다.</li>
+              <li><span class="resume-case-label">해결·결과:</span> 정형 메타데이터는 JPA로 관리하고, 동적 결과 테이블의 조회·삭제에는 JdbcTemplate을 적용했습니다. 실행 시 결정되는 테이블을 처리하면서 기존 메타데이터 관리 구조를 유지했습니다.</li>
+            </ul>
+          </div>
+          <div class="resume-case">
+            <h5>운영 기능</h5>
+            <p>최적화 전후 차량 위치를 WebSocket으로 전달하고 분석 결과를 Excel로 생성했습니다. 응답과 서버 로그에 공통 traceId를 포함해, 사용자 문의에 포함된 응답 식별자로 해당 요청의 로그를 찾을 수 있도록 했습니다.</p>
+          </div>
+          <a class="resume-detail-link" href="portfolio/city-signal/">프로젝트 상세 <span aria-hidden="true">↗</span></a>
+        </section>
+      </article>
+      <article class="resume-company resume-company-next">
+        <header class="resume-company-head">
+          <div><h3>(주)디케이비엠시</h3><p>백엔드 개발자 · CRM·고객채널 데이터 연동 및 운영 시스템 개발</p></div>
+          <span class="resume-period">2023.04 ~ 2025.02</span>
+        </header>
+        <section class="resume-project" aria-labelledby="plus-title">
+          <div class="resume-project-head">
+            <h4 id="plus-title">LG전자 PLUS+ <span>조회·배치 처리 개선</span></h4>
+            <span class="resume-period">2024.09 ~ 2025.01</span>
+          </div>
+          <p class="resume-project-intro">교환·환불 업무와 Salesforce WorkOrder 연동을 처리하는 운영 시스템입니다. 교환·환불 리포트 조회, 외부 서비스 요청 연동, 운영 배치 기능을 개발·개선했습니다.</p>
+          <div class="resume-case">
+            <h5>250만 건 이상 데이터 조인 조회 개선</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">문제·분석:</span> 교환·환불 리포트에서 250만 건 이상 데이터를 조인하는 쿼리의 조회 시간이 <strong>8초 이상</strong> 소요됐습니다. 실행 계획을 분석하고 서브쿼리, 인덱스 구성과 조인 조건을 검토했습니다.</li>
+              <li><span class="resume-case-label">해결·결과:</span> 서브쿼리 제거, 인덱스 개선과 조인 조건 재검토를 수행해 조회 시간을 <strong>2초 이내로 단축</strong>했습니다.</li>
+            </ul>
+          </div>
+          <div class="resume-case">
+            <h5>배치 누락 보완 및 연동 책임 분리</h5>
+            <p>배치 처리 중 일부 데이터가 누락되는 문제에 대응해 Chunk size를 조정하고 처리 상태 검증 로직을 보완했습니다. WorkOrder 연동에서는 기능 유형별로 요청을 분기하고 데코레이터 패턴으로 처리 책임을 분리했습니다.</p>
+          </div>
+        </section>
+        <section class="resume-project" aria-labelledby="grade-title">
+          <div class="resume-project-head">
+            <h4 id="grade-title">LG화학 CRM·고객채널 <span>Grade 관리</span></h4>
+            <span class="resume-period">2023.07 ~ 2024.12</span>
+          </div>
+          <p class="resume-project-intro">내부 CRM에서 관리하는 Grade·물성 정보를 고객채널에 제공하는 시스템입니다. Grade 등록·수정, 물성 정보 관리와 고객채널 데이터 연동을 담당했습니다.</p>
+          <div class="resume-case">
+            <h5>고정 필드 기반 Grade 속성 관리 개선</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">문제·제약:</span> Grade 속성을 고정 필드로 관리해 물성치·규격 항목의 추가·변경 시 코드와 데이터 구조의 수정이 필요했습니다.</li>
+              <li><span class="resume-case-label">해결·결과:</span> 속성을 메타데이터 기반으로 관리하도록 변경해 항목 변경에 따른 코드 수정 범위를 줄였습니다. 등록·수정된 정보가 고객채널에 자동 반영되도록 연동하고 입력 검증을 보완했습니다.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="resume-project" aria-labelledby="integration-title">
+          <div class="resume-project-head">
+            <h4 id="integration-title">클라우드 상담 통합 시스템 <span>해피톡·Salesforce 연동</span></h4>
+            <span class="resume-period">2024.03 ~ 2024.07</span>
+          </div>
+          <p class="resume-project-intro">해피톡 상담 정보와 Salesforce CRM의 상담 상태를 연동하는 시스템입니다. Node.js 중계 서버 개발과 Docker/Azure 배포·운영을 담당했습니다.</p>
+          <div class="resume-case">
+            <h5>외부 API 실패에 대응하는 상담 상태 연동</h5>
+            <ul class="resume-case-list">
+              <li><span class="resume-case-label">요구사항:</span> 상담사 변경과 상담 상태를 시스템 간에 반영하고, 외부 API 호출 실패 시 재처리할 수 있어야 했습니다.</li>
+              <li><span class="resume-case-label">구현·결과:</span> 토큰 발급·갱신, 상담사 변경 처리와 GraphQL 기반 상태 연동을 구현했습니다. 호출 실패에 대한 재시도·상태 관리 로직을 추가하고 중계 서버를 Docker로 구성해 Azure에 배포·운영했습니다.</li>
+            </ul>
+          </div>
+        </section>
       </article>
     </section>
-
-    <section class="section" id="skills">
-      <div class="section-title">
-        <span>02</span>
-        <h2>Tool &amp; Skill</h2>
-      </div>
-      <p class="section-desc">진행한 프로젝트, 개인 학습에서 사용한 경험이 있는 기술들입니다.</p>
-      <div class="skill-grid">
-        <article class="card skill-card">
-          <h3>Language</h3>
-          <ul class="plain-list">
-            <li>Java</li>
-            <li>Python</li>
-            <li>C++</li>
-          </ul>
-        </article>
-        <article class="card skill-card">
-          <h3>Backend</h3>
-          <ul class="plain-list">
-            <li>Spring / Spring Boot, FastAPI</li>
-            <li>Spring Data JPA, SQLAlchemy</li>
-            <li>QueryDSL</li>
-            <li>WebSocket</li>
-          </ul>
-        </article>
-        <article class="card skill-card">
-          <h3>Infra / DB</h3>
-          <ul class="plain-list">
-            <li>PostgreSQL</li>
-            <li>Jenkins</li>
-            <li>AWS EC2</li>
-            <li>GitHub Actions</li>
-            <li>Docker</li>
-            <li>Redis</li>
-            <li>Kafka</li>
-          </ul>
-        </article>
-        <article class="card skill-card">
-          <h3>ETC</h3>
-          <ul class="plain-list">
-            <li>Git</li>
-            <li>OpenCV</li>
-            <li>YOLO</li>
-            <li>FFmpeg</li>
-            <li>ELK Stack</li>
-            <li>Kibana</li>
-          </ul>
-        </article>
-      </div>
+    <section class="resume-section resume-compact" id="skills" aria-labelledby="skills-title">
+      <h2 id="skills-title">주요 기술</h2>
+      <dl class="resume-skills">
+        <div><dt>언어·백엔드</dt><dd>Java, Spring Boot, Python, FastAPI, C++, Node.js</dd></div>
+        <div><dt>데이터·연동</dt><dd>PostgreSQL, JPA, JdbcTemplate, SQLAlchemy, WebSocket, GraphQL</dd></div>
+        <div><dt>배포·데이터 처리</dt><dd>Docker, Azure, OpenCV, FFmpeg</dd></div>
+      </dl>
     </section>
-
-    <section class="section" id="experience">
-      <div class="section-title">
-        <span>03</span>
-        <h2>Experience</h2>
+    <section class="resume-section resume-compact" id="education" aria-labelledby="education-title">
+      <h2 id="education-title">기타 활동 및 교육</h2>
+      <div class="resume-other">
+        <div class="resume-other-head"><h3>한국관광공사 데이터 활용 공모전</h3><span class="resume-period">2026.07 ~ 진행 중</span></div>
+        <p>캠핑장·날씨·대기질·월령 데이터를 통합하는 백엔드 API와 별보기 지수·검색 필터를 설계했습니다. 외부 API 호출 제한을 고려한 수집·캐싱·스케줄링 구조를 설계했습니다.</p>
       </div>
-      <div class="stack-list">
-        <article class="card info-card">
-          <div class="card-head">
-            <div>
-              <h3>KH정보교육원</h3>
-              <p>클라우드 기반 SW 융합 개발자 과정</p>
-            </div>
-            <time>2022.06 ~ 2022.12</time>
-          </div>
-          <ul>
-            <li>Java/Spring 기반 웹 서비스 개발 교육 수료</li>
-            <li>팀 프로젝트에서 백엔드 기능 구현 담당</li>
-            <li>AWS, Docker, DB 연동 등 실무형 프로젝트 경험</li>
-            <li>사용 기술: Java, Spring Boot, Oracle, HTML/CSS, JavaScript</li>
-          </ul>
-        </article>
-
-        <article class="card info-card">
-          <div class="card-head">
-            <div>
-              <h3>한국관광공사 데이터 활용 공모전</h3>
-              <p>한국관광공사</p>
-            </div>
-            <time>2026.07 ~ 진행중</time>
-          </div>
-          <ul>
-            <li>고캠핑, 기상청, 에어코리아, 한국천문연구원 API를 연동해 캠핑장·날씨·대기질·월령 데이터를 통합하는 백엔드 API 설계</li>
-            <li>캠핑장 좌표 기준으로 구름량, 강수확률, 습도, 미세먼지, 달 밝기, 빛공해를 조합한 별보기 지수 계산 로직 설계</li>
-            <li>지역, 캠핑장 유형, 편의시설, 별보기 점수 기반 검색 필터 API 설계</li>
-            <li>외부 API 호출 제한을 고려해 데이터 수집, 캐싱, 스케줄링 처리 구조 설계</li>
-            <li>사용 기술: Java, Spring Boot, PostgreSQL, Redis, Docker</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="career">
-      <div class="section-title">
-        <span>04</span>
-        <h2>Career</h2>
-      </div>
-      <div class="stack-list">
-        <article class="card career-card">
-          <div class="card-head">
-            <div>
-              <h3>시티아이랩(주)</h3>
-              <p>기업부설연구소 / 백엔드 개발자·연구원</p>
-            </div>
-            <time>2025.09 ~ 현재</time>
-          </div>
-          <span class="tag">개발</span>
-          <h4>[백엔드 개발자·연구원으로서 실시간 안전관제 시스템 개발]</h4>
-          <ul>
-            <li>전기차 화재 징후 감지를 위한 열화상·가스 센서 기반 안전관제 시스템 백엔드 개발</li>
-            <li>C++ 기반 실시간 수집 서버와 Python 운영 서버를 연동하여 센서 데이터 수집·저장·분석 흐름 구축</li>
-            <li>다중 카메라 환경에서 발생할 수 있는 데이터 경합과 교착 상태를 개선하고, 실시간 처리 안정성 향상</li>
-            <li>열화상·가스 데이터의 품질 점검, 변환, 분석, 리포팅 도구 개발</li>
-            <li>교통 신호 최적화 시스템에서 Java 백엔드 API, WebSocket 스트리밍, Excel 리포팅 기능 개발</li>
-          </ul>
-        </article>
-
-        <article class="card career-card">
-          <div class="card-head">
-            <div>
-              <h3>(주)디케이비엠시</h3>
-              <p>백엔드 개발자</p>
-            </div>
-            <time>2023.04 ~ 2025.02</time>
-          </div>
-          <span class="tag">개발</span>
-          <h4>[엔터프라이즈 운영 시스템 백엔드 개발 및 성능 개선]</h4>
-          <ul>
-            <li>LG화학 CRM·고객채널 Grade 관리 시스템 개선 및 고객채널 연동 기능 개발</li>
-            <li>LG전자 PLUS+ 운영 시스템에서 250만 건 이상 대용량 조인 쿼리의 응답 지연을 8초 이상에서 2초 이내로 개선</li>
-            <li>대량 배치 처리 중 발생하던 데이터 누락 문제를 Chunk 단위 처리와 검증 로직으로 보완</li>
-            <li>Salesforce, CTI, 해피톡 등 외부 시스템 연동을 위한 중계 서버 및 재처리 로직 개발</li>
-            <li>레거시 코드 정리, 모듈 분리, 검증 로직 추가를 통해 운영 시스템의 안정성과 유지보수성 개선</li>
-          </ul>
-        </article>
-
-        <article class="card career-card">
-          <div class="card-head">
-            <div>
-              <h3>신진시스템</h3>
-              <p>구매관리자</p>
-            </div>
-            <time>2021.04 ~ 2022.05</time>
-          </div>
-          <span class="tag muted">비개발</span>
-          <h4>[구매 및 운영 관리 업무 수행]</h4>
-          <ul>
-            <li>자재 구매, 발주, 납기 관리 등 구매 관리 업무 수행</li>
-            <li>거래처와의 커뮤니케이션 및 입출고 일정 관리</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="projects">
-      <div class="section-title">
-        <span>05</span>
-        <h2>Project</h2>
-      </div>
-      <div class="project-list">
-        <article class="card project-card featured">
-          <div class="project-head">
-            <div>
-              <h3>CITY_SAFE</h3>
-              <p>시티아이랩 / 백엔드 개발</p>
-            </div>
-            <time>2025.10 ~ 현재</time>
-          </div>
-          <h4>전기차 화재 감지 안전관제 시스템 개발</h4>
-          <ul>
-            <li>열화상 카메라와 가스 센서를 연동해 전기차 화재 징후를 실시간으로 감지하는 안전관제 시스템 개발</li>
-            <li>C++ 기반 열화상 수집 서버에서 다중 카메라 온도 배열, ROI 분석, 이상 온도 감지, WebSocket 스트리밍 구조 구현</li>
-            <li>Python 운영 서버를 통해 실시간 센서 이벤트 저장, 상태 집계, 외부 장비 연동, 영상 녹화 기능 개발</li>
-            <li>FastAPI 서버에 큐 기반 처리 구조를 적용해 실시간 입력과 DB 저장 작업을 분리하고, 입력 폭주 시 서버가 멈추지 않도록 개선</li>
-            <li>다중 카메라 처리 과정에서 발생할 수 있는 데이터 경합과 교착 상태를 카메라별 락 분리, 작업별 스레드 풀 구조로 개선</li>
-            <li>열화상·가스 데이터의 수집, 품질 점검, 변환, 분석, 리포팅까지 이어지는 데이터 처리 도구 체인 구축</li>
-          </ul>
-          <div class="chips"><span>C++</span><span>Boost.Asio</span><span>Python</span><span>FastAPI</span><span>PostgreSQL</span><span>OpenCV</span><span>FFmpeg</span><span>WebSocket</span></div>
-        </article>
-
-        <article class="card project-card">
-          <div class="project-head">
-            <div>
-              <h3>CITY_SIGNAL</h3>
-              <p>시티아이랩 / 백엔드 개발</p>
-            </div>
-            <time>2025.09 ~ 2025.12</time>
-          </div>
-          <h4>교통 신호 운영 분석 백엔드 시스템 개발</h4>
-          <ul>
-            <li>SUMO 교통 시뮬레이터와 Unity 3D 시각화 클라이언트를 연동하는 교통 신호 최적화 백엔드 개발</li>
-            <li>Java 백엔드가 모델 메타데이터, 최적화 이력, 신호 계획, 분석 결과를 관리하고 Python 서버는 시뮬레이션 계산에 집중하도록 역할 분리</li>
-            <li>학습 모델 생성, 최적화 실행, 결과 조회, 삭제 등 주요 도메인 API 구현</li>
-            <li>시뮬레이션마다 생성되는 동적 테이블을 런타임에 조회·삭제할 수 있도록 JdbcTemplate 기반 데이터 접근 구조 설계</li>
-            <li>Unity 클라이언트에 최적화 전후 차량 위치 데이터를 150ms 간격으로 전송하는 WebSocket 스트리밍 기능 구현</li>
-            <li>교통 분석 결과를 Excel 리포트로 생성하고, 공통 응답·예외 처리·MDC traceId 기반 요청 추적 구조 적용</li>
-          </ul>
-          <div class="chips"><span>Java</span><span>Spring Boot</span><span>PostgreSQL</span><span>JPA</span><span>JdbcTemplate</span><span>WebClient</span><span>WebSocket</span><span>Apache POI</span></div>
-        </article>
-
-        <article class="card project-card">
-          <div class="project-head">
-            <div>
-              <h3>LG화학 CRM·고객채널</h3>
-              <p>디케이비엠시 / 백엔드 개발</p>
-            </div>
-            <time>2023.07 ~ 2024.12</time>
-          </div>
-          <h4>Grade 관리 시스템 개선</h4>
-          <ul>
-            <li>내부 CRM에서 관리하던 Grade 및 물성 정보를 고객채널과 연동하는 데이터 흐름 개선</li>
-            <li>신규 Grade 등록·수정, 물성 정보 관리 기능을 개발하고 고객채널에 자동 반영되도록 연동 구조 구현</li>
-            <li>자료실 서비스 내 다운로드 이력 및 북마크 기능을 개발하여 사용자 활동 기반 관리 기능 추가</li>
-            <li>고정 필드로 관리되던 Grade 속성 정보를 메타데이터 기반의 동적 관리 구조로 개선</li>
-            <li>물성치, 규격 등 필드 추가·변경 시 코드 수정 범위를 줄이고 DB와 화면에 유연하게 반영될 수 있도록 구조 개선</li>
-            <li>등록 정보 검증 및 자동 연동 흐름을 보완하여 정보 반영 지연과 운영 수작업 부담 감소</li>
-          </ul>
-        </article>
-
-        <article class="card project-card">
-          <div class="project-head">
-            <div>
-              <h3>클라우드 상담 통합 시스템 고도화</h3>
-              <p>디케이비엠시 / 백엔드 개발</p>
-            </div>
-            <time>2024.03 ~ 2024.07</time>
-          </div>
-          <h4>해피톡 상담 시스템과 Salesforce CRM 연동</h4>
-          <ul>
-            <li>Node.js 기반 중계 서버를 직접 구현하여 해피톡 API의 토큰 발급·갱신 및 상담사 변경 처리 기능 개발</li>
-            <li>GraphQL을 활용해 Salesforce CRM과 상담 상태를 실시간으로 연동</li>
-            <li>상담사 변경, 상태 전송, CRM 반영 과정에서 발생할 수 있는 지연·누락 문제를 분석하고 재처리 구조 설계</li>
-            <li>외부 API 호출 실패 및 예외 상황에 대응하기 위한 재시도 로직과 상태 관리 로직 구현</li>
-            <li>Azure 클라우드 환경에 Docker 기반 서버를 배포·운영하여 상담 이벤트 연동 흐름의 안정성 확보</li>
-          </ul>
-          <div class="chips"><span>Node.js</span><span>GraphQL</span><span>Salesforce</span><span>Docker</span><span>Azure</span></div>
-        </article>
-
-        <article class="card project-card">
-          <div class="project-head">
-            <div>
-              <h3>LG전자 PLUS+</h3>
-              <p>디케이비엠시 / 백엔드 개발</p>
-            </div>
-            <time>2024.09 ~ 2025.01</time>
-          </div>
-          <h4>운영 시스템 고도화 및 성능 개선</h4>
-          <ul>
-            <li>LG전자 PLUS+ 운영 시스템의 교환·환불, WorkOrder 연동, 운영 배치 기능 고도화</li>
-            <li>250만 건 이상 대량 데이터를 조인하는 교환·환불 레포트 쿼리에서 8초 이상 발생하던 조회 지연을 2초 이내로 개선</li>
-            <li>실행 계획 분석을 기반으로 서브쿼리 제거, 인덱스 구조 개선, 조인 조건 재검토를 수행하여 조회 성능 최적화</li>
-            <li>Salesforce WorkOrder 엔티티와 연동되는 외부 서비스 요청을 기능 유형별로 분기 처리하는 구조 구현</li>
-            <li>데코레이터 패턴을 적용해 처리 책임을 분리하고, 신규 연동 기능 추가 시 기존 코드 영향 범위를 줄임</li>
-            <li>배치 처리 중 일부 데이터가 누락되던 문제를 Chunk size 조정과 처리 상태 검증 로직으로 개선</li>
-            <li>관리자 근태 승인 및 검증 로직을 추가하여 운영 과정에서 누락되기 쉬운 항목을 사전에 방지</li>
-            <li>레거시 코드 정리와 모듈 분리를 통해 운영 배치 시스템의 안정성과 유지보수성 개선</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section class="section" id="education">
-      <div class="section-title">
-        <span>06</span>
-        <h2>Education</h2>
-      </div>
-      <div class="card education-card">
-        <div class="education-row">
-          <time>2013.03 ~ 2015.02</time>
-          <strong>한국폴리텍대학</strong>
-          <span>로봇자동화과</span>
-        </div>
-        <div class="education-row">
-          <time>2008.03 ~ 2011.02</time>
-          <strong>마산중앙고등학교</strong>
-          <span>인문계</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact-section" id="contact">
-      <div class="card contact-card">
-        <h2>Contact</h2>
-        <p>프로젝트 경험과 기술적인 문제 해결 과정을 더 자세히 설명드릴 수 있습니다.</p>
-        <div class="contact-actions">
-          <a class="button primary" href="mailto:dlguswo0504@naver.com">dlguswo0504@naver.com</a>
-          <a class="button dark" href="https://github.com/hyunganom" target="_blank" rel="noopener noreferrer">GitHub</a>
-          <a class="button dark" href="assets/html-pdf/이현재_이력서_HTML기준.pdf" download>HTML 기준 PDF 다운로드</a>
-          <button class="button print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
-        </div>
-      </div>
+      <dl class="resume-history">
+        <div><dt>2022.06 ~ 2022.12</dt><dd><strong>KH정보교육원</strong> · 클라우드 기반 SW 융합 개발자 과정 수료</dd></div>
+        <div><dt>2021.04 ~ 2022.05</dt><dd><strong>신진시스템</strong> · 구매관리자 / 자재 구매·발주·납기 관리</dd></div>
+        <div><dt>2013.03 ~ 2015.02</dt><dd><strong>한국폴리텍대학</strong> · 로봇자동화과</dd></div>
+        <div><dt>2008.03 ~ 2011.02</dt><dd><strong>마산중앙고등학교</strong> · 인문계</dd></div>
+      </dl>
     </section>
   </main>
-
-  <footer class="footer">
-    <p>© 이현재. Backend Developer Resume.</p>
-  </footer>
+  <footer class="resume-footer">이현재 · Backend Developer</footer>
 </body>
 </html>
