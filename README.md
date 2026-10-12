@@ -6,7 +6,7 @@ GitHub Pages 배포용 정적 웹사이트입니다.
 
 - `/` : 웹 이력서
 - `/portfolio/` : 포트폴리오 목록
-- `/portfolio/city-safe/` : CITY_SAFE 전기차 배터리 화재·과열·이상 감지
+- `/portfolio/thermal-safety/` : 열화상·가스 안전관제 시스템
 - `/portfolio/city-signal/` : CITY_SIGNAL 도시 교통신호 최적화
 - `/portfolio/thermal-parking/` : 열화상 주차 감지 CV 알고리즘
 - `/portfolio/kafka-event-sync/` : Kafka 실시간 이벤트 데이터 동기화 전략
