@@ -69,7 +69,8 @@
     .feature .mechanism{border-top:1px solid #e7ebf1;padding-top:13px;font-size:12px;color:var(--ink);margin-bottom:0}
     .mechanism span{color:var(--blue);font-weight:800;margin-right:7px}
     .tradeoff{margin:18px 0 0;padding:17px 21px;background:var(--blue-light);border-radius:6px;font-size:13px;color:#354f74}
-    .case-index{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:30px}
+    .case-index-title{margin:30px 0 12px}
+    .case-index{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:0}
     .case-index a{padding:21px;border-top:2px solid var(--ink);background:#edf0f5;transition:background .18s}
     .case-index a:hover{background:#e3ebf8}
     .case-index small{font-size:10px;color:var(--blue);font-weight:800;letter-spacing:.08em}
@@ -159,7 +160,7 @@
       .system-flow{grid-template-columns:repeat(5,1fr)}.system-flow li{padding:12px 8px}.system-flow strong{font-size:9.5pt}.system-flow p{font-size:9pt}.flow-caption{font-size:8.5pt}
       .feature-grid{grid-template-columns:1fr 1fr;gap:4mm}.feature{padding:4mm}.feature p{font-size:10pt;margin-bottom:10px}.feature .mechanism{font-size:9.5pt;padding-top:9px;margin-bottom:0}.feature-index{margin-bottom:9px}
       .tags{margin-top:8px}.tag{padding:3px 6px;font-size:8pt}
-      #backend,.case{break-before:page}.case{padding:0}.case-index{display:none}.case-block{margin-bottom:4mm}.case-block>p{font-size:10pt}
+      #backend,.case{break-before:page}.case{padding:0}.case-index-title,.case-index{display:none}.case-block{margin-bottom:4mm}.case-block>p{font-size:10pt}
       .timeline{grid-template-columns:repeat(4,1fr);margin:10px 0}.timeline>div{padding:9px 10px}.timeline time{margin-bottom:4px}.timeline p{font-size:9pt}
       .comparison{grid-template-columns:1fr 1fr;gap:4mm;margin:10px 0}.comparison figure{padding:10px 12px}.comparison li{padding:3px 6px;margin-bottom:8px;font-size:9.5pt}.comparison p{font-size:9pt;margin-top:7px}figcaption{margin-bottom:7px}
       .table-wrap{overflow:visible;margin-top:8px}table{font-size:9.5pt}caption{font-size:8.5pt;padding:7px 10px}th,td{padding:7px 10px}
@@ -200,7 +201,7 @@
         <div><dt>기간</dt><dd>2025.10 — 현재</dd></div>
         <div><dt>역할</dt><dd>백엔드 개발자·연구원</dd></div>
         <div><dt>담당 영역</dt><dd>Python 관리 서버 개발<br>C++ 수집·분석 구조 개선 참여</dd></div>
-        <div><dt>주요 기술</dt><dd>Python · FastAPI · C++<br>PostgreSQL · WebSocket</dd></div>
+        <div><dt>주요 기술</dt><dd>Python · FastAPI · C++<br>PostgreSQL · WebSocket · OpenCV</dd></div>
       </dl>
     </div>
   </section>
@@ -225,7 +226,7 @@
     <section class="chapter" id="backend" aria-labelledby="backend-title">
       <div class="chapter-head">
         <div><p class="chapter-number">02</p><p class="chapter-label">백엔드 구조</p></div>
-        <div><h2 id="backend-title">다중 카메라 데이터 처리 구조</h2><p class="section-lead">카메라 연결, 프레임 수신, ROI 분석과 화면 전송을 나누어 처리합니다. 분석 대기열의 크기를 제한하고, 카메라별 상태 갱신 순서와 락 범위를 관리합니다.</p></div>
+        <div><h2 id="backend-title">실시간 카메라 데이터 처리 구조</h2><p class="section-lead">카메라 연결, 프레임 수신, ROI 분석과 화면 전송을 나누어 처리합니다. 분석 대기열의 크기를 제한하고, 카메라별 상태 갱신 순서와 락 범위를 관리합니다.</p></div>
       </div>
       <div class="feature-grid">
         <article class="feature">
@@ -253,7 +254,7 @@
           <p class="mechanism"><span>처리 방식</span>화면 데이터 생성과 클라이언트별 전송을 분리합니다. 이 방식은 화면용 스트림에 적용됩니다.</p>
         </article>
       </div>
-      <p class="tradeoff"><strong>감지 이벤트의 유지 조건</strong> — 화면 전송이 생략되더라도 감지가 지속되는 동안 이벤트는 유지해야 합니다. 전송 조건 때문에 DB 이벤트가 먼저 종료되던 문제는 아래 사례에서 다룹니다.</p>
+      <h2 class="case-index-title">주요 개선 사례</h3>
       <div class="case-index" aria-label="문제 해결 사례 바로가기">
         <a href="#event-lifetime"><small>사례 01</small><strong>감지 중 DB 이벤트 종료 문제 ↗</strong><p>유지 갱신 순서 수정과 실제 카메라 검증</p></a>
         <a href="#migration"><small>사례 02</small><strong>카메라·센서 처리의 Python 이관 ↗</strong><p>분석 로직부터 SDK 연동까지 단계별 전환</p></a>
