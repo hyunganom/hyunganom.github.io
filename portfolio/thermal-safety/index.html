@@ -222,10 +222,10 @@
       </div>
       <div class="feature-grid">
         <article class="feature">
-          <div class="feature-index"><span>실행 풀 분리</span><b>01</b></div>
+          <div class="feature-index"><span>스레드 풀 분리</span><b>01</b></div>
           <h3>SDK 호출·프레임 수신·ROI 분석 분리</h3>
-          <p>SDK 제어, 카메라별 프레임 읽기, ROI 계산에 별도의 실행 풀을 사용합니다. 연결이나 입력을 기다리는 작업을 이벤트 루프에서 직접 실행하지 않고, 완료된 결과를 비동기 처리 흐름으로 돌려줍니다.</p>
-          <p class="mechanism"><span>처리 방식</span>SDK 호출과 프레임 수신은 별도 실행 풀에 위임하고, ROI 계산에 사용하는 워커 수를 제한합니다.</p>
+          <p>SDK 제어, 카메라별 프레임 읽기, ROI 계산에 별도의 스레드 풀을 사용합니다. 연결이나 입력을 기다리는 작업을 이벤트 루프에서 직접 실행하지 않고, 완료된 결과를 비동기 처리 흐름으로 돌려줍니다.</p>
+          <p class="mechanism"><span>처리 방식</span>SDK 호출과 프레임 수신은 별도 스레드 풀에 위임하고, ROI 계산에 사용하는 워커 수를 제한합니다.</p>
         </article>
         <article class="feature">
           <div class="feature-index"><span>프레임 큐</span><b>02</b></div>
@@ -297,7 +297,7 @@
     <section class="chapter case" id="migration" aria-labelledby="migration-title">
       <div class="chapter-head">
         <div><p class="chapter-number">사례 02</p><p class="chapter-label">동시성과 병렬 처리</p></div>
-        <div><h2 id="migration-title">Python 기반 다중 카메라 동시 처리 구조 설계</h2><p class="section-lead">카메라별 작업 흐름은 코루틴으로 조율하고, SDK 호출과 온도 분석은 별도 스레드 풀에서 실행했습니다. 여러 카메라를 함께 처리하면서 각 카메라의 분석 순서와 대기열 크기를 제어했습니다.</p><div class="tags"><span class="tag">asyncio · 코루틴</span><span class="tag">ThreadPoolExecutor</span><span class="tag">카메라별 순차 처리</span><span class="tag">최신 프레임 큐</span></div></div>
+        <div><h2 id="migration-title">Python 기반 다중 카메라 동시 처리 구조 설계</h2><p class="section-lead">카메라별 수신·분석 순서는 코루틴으로 관리하고, SDK 호출과 온도 분석은 별도 스레드 풀에서 실행했습니다. 여러 카메라를 함께 처리하면서 각 카메라의 분석 순서와 대기열 크기를 제어했습니다.</p><div class="tags"><span class="tag">asyncio · 코루틴</span><span class="tag">ThreadPoolExecutor</span><span class="tag">카메라별 순차 처리</span><span class="tag">최신 프레임 큐</span></div></div>
       </div>
       <div class="case-body">
         <div class="case-block">
@@ -312,12 +312,12 @@
         <div class="case-block">
           <span class="small-label">핵심 설계</span><h3>카메라 간에는 동시 처리, 같은 카메라 안에서는 순서 보장</h3>
           <div class="pipeline" aria-label="동시 처리와 실행 자원·처리 순서 제어">
-            <div><small>동시성 · 코루틴</small><strong>카메라별 작업 흐름 조율</strong><p>카메라마다 독립적인 asyncio 태스크를 두고, 입력이나 분석 완료를 기다리는 동안 다른 카메라의 작업을 진행합니다.</p></div>
-            <div><small>병렬 작업 · 스레드 풀</small><strong>SDK 대기와 분석 자원 분리</strong><p>SDK 제어, 카메라별 프레임 수신, ROI 분석에 별도 실행 풀을 사용해 장치 응답 대기가 분석 워커를 점유하지 않도록 했습니다.</p></div>
+            <div><small>동시성 · 코루틴</small><strong>카메라별 수신·분석 순서 관리</strong><p>카메라마다 독립적인 asyncio 태스크를 두고, 입력이나 분석 완료를 기다리는 동안 다른 카메라의 작업을 진행합니다.</p></div>
+            <div><small>병렬 작업 · 스레드 풀</small><strong>SDK 대기와 분석 자원 분리</strong><p>SDK 제어, 카메라별 프레임 수신, ROI 분석에 별도 스레드 풀을 사용해 장치 응답 대기가 분석 워커를 점유하지 않도록 했습니다.</p></div>
             <div><small>순서 제어 · 프레임 큐</small><strong>같은 카메라는 순서대로 분석</strong><p>앞선 분석이 끝난 뒤 다음 프레임을 처리합니다. 대기 큐에는 최신 프레임 1개만 보관해 오래된 입력이 쌓이지 않도록 했습니다.</p></div>
           </div>
           <p>여러 카메라의 ROI 분석은 제한된 워커 스레드에 분산하고, 온도 계산은 NumPy 배열 연산으로 처리했습니다. 감지 상태는 카메라별 락으로 보호했습니다. 입력이 분석보다 빠르면 중간 프레임을 일부 생략해 대기열에 오래된 영상이 쌓이는 것을 막았습니다.</p>
-          <p>가스 센서도 통신 스레드에서 받은 데이터를 비동기 큐로 전달해, 같은 서버의 상태 관리·화면 발행 흐름에 연결했습니다.</p>
+          <p>가스 센서도 통신 스레드에서 받은 데이터를 비동기 큐로 전달해, 같은 서버의 상태 관리·화면 전송 흐름에 연결했습니다.</p>
         </div>
         <div class="case-block">
           <span class="small-label">구현 결과와 검증</span><h3>장치 대기와 분석을 분리한 Python 처리 구조 구현</h3>
@@ -330,7 +330,7 @@
     <section class="chapter case" id="reconnect" aria-labelledby="reconnect-title">
       <div class="chapter-head">
         <div><p class="chapter-number">사례 03</p><p class="chapter-label">공유 자원과 동시성 제어</p></div>
-        <div><h2 id="reconnect-title">카메라 재연결 중 다른 카메라 API까지 지연된 문제</h2><p class="section-lead">기존 C++ 수집 서버에서 동기 SDK 연결을 기다리는 동안 글로벌 락을 유지하던 구간을 변경했습니다. 공유 상태를 보호하는 구간과 외부 장치의 응답을 기다리는 구간을 분리했습니다.</p><div class="tags"><span class="tag">C++ · Mutex</span><span class="tag">글로벌 락 범위 축소</span><span class="tag">재연결 수명 관리</span></div></div>
+        <div><h2 id="reconnect-title">카메라 재연결 중 다른 카메라 API까지 지연된 문제</h2><p class="section-lead">기존 C++ 수집 서버에서 동기 SDK 연결을 기다리는 동안 글로벌 락을 유지하던 구간을 변경했습니다. 공유 상태를 보호하는 구간과 외부 장치의 응답을 기다리는 구간을 분리했습니다.</p><div class="tags"><span class="tag">C++ · Mutex</span><span class="tag">글로벌 락 범위 축소</span><span class="tag">재연결 작업의 시작·종료 관리</span></div></div>
       </div>
       <div class="case-body">
         <div class="case-block">
@@ -352,7 +352,7 @@
           <p>SDK 연결 호출 자체는 동기 방식으로 유지했습니다. 이 변경의 범위는 <strong>연결을 기다리는 동안 글로벌 락을 점유하지 않도록 하는 것</strong>입니다.</p>
         </div>
         <div class="case-block">
-          <span class="small-label">재연결 수명 관리</span><h3>새 연결·삭제 요청과 이전 재시도 작업의 충돌 제어</h3>
+          <span class="small-label">재연결 작업의 시작·종료 관리</span><h3>새 연결·삭제 요청과 이전 재시도 작업의 충돌 제어</h3>
           <p>새 연결이나 장치 삭제·연결 해제 시 이전 재시도 루프에 취소 신호를 전달하고, 루프가 신호를 확인하면 종료하도록 구성했습니다. 연결 실패 처리와 콜백이 같은 장치의 재연결을 중복으로 시작하지 않도록 상태 전이도 제어했습니다.</p>
           <p>접속 정보는 공유 컨테이너의 항목을 계속 참조하지 않고 값으로 복사해 사용합니다. 취소 신호는 <strong>재시도 루프의 후속 작업을 중단</strong>하기 위한 것으로, 이미 실행 중인 SDK 연결 호출을 즉시 취소하는 기능은 아닙니다.</p>
         </div>

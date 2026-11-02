@@ -334,7 +334,7 @@
             <figure class="after"><figcaption>변경 후 · v8 판정</figcaption><ol><li>온도맵과 기준 패턴 각각 보정</li><li class="accent">ROI의 2차 곡면 성분 제거</li><li>남은 패턴의 NCC로 점수 산출</li></ol><p>실시간·오프라인 분석·학습 품질 계산에 적용</p></figure>
           </div>
         </div>
-        <div class="case-block"><h3><span class="case-step">05 성과와 검증</span>보정 전후를 비교할 수 있는 구조 확보</h3><p>v8에는 보정된 패턴으로 판정하는 경로가 구현되어 있습니다. 기존 변경 기록에는 동일 녹화 구간에서 점수의 최대·최소 차이가 <strong>0.065 → 0.034</strong>로 줄었다고 남아 있습니다.</p><div class="result"><span>검증 범위</span><div>이 수치는 소스의 변경 기록에 기재된 특정 구간 비교값입니다. 이번 정리에서 원본 데이터를 재실행한 결과나 전체 차량 감지 정확도를 뜻하지 않습니다.</div></div></div>
+        <div class="case-block"><h3><span class="case-step">05 성과와 검증</span>같은 녹화 구간에서 보정 전후 점수 비교</h3><p>v8에는 보정된 패턴으로 판정하는 경로가 구현되어 있습니다. 기존 변경 기록에는 동일 녹화 구간에서 점수의 최대·최소 차이가 <strong>0.065 → 0.034</strong>로 줄었다고 남아 있습니다.</p><div class="result"><span>검증 범위</span><div>이 수치는 소스의 변경 기록에 기재된 특정 구간 비교값입니다. 원본 데이터를 다시 실행해 확인한 수치는 아니며, 전체 차량 감지 정확도를 나타내지 않습니다.</div></div></div>
       </div>
     </section>
 
@@ -346,7 +346,7 @@
       <div class="case-body">
         <div class="case-block"><h3><span class="case-step">01 문제</span>같은 빈 상태라도 ROI마다 NCC가 다름</h3><p>패턴이 뚜렷한 영역과 균일한 영역은 같은 노이즈에도 유사도가 다르게 나옵니다. 초기 NCC 방식의 고정 임계값만으로는 이 차이를 다루기 어려워, v3·v5에서는 빈 상태의 예상 유사도를 기준선 B로 두었습니다.</p></div>
         <div class="case-block"><h3><span class="case-step">02 원인 분석</span>노이즈 추정과 ROI 복원이 기준선에 영향</h3><p>v8 변경 기록에서는 학습 중의 느린 온도 변화가 노이즈 추정에 섞여 B가 낮게 예측되는 문제를 확인할 수 있습니다. 또한 전체 화면에서 측정한 B를 일부 ROI에 적용하거나, ROI를 바꾼 뒤 이전 B를 사용하면 점수의 비교 기준이 달라집니다.</p></div>
-        <div class="case-block"><h3><span class="case-step">03 기술적 판단</span>예측식에 더해 실제 학습 구간을 기준으로</h3><p>v8에서는 해당 ROI의 학습 구간에서 측정한 평균 NCC를 우선 사용합니다. 실측값이 없을 때 예측값으로 시작하고, 안정된 빈 상태가 유지되는 조건에서 B를 보정합니다. ‘모든 ROI에 보정이 필요 없다’고 가정하기보다 <strong>기준선의 출처와 적용 영역을 함께 관리</strong>하는 방향으로 바뀌었습니다.</p><p class="formula">점유 점수 occ = 1 − NCC / B</p><p class="evidence-note">B는 빈 상태의 기준 유사도입니다. occ는 기준 패턴에서 얼마나 달라졌는지를 나타내는 점수이며, 차량이 차지한 실제 면적 비율은 아닙니다.</p></div>
+        <div class="case-block"><h3><span class="case-step">03 기술적 판단</span>학습 구간에서 측정한 기준선 우선 사용</h3><p>v8에서는 해당 ROI의 학습 구간에서 측정한 평균 NCC를 우선 사용합니다. 실측값이 없을 때 예측값으로 시작하고, 안정된 빈 상태가 유지되는 조건에서 B를 보정합니다. <strong>각 ROI에서 측정한 기준선을 해당 영역에 적용</strong>하도록 저장·복원 방식을 바꿨습니다.</p><p class="formula">점유 점수 occ = 1 − NCC / B</p><p class="evidence-note">B는 빈 상태의 기준 유사도입니다. occ는 기준 패턴에서 얼마나 달라졌는지를 나타내는 점수이며, 차량이 차지한 실제 면적 비율은 아닙니다.</p></div>
         <div class="case-block"><h3><span class="case-step">04 해결</span>노이즈 추정·저장·복원을 함께 수정</h3>
           <div class="architecture">
             <div><span class="arch-label">학습</span><p><b>인접 프레임 차분</b>으로 노이즈를 추정해 느린 변화의 영향을 줄이고, 판정과 같은 곡면 보정 공간에서 B를 측정합니다.</p></div>
@@ -361,7 +361,7 @@
     <section class="chapter case" id="learning" aria-labelledby="learning-title">
       <div class="chapter-head">
         <div><p class="chapter-number">CASE 03</p><p class="chapter-label">초기 상태와 실패 복구</p></div>
-        <div><h2 id="learning-title">차량이 있는 상태에서 시작해<br>빈 기준선으로 전환하기</h2><p class="section-lead">‘처음부터 빈 주차면을 학습할 수 있다’는 전제를 풀고, <strong>임시 기준의 수명과 교체 실패</strong>를 다루는 절차를 추가했습니다.</p><div class="tags"><span class="tag">상태 전이</span><span class="tag">품질 검사·재시도</span><span class="tag">파일 교체</span></div></div>
+        <div><h2 id="learning-title">차량이 있는 상태에서 시작해<br>빈 기준선으로 전환하기</h2><p class="section-lead">이미 차량이 주차된 상태에서는 차량이 있는 장면을 임시 기준으로 사용합니다. <strong>출차 후 빈 기준선으로 바꾸고, 학습·저장에 실패하면 다시 시도</strong>하도록 처리했습니다.</p><div class="tags"><span class="tag">상태 전이</span><span class="tag">품질 검사·재시도</span><span class="tag">파일 교체</span></div></div>
       </div>
       <div class="case-body">
         <div class="case-block"><h3><span class="case-step">01 문제</span>초기 장면이 항상 빈 주차면은 아님</h3><p>이미 차량이 주차된 상태에서는 빈 천장 기준을 바로 수집할 수 없습니다. 이 장면을 빈 기준으로 저장하면 이후 판정의 의미가 바뀝니다. 학습 중 장면이 변하는 경우에도 그대로 저장하면 비교 기준의 품질이 떨어집니다.</p></div>
@@ -375,7 +375,7 @@
           </div>
           <p>자동 생성한 빈 기준은 임시 파일에 쓴 뒤 파일 교체 연산으로 반영합니다. <strong>파일 저장에 성공한 후</strong> 메모리의 검출기도 교체하며, 저장에 실패하면 기존 흐름을 유지한 채 재학습을 예약합니다. 이 교체 경로에서는 WebSocket 세션을 종료하지 않습니다.</p>
         </div>
-        <div class="case-block"><h3><span class="case-step">05 성과와 검증</span>학습 실패를 처리하는 경로까지 구현</h3><p>최종 v8 파일에는 차량 기준의 역할 복원, 출차 후 자동 수집, 품질 미달 재시도, 파일 교체 실패 처리와 일반 검출기 전환이 연결되어 있습니다. 초기 상태를 구분하고 다음 단계로 넘어갈 조건을 명시한 것이 구현 결과입니다.</p><div class="result"><span>검증 범위</span><div>코드에서 전환·실패 처리 경로를 확인했습니다. 학습 구간의 평균 NCC는 장면의 자기 일관성을 보는 지표이며, 빈 주차면이라는 정답이나 현장 감지 정확도를 보장하지는 않습니다.</div></div></div>
+        <div class="case-block"><h3><span class="case-step">05 성과와 검증</span>학습 실패를 처리하는 경로까지 구현</h3><p>최종 v8 파일에는 차량 기준의 역할 복원, 출차 후 자동 수집, 품질 미달 재시도, 파일 교체 실패 처리와 일반 검출기 전환이 연결되어 있습니다. 학습과 저장이 끝나기 전에는 기존 검출기를 유지하도록 했습니다.</p><div class="result"><span>검증 범위</span><div>코드에서 전환·실패 처리 경로를 확인했습니다. 학습 구간의 평균 NCC는 수집한 프레임들이 서로 얼마나 비슷한지를 나타냅니다. 실제로 빈 주차면인지와 현장 감지 정확도는 별도로 확인해야 합니다.</div></div></div>
       </div>
     </section>
   </main>

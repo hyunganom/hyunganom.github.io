@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="이현재 백엔드 개발자 프로젝트 포트폴리오" />
   <meta property="og:title" content="이현재 | Portfolio" />
-  <meta property="og:description" content="실시간 시스템, 데이터 처리, 백엔드 구조 개선 중심의 프로젝트 포트폴리오입니다." />
+  <meta property="og:description" content="백엔드 개발과 연구과제에서 맡은 업무, 문제 해결 과정과 검증 결과를 정리했습니다." />
   <title>이현재 | Portfolio</title>
   <link rel="stylesheet" href="../style.css" />
   <link rel="stylesheet" href="portfolio.css" />
@@ -23,15 +23,15 @@
     <section class="portfolio-hero">
       <div class="breadcrumb"><a href="../">Resume</a><span>/</span><span>Portfolio</span></div>
       <p class="eyebrow">Backend Portfolio</p>
-      <h1>운영 환경의 문제를 구조적으로 해결한 프로젝트 기록입니다.</h1>
+      <h1>직접 개발하고 문제를 해결한 과정을 정리했습니다.</h1>
       <p>
-        실시간 데이터 처리, 외부 서버 연동, WebSocket 스트리밍, CV 알고리즘 등
-        직접 맡은 역할과 기술적 의사결정을 프로젝트별로 정리했습니다.
+        안전관제, 교통신호, 주차 감지 시스템과 화재 실험 연구에서
+        맡은 업무, 구현 과정과 확인한 결과를 소개합니다.
       </p>
       <div class="portfolio-actions">
         <a class="button primary" href="thermal-safety/">열화상·가스 안전관제</a>
         <a class="button ghost" href="ev-fire-research/">전기차 전소실험 연구</a>
-        <a class="button ghost" href="city-signal/">CITY_SIGNAL</a>
+        <a class="button ghost" href="city-signal/">교통신호 최적화</a>
         <a class="button ghost" href="thermal-parking/">주차 감지</a>
         <a class="button ghost" href="../">이력서로 돌아가기</a>
         <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
@@ -45,7 +45,7 @@
         <div>
           <span class="tag">Research / C++ / Python</span>
           <h2>한국도로공사 전기차 전소실험 공동 연구과제</h2>
-          <p>고속도로 전기차 화재 예방 및 진압 기술 개발을 위한 배터리 팩·실차 전소시험 연구입니다. 복합센서 계측 시스템, 조기 경보 방법과 시험 결과를 정리하고, 시스템 개발 및 실험 데이터 취득 분야의 연구 참여 범위를 기술했습니다.</p>
+          <p>고속도로 전기차 화재 예방 및 진압 기술 개발을 위한 배터리 팩·실차 전소시험에 참여했습니다. 열화상·가스 센서의 계측·관제 시스템 개발과 현장 데이터 수집을 담당했으며, 협력 기관의 경보 알고리즘과 시험 결과를 함께 소개합니다.</p>
           <div class="chips"><span>실화재 실험</span><span>열화상·가스 센서</span><span>SDK 연동</span><span>연구 데이터</span><span>알고리즘 적용</span></div>
           <div class="portfolio-actions"><a class="button primary" href="ev-fire-research/">연구과제 상세 보기</a><a class="button" href="../assets/html-pdf/전기차_실화재_연구과제_포트폴리오.pdf" target="_blank" rel="noopener">PDF 보기</a></div>
         </div><span class="project-period">연구과제 · 2차년도</span>
@@ -54,7 +54,7 @@
         <div>
           <span class="tag">C++ / Python</span>
           <h2>열화상·가스 안전관제 시스템</h2>
-          <p>열화상·가스 데이터 수집부터 감지 이력과 실시간 관제까지 백엔드를 개발했습니다. 온도 이상 이력의 조기 종료를 수정하고 Python 다중 카메라 동시 처리 설계에 참여했습니다. 카메라 재연결 중 다른 API까지 지연된 문제를 직접 확인하고, 글로벌 락 범위 변경을 사례로 정리했습니다.</p>
+          <p>열화상·가스 데이터 수집부터 감지 이력과 실시간 관제까지 백엔드를 개발했습니다. 온도 이상 이력의 조기 종료를 수정하고 Python 다중 카메라 동시 처리 설계에 참여했습니다. 카메라 재연결 중 다른 API까지 지연되는 원인을 확인하고, 글로벌 락 범위를 변경한 과정을 정리했습니다.</p>
           <div class="chips"><span>C++20</span><span>Boost.Asio</span><span>coroutine</span><span>FastAPI</span><span>asyncio</span><span>SQLAlchemy</span><span>PostgreSQL</span><span>ctypes</span><span>shared memory</span></div>
           <div class="portfolio-actions"><a class="button primary" href="thermal-safety/">상세 보기</a></div>
         </div><time class="project-period">2025.10 ~ 현재</time>
@@ -62,17 +62,17 @@
       <article class="card portfolio-card">
         <div>
           <span class="tag">Java / Spring</span>
-          <h2>CITY_SIGNAL - 도시 교통신호 최적화 시스템</h2>
-          <p>강화학습 기반 교통신호 최적화 시스템에서 Java/Spring 중간 계층을 담당했습니다. 장시간 연산의 비동기 오케스트레이션, 런타임 동적 테이블 연동, 차량 궤적(FCD) 실시간 스트리밍, TOD·Ring×Phase 신호 도메인 변환을 구현했습니다.</p>
+          <h2>도시 교통신호 최적화 시스템</h2>
+          <p>강화학습으로 교통신호를 최적화하는 시스템의 Java/Spring 중계 서버를 개발했습니다. Python 연산 서버에 학습·시뮬레이션을 요청하고, 결과를 조회해 Unity 화면에 차량 위치를 전송했습니다. 시간대별 신호 계획 변환과 Excel 분석 보고서 생성도 담당했습니다.</p>
           <div class="chips"><span>Java 21</span><span>Spring Boot</span><span>WebClient</span><span>WebSocket</span><span>JPA</span><span>JdbcTemplate</span><span>PostgreSQL</span><span>Apache POI</span></div>
-          <div class="portfolio-actions"><a class="button primary" href="city-signal/">상세 보기</a><a class="button" href="../assets/html-pdf/CITY_SIGNAL_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML PDF</a></div>
+          <div class="portfolio-actions"><a class="button primary" href="city-signal/">상세 보기</a><a class="button" href="../assets/html-pdf/CITY_SIGNAL_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">이전 버전 PDF</a></div>
         </div><time class="project-period">2025.09 ~ 2025.12</time>
       </article>
       <article class="card portfolio-card parking-card">
         <div>
           <span class="tag">Python / Computer Vision</span>
           <h2>열화상 카메라 기반 실시간 주차 감지 시스템</h2>
-          <p>온도 변화로 흔들리는 판정, ROI 기준선 불일치, 차량이 있는 상태의 초기 학습 문제를 분석하며 parking_v8까지 개선했습니다. 실시간 감지와 녹화 분석을 연결하고, 판정·기준 데이터·상태 관리의 변경 과정과 검증 범위를 정리했습니다.</p>
+          <p>온도 변화로 주차 판정이 흔들리는 문제와 관심 영역(ROI)에 맞지 않는 기준선을 사용하는 문제를 개선했습니다. 차량이 주차된 상태에서도 시작할 수 있도록 초기 학습 절차를 추가하고, 실시간 감지와 녹화 데이터 분석에 같은 판정 방식을 적용했습니다.</p>
           <div class="chips"><span>Python</span><span>NumPy</span><span>OpenCV</span><span>WebSocket</span><span>tkinter</span><span>matplotlib</span><span>npz</span><span>NCC</span></div>
           <div class="portfolio-actions"><a class="button primary" href="thermal-parking/">상세 보기</a><a class="button" href="../assets/html-pdf/열화상_주차감지_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">이전 버전 PDF</a></div>
         </div><time class="project-period">2026.04 ~ 2026.08</time>

@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="CITY_SIGNAL 도시 교통신호 최적화 시스템 Java/Spring 백엔드 포트폴리오" />
-  <meta property="og:title" content="CITY_SIGNAL | 이현재 Portfolio" />
-  <meta property="og:description" content="강화학습 기반 교통신호 최적화 시스템의 Java/Spring 중간 계층 설계·구현 경험" />
-  <title>CITY_SIGNAL | 이현재 Portfolio</title>
+  <meta name="description" content="도시 교통신호 최적화 시스템의 Java/Spring 중계 서버 개발 포트폴리오" />
+  <meta property="og:title" content="도시 교통신호 최적화 시스템 | 이현재 Portfolio" />
+  <meta property="og:description" content="Python 연산 서버와 Unity 화면을 연결하는 Java/Spring 중계 서버 개발 경험" />
+  <title>도시 교통신호 최적화 시스템 | 이현재 Portfolio</title>
   <link rel="stylesheet" href="../../style.css" />
   <link rel="stylesheet" href="../portfolio.css" />
 </head>
@@ -24,22 +24,22 @@
       </div>
     </nav>
     <section class="portfolio-hero">
-      <div class="breadcrumb"><a href="../../">Resume</a><span>/</span><a href="../">Portfolio</a><span>/</span><span>CITY_SIGNAL</span></div>
-      <p class="eyebrow">CITY_SIGNAL · Java/Spring Backend</p>
-      <h1>도시 교통신호 최적화 시스템의 Java/Spring 중간 계층 설계·구현</h1>
+      <div class="breadcrumb"><a href="../../">Resume</a><span>/</span><a href="../">Portfolio</a><span>/</span><span>도시 교통신호 최적화 시스템</span></div>
+      <p class="eyebrow">Java / Spring · 중계 서버 개발</p>
+      <h1>도시 교통신호 최적화 시스템</h1>
       <p>
-        강화학습 기반 교통신호 최적화 시스템에서 메타데이터 영속화, 시뮬레이션 오케스트레이션,
-        차량 궤적 실시간 스트리밍, 신호 계획 도메인 변환, 분석 리포팅을 담당했습니다.
+        Python 연산 서버와 Unity 화면을 연결하는 Java/Spring 중계 서버를 개발했습니다.
+        학습·시뮬레이션 요청, 모델·실행 이력 관리, 차량 위치 전송과 신호 계획 변환을 담당했습니다.
       </p>
       <div class="portfolio-actions">
-        <a class="button primary" href="../../assets/html-pdf/CITY_SIGNAL_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML 기준 PDF 보기</a>
-        <a class="button ghost" href="../../assets/city-signal-java-spring.pdf" target="_blank" rel="noopener noreferrer">원본 PDF 보기</a>
+        <a class="button primary" href="../../assets/html-pdf/CITY_SIGNAL_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">이전 버전 PDF 보기</a>
+        <a class="button ghost" href="../../assets/city-signal-java-spring.pdf" target="_blank" rel="noopener noreferrer">초기 자료 PDF 보기</a>
         <a class="button ghost" href="../">포트폴리오 목록</a>
         <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
       </div>
       <dl class="meta-grid">
         <div class="meta-card"><dt>도메인</dt><dd>도시 교통신호 강화학습 최적화</dd></div>
-        <div class="meta-card"><dt>담당 영역</dt><dd>Java/Spring 백엔드 전 영역</dd></div>
+        <div class="meta-card"><dt>담당 영역</dt><dd>Java/Spring 중계 서버 개발</dd></div>
         <div class="meta-card"><dt>기간</dt><dd>2025.09 ~ 2025.12</dd></div>
         <div class="meta-card"><dt>팀 구성</dt><dd>Java 백엔드 / Python 연산 서버 / Unity 클라이언트 / 관리자 웹</dd></div>
       </dl>
@@ -52,32 +52,32 @@
       <div class="summary-box">
         <p>
           교차로 신호 주기를 강화학습으로 최적화하고, 그 결과를 SUMO 교통 시뮬레이터로 검증하는 시스템입니다.
-          고처리량 연산인 학습·시뮬레이션은 Python 서버가 담당하고,
-          영속화·외부 인터페이스·운영 도구는 Java/Spring 백엔드가 담당하도록 역할을 분리했습니다.
+          학습·시뮬레이션은 Python 서버가 수행합니다.
+          Java/Spring 중계 서버는 사용자 요청을 전달하고, 모델·실행 이력 저장과 결과 조회 API를 제공합니다.
         </p>
         <p>
-          이 구조를 통해 학습이 수십 분에서 수 시간 걸리더라도 운영 화면이 멈추지 않고,
-          연산 서버와 운영 서버가 서로의 장애로부터 격리될 수 있도록 했습니다.
+          학습이 수십 분에서 수 시간 걸리므로, 완료를 기다리는 대신 작업 접수 응답을 먼저 반환했습니다.
+          연산 서버의 응답이 도착하면 결과와 상태를 갱신하도록 처리했습니다.
         </p>
         <p>
           내부망에서 운영되는 초기 검증 단계 시스템이라 인증·인가는 적용 범위에 포함하지 않았고,
-          기능 검증과 데이터 정합성 확보를 우선했습니다.
+          기능 동작과 모델·결과 데이터의 일치 여부를 확인하는 데 집중했습니다.
         </p>
       </div>
     </section>
 
     <section class="detail-section">
-      <h2>담당 역할 &amp; 기여 요약</h2>
+      <h2>담당 업무</h2>
       <div class="table-wrap">
         <table class="portfolio-table">
-          <thead><tr><th>영역</th><th>기여</th></tr></thead>
+          <thead><tr><th>영역</th><th>구현 내용</th></tr></thead>
           <tbody>
-            <tr><td><strong>학습·최적화 요청 관리</strong></td><td>외부 연산 서버 오케스트레이션, AI/Custom 요청 경로 분리, JPA Specification 동적 필터</td></tr>
-            <tr><td><strong>동적 테이블 연동</strong></td><td>연산 서버가 런타임에 생성하는 결과 테이블을 JdbcTemplate로 조회·정리</td></tr>
-            <tr><td><strong>실시간 스트리밍</strong></td><td>차량 궤적(FCD) 데이터를 시각화 클라이언트에 고정 주기로 WebSocket 푸시, 재생 제어</td></tr>
-            <tr><td><strong>신호 도메인 변환</strong></td><td>TOD 시간대별 신호 계획, Ring × Phase 매핑, 순수 녹색시간 산출</td></tr>
-            <tr><td><strong>분석 리포팅</strong></td><td>기준/최적화 지표 집계 쿼리와 Apache POI 기반 다중 시트 Excel 생성</td></tr>
-            <tr><td><strong>공통 인프라</strong></td><td>표준 응답 포맷, 전역 예외 처리, MDC traceId, WebClient/WebSocket/CORS 설정</td></tr>
+            <tr><td><strong>학습·최적화 요청 관리</strong></td><td>Python 서버에 연산 요청, AI/Custom 요청 경로 분리, JPA Specification을 이용한 검색 조건 처리</td></tr>
+            <tr><td><strong>동적 테이블 연동</strong></td><td>연산 서버가 실행마다 생성하는 결과 테이블을 JdbcTemplate로 조회·삭제</td></tr>
+            <tr><td><strong>실시간 스트리밍</strong></td><td>차량 위치(FCD)를 WebSocket으로 주기적으로 전송하고 재생·일시정지·시점 이동 처리</td></tr>
+            <tr><td><strong>신호 계획 데이터 변환</strong></td><td>TOD 시간대별 신호 계획, Ring × Phase 매핑, 순수 녹색시간 산출</td></tr>
+            <tr><td><strong>Excel 분석 보고서</strong></td><td>기준/최적화 지표 집계 쿼리와 Apache POI 기반 다중 시트 Excel 생성</td></tr>
+            <tr><td><strong>API 공통 처리</strong></td><td>표준 응답 포맷, 전역 예외 처리, MDC traceId, WebClient/WebSocket/CORS 설정</td></tr>
           </tbody>
         </table>
       </div>
@@ -93,24 +93,24 @@
     <section class="detail-section" id="architecture">
       <h2>시스템 아키텍처</h2>
       <figure class="architecture-figure card detail-card">
-        <img src="../../assets/city-signal-architecture.png" alt="비동기 연산 오케스트레이션 백엔드 아키텍처" />
+        <img src="../../assets/city-signal-architecture.png" alt="관리자 웹과 Unity 화면, Python 연산 서버를 연결하는 Java/Spring 중계 서버 구조" />
         <figcaption>
           관리자 웹은 REST로 Java/Spring 백엔드와 통신하고, 3D 시각화 클라이언트는 WebSocket으로 데이터를 수신합니다.
-          Java 백엔드는 요청 추적, 표준 응답, 예외 처리, 영속화를 담당하고 Python 연산 서버와 PostgreSQL을 연동합니다.
+          Java 중계 서버는 Python 서버에 연산을 요청하고 PostgreSQL에서 모델 정보와 결과를 조회합니다. API 응답 형식과 예외 처리, 요청별 로그 추적도 담당합니다.
         </figcaption>
       </figure>
     </section>
 
     <section class="detail-section" id="decisions">
-      <h2>핵심 기술 의사결정</h2>
+      <h2>구현 과정과 선택 이유</h2>
       <div class="decision-list">
 
         <article class="card decision-card">
           <h3>1. 장시간 작업은 비동기, 삭제는 동기</h3>
-          <div class="decision-row"><span class="decision-label">증상</span><p>학습·최적화 요청을 보내면 응답이 올 때까지 화면이 멈춰 있었습니다. 작업이 접수됐는지조차 확인할 수 없었고, 여러 명이 동시에 요청하면 서버가 다른 요청도 받지 못했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>연산이 분~시간 단위인데 응답을 그대로 기다리면 요청 스레드가 그동안 점유됩니다. 동시 요청이 겹치면 톰캣 스레드풀이 고갈되고, 연산 서버 장애가 그대로 API 지연으로 전파됩니다.</p></div>
+          <div class="decision-row"><span class="decision-label">증상</span><p>학습·최적화 요청 후 연산이 끝날 때까지 응답이 없어, 화면에서 작업 접수 여부를 확인하기 어려웠습니다. 다른 요청 처리도 지연됐습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>요청을 처리하는 스레드가 수십 분에서 수 시간이 걸리는 외부 연산의 응답을 기다리는 구조였습니다. 연산 대기 시간을 API 응답 시간에서 분리할 필요가 있었습니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>메타데이터를 먼저 저장해 내부 ID를 확보한 뒤 <span class="inline-code">WebClient.subscribe()</span>로 비동기 호출하고 즉시 접수 응답을 반환했습니다. 반면 삭제는 <span class="inline-code">block()</span>으로 외부 정리 → 종속 데이터 → 메타 삭제 순서를 보장했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>비동기 여부를 성능이 아니라 <strong>응답성과 정합성 중 무엇이 중요한 작업인가</strong>로 갈랐습니다. 삭제는 메타데이터를 먼저 지우면 이후 단계에서 대상 식별자를 찾을 수 없으므로 순서를 지켜야 했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>학습 요청은 완료 전에 접수 여부를 알려줄 수 있게 됐습니다. 삭제는 후속 단계에서 대상 식별자가 필요하므로, <strong>관련 데이터 정리가 끝난 뒤 메타데이터를 삭제</strong>하도록 했습니다.</p></div>
           <pre class="code-block"><code>// 1) 메타데이터를 먼저 저장해 내부 modelId 확보
 TrnModelInfoEntity entity = trainRepository.save(mapper.toEntity(req));
 String modelId = entity.getId();
@@ -134,11 +134,11 @@ return TrainFrontResponse.builder().status("CREATED").build();</code></pre>
         </article>
 
         <article class="card decision-card">
-          <h3>2. 런타임 동적 테이블은 JPA 대신 JdbcTemplate</h3>
-          <div class="decision-row"><span class="decision-label">증상</span><p>연산 서버가 시뮬레이션마다 이름이 다른 결과 테이블을 생성했습니다. 이 테이블들을 JPA로 다루려 하면 매핑할 엔티티를 만들 수 없었습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>JPA Entity는 테이블명이 컴파일 타임에 고정되어야 합니다. 테이블명이 실행 중에 결정되는 구조는 ORM의 전제를 벗어납니다.</p></div>
-          <div class="decision-row"><span class="decision-label">선택</span><p>동적 결과 테이블의 조회·삭제만 <span class="inline-code">JdbcTemplate</span>으로 내려가고, 정형 메타데이터는 JPA를 유지했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>기술을 하나로 통일하는 대신 <strong>각 기술의 장점이 유효한 범위</strong>로 나눴습니다. ORM 범위를 벗어나는 영역만 선택적으로 JDBC를 쓰고, 나머지의 생산성과 타입 안전성은 유지했습니다.</p></div>
+          <h3>2. 실행마다 이름이 달라지는 결과 테이블 처리</h3>
+          <div class="decision-row"><span class="decision-label">증상</span><p>연산 서버가 시뮬레이션마다 이름이 다른 결과 테이블을 생성했습니다. 실행마다 새로운 테이블에 맞춰 엔티티를 추가하는 방식은 사용하기 어려웠습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>기존 JPA 엔티티는 고정된 테이블에 매핑돼 있어, 실행마다 생성되는 결과 테이블을 같은 방식으로 조회하기 어려웠습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>동적 결과 테이블은 <span class="inline-code">JdbcTemplate</span>으로 조회·삭제하고, 모델·실행 정보는 기존 JPA 엔티티로 관리했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>실행 시 결정되는 테이블명을 SQL에 반영할 수 있게 됐습니다. <strong>모델·실행 정보의 기존 JPA 코드는 유지</strong>해 변경 범위를 결과 테이블 처리로 제한했습니다.</p></div>
           <pre class="code-block"><code>String optUuid = jdbcTemplate.queryForObject(
         "SELECT opt_uuid FROM opt_result_metric_info WHERE id = ?", String.class, optiId);
 
@@ -152,31 +152,31 @@ jdbcTemplate.update("DELETE FROM metric_intersection_summary WHERE opt_uuid = ?"
           <p style="margin-top:.9rem;color:#5d6b82;font-size:.92rem;">
             <strong>보안 고려사항:</strong> 값에는 파라미터 바인딩을 쓸 수 있지만 식별자(테이블명)에는 쓸 수 없습니다.
             이 구간은 연산 서버가 생성한 UUID만 저장된다는 내부 전제에 의존하고 있어,
-            외부 입력이 닿는 경로가 생긴다면 UUID 형식 정규식 검증으로 식별자를 화이트리스트화해야 하는 지점입니다.
+            UUID 형식 검증을 추가해 허용된 테이블명만 SQL에 포함하도록 보완할 필요가 있습니다.
           </p>
         </article>
 
         <article class="card decision-card">
-          <h3>3. 삭제는 단계마다 실패 정책을 다르게</h3>
+          <h3>3. 삭제 단계별 예외 처리와 한계</h3>
           <div class="decision-row"><span class="decision-label">증상</span><p>삭제 도중 한 단계가 실패하면 일부만 지워진 상태가 남았습니다. 어디까지 지워졌는지 알 수 없어 재시도도 위험했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>모든 단계에 같은 실패 처리를 적용했기 때문입니다. 실제로는 단계마다 실패의 의미가 다릅니다.</p></div>
-          <div class="decision-row"><span class="decision-label">선택</span><p>단계별로 정책을 나눴습니다. <strong>메타 조회 실패</strong>는 지울 대상이 없다는 뜻이므로 정상 종료, <strong>동적 테이블 DROP 실패</strong>는 이미 지워졌을 가능성이 있어 로그만 남기고 진행, <strong>공통 테이블·메타 삭제 실패</strong>는 예외를 다시 던져 트랜잭션을 롤백했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>"부분 삭제 상태"가 남을 수 있는 구간과 남아도 무해한 구간을 구분했습니다. 멱등하게 재시도할 수 있는 작업은 통과시키고, 정합성이 깨지는 작업만 롤백합니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>외부 연산 결과, 동적 테이블, 공통 테이블과 메타데이터를 차례로 삭제하므로 각 단계의 실패를 구분해야 했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>구현에서는 <strong>메타 조회 실패</strong> 시 처리를 종료하고, <strong>동적 테이블 DROP 실패</strong>는 로그를 남긴 뒤 다음 단계로 진행했습니다. <strong>공통 테이블·메타데이터 삭제 실패</strong>는 예외를 다시 던져 트랜잭션이 롤백되도록 했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">한계</span><p>조회나 DROP 실패가 대상이 없다는 뜻은 아닙니다. <strong>대상 없음과 DB 오류를 구분</strong>하고, 삭제가 일부만 완료된 경우의 재시도 동작을 추가로 검증해야 합니다.</p></div>
         </article>
 
         <article class="card decision-card">
-          <h3>4. MDC traceId 표준화</h3>
+          <h3>4. 응답과 서버 로그를 traceId로 연결</h3>
           <div class="decision-row"><span class="decision-label">증상</span><p>사용자가 오류 화면을 캡처해 문의해도, 서버 로그에서 그 요청이 어느 줄인지 찾을 수 없었습니다.</p></div>
           <div class="decision-row"><span class="decision-label">원인</span><p>클라이언트가 받은 응답과 서버 로그를 연결할 공통 식별자가 없었습니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>Servlet Filter에서 요청마다 UUID traceId를 MDC에 주입하고, 표준 응답 객체 생성 시 traceId와 timestamp를 자동 포함시켰습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>응답의 traceId로 서버 로그를 역추적할 수 있게 됐습니다. <span class="inline-code">try-finally</span>에서 MDC를 제거하는 것이 중요한데, 톰캣은 요청 처리가 끝난 스레드를 버리지 않고 재사용하므로 지우지 않으면 <strong>다음 요청이 이전 요청의 traceId를 그대로 물려받습니다.</strong></p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>사용자가 전달한 응답의 traceId로 해당 요청의 서버 로그를 찾을 수 있게 됐습니다. 요청 처리가 끝나면 <span class="inline-code">finally</span>에서 MDC를 비워, 재사용되는 스레드에 이전 요청 정보가 남지 않도록 했습니다.</p></div>
         </article>
 
         <article class="card decision-card">
-          <h3>5. N+1 제거와 타입 안전한 동적 필터</h3>
+          <h3>5. 연관 데이터 일괄 조회와 검색 조건 조합</h3>
           <div class="decision-row"><span class="decision-label">증상</span><p>목록이 길어질수록 조회가 느려졌고, 검색 조건 조합이 늘 때마다 Repository 메서드가 하나씩 늘어났습니다.</p></div>
           <div class="decision-row"><span class="decision-label">원인</span><p>목록을 조회한 뒤 행마다 연관 데이터를 개별 조회하면 100건에 최대 101회 쿼리가 나갑니다. 그리고 선택적 조건을 문자열 JPQL로 분기하면 조합 수만큼 분기가 생깁니다.</p></div>
-          <div class="decision-row"><span class="decision-label">선택</span><p>연관 키를 모아 중복 제거 후 <span class="inline-code">IN</span> 절로 한 번에 조회하고 Map으로 룩업했습니다. 검색 조건은 JPA Specification으로 값이 있을 때만 Predicate를 추가하도록 조립했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>연관 키를 모아 중복 제거 후 <span class="inline-code">IN</span> 절로 한 번에 조회하고 Map에서 찾도록 했습니다. 검색 조건은 JPA Specification으로 값이 있을 때만 Predicate를 추가하도록 조립했습니다.</p></div>
           <div class="decision-row"><span class="decision-label">효과</span><p>쿼리 호출 수가 <span class="inline-code">1 + N</span>에서 <span class="inline-code">1 + 1</span>로 줄었습니다. 조건 조합마다 메서드를 만들 필요가 없어졌고, 목록 조회와 페이지 수 조회가 같은 조건 객체를 재사용합니다.</p></div>
           <p style="margin-top:.9rem;color:#5d6b82;font-size:.92rem;">
             응답 시간 개선 폭은 별도로 측정하지 않았으므로 배수로 표현하지 않고, 쿼리 호출 수 감소를 기준으로 정리했습니다.
@@ -187,11 +187,11 @@ jdbcTemplate.update("DELETE FROM metric_intersection_summary WHERE opt_uuid = ?"
     </section>
 
     <section class="detail-section" id="domain">
-      <h2>신호 제어 도메인 변환</h2>
+      <h2>시간대별 신호 계획 변환</h2>
       <div class="summary-box">
         <p>
-          이 프로젝트에서 가장 많은 시행착오가 있었던 부분은 기술이 아니라 <strong>도메인 이해</strong>였습니다.
-          교통신호 데이터는 일반적인 CRUD 데이터와 구조가 다르고, 그 차이를 모르면 코드가 조용히 잘못된 값을 만듭니다.
+          교통신호는 <strong>시간대, Ring, Phase를 함께 구분</strong>해야 합니다.
+          이 구분을 조회와 변환 코드에 반영하지 않으면 서로 다른 신호의 운영 시간이 뒤섞일 수 있었습니다.
         </p>
       </div>
 
@@ -229,12 +229,12 @@ jdbcTemplate.update("DELETE FROM metric_intersection_summary WHERE opt_uuid = ?"
     (a, b) -&gt; a));                                  // 중복 시 첫 값 유지</code></pre>
         <p>
           merge 함수를 함께 둔 이유는, 조합 키로 바꾼 뒤에도 원천 데이터에 중복 행이 들어올 수 있기 때문입니다.
-          <strong>예외로 죽는 대신 첫 값을 유지하고 넘어가는 쪽</strong>을 택했습니다.
-          시범 운영 데이터의 품질을 전제할 수 없는 상황이었습니다.
+          <strong>같은 조합 키가 중복되면 첫 값을 유지</strong>하도록 처리했습니다.
+          이 처리는 중복으로 인한 예외를 막지만, 서로 다른 값 중 어느 것이 맞는지 판단하지는 않습니다.
         </p>
       </div>
 
-      <h3>순수 녹색시간 계산과 음수 방어</h3>
+      <h3>순수 녹색시간 계산과 음수 표시 방지</h3>
       <div class="card detail-card">
         <p>
           화면에 필요한 값은 DB에 그대로 있지 않습니다.
@@ -252,7 +252,7 @@ return TODSignalTable.builder()
           <span class="inline-code">Math.max(val, 0)</span>를 둔 이유는, 원천 데이터에서 황색·전적색 합이
           운영 시간보다 큰 행이 실제로 존재했기 때문입니다.
           그대로 두면 화면에 <strong>음수 녹색시간</strong>이 표시됩니다.
-          데이터 이상이 사용자에게 그대로 노출되지 않도록 표현 계층에서 하한을 뒀습니다.
+          응답용 계산 값의 최솟값을 0으로 제한했습니다. 원본 데이터 오류를 수정하는 처리는 아닙니다.
         </p>
         <p>
           이 과정에서 <strong>DB 원본 값</strong>, <strong>외부 응답용 계산 값</strong>,
@@ -263,12 +263,12 @@ return TODSignalTable.builder()
     </section>
 
     <section class="detail-section" id="streaming">
-      <h2>실시간 스트리밍 — 연결이 아니라 재생 상태 관리</h2>
+      <h2>차량 위치 전송과 시뮬레이션 재생 제어</h2>
       <div class="summary-box">
         <p>
           시각화 클라이언트는 <strong>기준 신호안과 최적화 신호안의 차량 흐름을 나란히 비교</strong>해야 했습니다.
-          그래서 필요한 것은 WebSocket 연결 자체가 아니라, 두 데이터를 같은 시각으로 묶어 보내고
-          사용자가 재생을 제어할 수 있게 하는 <strong>상태 관리</strong>였습니다.
+          두 결과에서 같은 시각의 차량 위치를 조회해 함께 전송하고,
+          사용자가 <strong>일시정지·재개·시점 이동</strong>을 할 수 있도록 재생 상태를 관리했습니다.
         </p>
       </div>
 
@@ -286,9 +286,9 @@ return TODSignalTable.builder()
         </table>
       </div>
       <p class="section-desc" style="margin-top:1rem">
-        메시지 종류가 늘어나도 분기만 추가하면 되도록 구성했고,
-        Handler는 WebSocket 이벤트 전달만 담당하고 Service가 세션·현재 시각·동적 테이블명·
-        스케줄러 핸들의 생명주기를 관리하도록 책임을 나눴습니다.
+        Handler는 WebSocket 메시지를 받아 Service로 전달합니다.
+        Service는 연결 세션, 재생 시각과 결과 테이블명을 보관하고,
+        재생 요청에 따라 주기적 전송 작업을 시작하거나 취소합니다.
       </p>
 
       <h3>같은 시각의 두 데이터를 한 메시지로</h3>
@@ -314,11 +314,11 @@ streamingTask = scheduler.scheduleAtFixedRate(() -&gt; {
 }, 0, 150, TimeUnit.MILLISECONDS);               // 실제 송신 주기는 150ms</code></pre>
         <p>
           두 데이터를 각각 보내면 클라이언트가 도착 순서를 맞춰야 합니다.
-          <strong>같은 기준 시각의 두 payload를 하나의 메시지로 묶어</strong> 그 부담을 서버가 흡수했습니다.
+          <strong>같은 기준 시각의 두 결과를 하나의 메시지로 묶어</strong> 클라이언트가 바로 비교해 표시할 수 있도록 했습니다.
         </p>
         <p>
           송신 주기는 150ms인데 기준 시각은 1초씩 증가합니다.
-          이 차이가 <strong>약 6.7배속 재생</strong>을 만들어, 한 시간짜리 시뮬레이션을 9분 정도에 검토할 수 있습니다.
+          조회·전송 지연이 없다면 <strong>약 6.7배속</strong>에 해당하며, 한 시간 분량을 약 9분에 재생하도록 설정한 값입니다.
           구간 끝에 도달하면 0으로 돌아가 반복 재생합니다.
         </p>
         <p style="color:#5d6b82;font-size:.92rem;">
@@ -330,11 +330,11 @@ streamingTask = scheduler.scheduleAtFixedRate(() -&gt; {
     </section>
 
     <section class="detail-section">
-      <h2>공통 계층 표준화</h2>
+      <h2>API 응답과 오류 처리</h2>
       <div class="two-col">
         <article class="card detail-card">
           <h3>통합 응답 포맷</h3>
-          <p>모든 REST 응답을 record 기반 <span class="inline-code">ResponseApi&lt;T&gt;</span>로 통일하고, 생성 시점에 traceId와 timestamp를 자동 주입했습니다. record라 생성 후 값이 바뀌지 않습니다.</p>
+          <p>모든 REST 응답을 record 기반 <span class="inline-code">ResponseApi&lt;T&gt;</span>로 통일하고, 생성 시점에 traceId와 timestamp를 자동 주입했습니다.</p>
         </article>
         <article class="card detail-card">
           <h3>비즈니스 코드와 HTTP 코드 분리</h3>
@@ -352,11 +352,11 @@ streamingTask = scheduler.scheduleAtFixedRate(() -&gt; {
     </section>
 
     <section class="detail-section">
-      <h2>분석 리포팅</h2>
+      <h2>Excel 분석 보고서</h2>
       <div class="card detail-card">
         <p>
           같은 분석 데이터를 웹 화면에서는 JSON으로, 외부 보고용으로는 Excel로 제공해야 했습니다.
-          Apache POI로 하나의 Workbook에 관점별 시트를 나눠 생성했습니다.
+          Apache POI로 시간대별 지표, 교차로별 지표와 신호 변경 내역을 각각 다른 시트에 담았습니다.
         </p>
         <div class="table-wrap">
           <table class="portfolio-table">
@@ -370,16 +370,14 @@ streamingTask = scheduler.scheduleAtFixedRate(() -&gt; {
           </table>
         </div>
         <p style="margin-top:1rem">
-          시트를 나눈 기준은 데이터 구조가 아니라 <strong>검토자의 관점</strong>이었습니다.
-          교통 담당자는 지점별로 보고, 운영자는 시간대별로 봅니다.
-          한 시트에 모두 담으면 양쪽 모두 필요한 부분을 찾아야 합니다.
-          시트별 헤더 색상도 도메인 의미와 맞춰 비개발 검토자가 바로 이해할 수 있도록 했습니다.
+          <strong>시간대별 비교와 교차로별 비교를 별도 시트로 제공</strong>해 필요한 결과를 바로 찾을 수 있도록 했습니다.
+          시트별 헤더 색상도 구분했습니다.
         </p>
       </div>
       <div class="back-top"><a class="button dark" href="#top">맨 위로</a></div>
     </section>
   </main>
 
-  <footer class="footer">© 이현재. CITY_SIGNAL Portfolio.</footer>
+  <footer class="footer">© 이현재. 도시 교통신호 최적화 시스템.</footer>
 </body>
 </html>

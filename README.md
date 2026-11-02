@@ -7,7 +7,7 @@ GitHub Pages 배포용 정적 웹사이트입니다.
 - `/` : 웹 이력서
 - `/portfolio/` : 포트폴리오 목록
 - `/portfolio/thermal-safety/` : 열화상·가스 안전관제 시스템
-- `/portfolio/city-signal/` : CITY_SIGNAL 도시 교통신호 최적화
+- `/portfolio/city-signal/` : 도시 교통신호 최적화 시스템
 - `/portfolio/thermal-parking/` : 열화상 주차 감지 CV 알고리즘
 
 ## PDF 출력

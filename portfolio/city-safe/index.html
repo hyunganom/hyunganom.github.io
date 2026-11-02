@@ -27,8 +27,8 @@
       <p class="eyebrow">CITY_SAFE · C++ / Python Backend</p>
       <h1>전기차 배터리 화재·과열·이상 감지를 위한 이중 서버 백엔드 설계</h1>
       <p>
-        다중 열화상 카메라 환경에서 반복되던 동시성·생명주기 결함을 아키텍처 수준에서 제거하고,
-        실시간 연산은 C++ 서버가, 영속화·외부 통합은 Python 관리 서버가 담당하도록 재설계했습니다.
+        여러 열화상 카메라를 처리하면서 발생한 공유 상태 접근과 객체 삭제 문제를 개선했습니다.
+        C++ 서버는 카메라 수집·분석을, Python 관리 서버는 DB 저장과 외부 장비 연동을 담당했습니다.
         이후 열화상 파이프라인을 단계적으로 Python으로 이관해 운영 프로세스를 단일화했습니다.
       </p>
       <div class="portfolio-actions">
@@ -51,16 +51,16 @@
       <h2>프로젝트 개요</h2>
       <div class="summary-box">
         <p>
-          전기차 배터리 화재·과열·이상 감지 시스템의 백엔드입니다. 두 서버가 동일한 운영 가설인
-          <strong>“최신 상태 우선, 손실 허용, 영구 다운 금지”</strong>를 공유하도록 인터페이스와 장애 처리 정책을 맞췄습니다.
+          전기차 배터리의 화재·과열·이상 징후를 감지하는 시스템의 백엔드입니다.
+          <strong>최신 데이터 우선 처리와 연결 실패 후 재시도</strong>를 기준으로 두 서버의 처리 방식을 정했습니다.
         </p>
         <p>
           C++ 서버는 열화상 SDK, 프레임 수집, ROI 온도·이상 분석, WebSocket 스트리밍에 집중하고,
-          Python 서버는 DB 영속화·집계, 외부 시스템 통합, 이벤트 영상 녹화, 캐시·상태 머신을 담당했습니다.
+          Python 서버는 DB 저장·집계, 외부 시스템 통합, 이벤트 영상 녹화, 캐시·상태 머신을 담당했습니다.
         </p>
       </div>
 
-      <h3>왜 패치가 아니라 재설계였는가</h3>
+      <h3>공유 상태와 객체 수명 관리에서 발생한 문제</h3>
       <div class="card detail-card">
         <p>
           기존 구조에서는 카메라 대수가 늘수록 다음 증상이 더 자주 나타났습니다.
@@ -76,7 +76,7 @@
         </ul>
         <p>
           그래서 “어떤 공유 상태를 어떤 락이 보호하는가”를 코드에서 눈으로 확인할 수 있는 구조로 바꾸는 것을
-          재설계의 목표로 잡았습니다. 아래 의사결정은 모두 이 목표에서 파생된 것입니다.
+          개선 목표로 잡았습니다.
         </p>
       </div>
     </section>
@@ -134,7 +134,7 @@
       <div class="card detail-card">
         <p>
           기존에는 단일 <span class="inline-code">io_context</span>와 단일 풀에서 모든 작업이 실행됐습니다.
-          ROI 분석 같은 CPU 집약 작업이 네트워크 응답성을 잠식하는 구조였습니다.
+          ROI 계산이 오래 걸리면 네트워크 요청 처리도 지연되는 구조였습니다.
           작업 성격에 따라 전용 풀로 분리하고, 각 풀의 크기를 코어 수 기반으로 산정했습니다.
         </p>
         <pre class="code-block"><code>16 코어 기준
@@ -165,14 +165,14 @@ ThreadPool   ── enc 4   JPEG · Base64 인코딩 (CPU 바운드)</code></pre
     </section>
 
     <section class="detail-section" id="decisions">
-      <h2>핵심 기술 의사결정</h2>
+      <h2>문제별 수정 내용</h2>
       <div class="decision-list">
 
         <article class="card decision-card">
           <h3>1. 공유 상태와 락의 1:1 매칭</h3>
           <div class="decision-row"><span class="decision-label">증상</span><p>모니터링 스레드와 스트리밍 경로가 동일한 맵을 동시에 읽고 쓰면서, 검출 상태 불일치와 메모리 접근 오류가 발생했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>검출 상태·배경온도 등 10여 개의 <span class="inline-code">unordered_map</span>이 뮤텍스 선언 없이 멤버로 흩어져 있었습니다. 동시 insert로 rehash가 일어나면 다른 스레드가 들고 있던 참조가 전부 무효화됩니다.</p></div>
-          <div class="decision-row"><span class="decision-label">선택</span><p>공유 상태를 하나로 응집하고 카테고리별 뮤텍스로 나눴습니다. 카메라별 상태에는 카메라마다 독립 락을 부여했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>검출 상태·배경온도 등 10여 개의 <span class="inline-code">unordered_map</span>이 뮤텍스 선언 없이 멤버로 흩어져 있었습니다. 같은 맵에 대한 조회와 변경을 동기화하지 않은 채 여러 스레드에서 수행하고 있었습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">선택</span><p>공유 상태를 함께 관리하도록 묶고 카테고리별 뮤텍스로 나눴습니다. 카메라별 상태에는 카메라마다 독립 락을 부여했습니다.</p></div>
           <div class="decision-row"><span class="decision-label">효과</span><p>어떤 락이 무엇을 보호하는지가 타입에 드러납니다. 카메라 A의 갱신이 카메라 B의 송신을 막지 않으며, 카메라별로 독립된 락을 사용해 카메라 수가 늘어나도 서로 간의 경합을 최소화했습니다.</p></div>
           <pre class="code-block"><code>struct PipelineState {
     struct PerCameraROI {
@@ -204,9 +204,9 @@ ThreadPool   ── enc 4   JPEG · Base64 인코딩 (CPU 바운드)</code></pre
         <article class="card decision-card">
           <h3>3. 단방향 소유 트리로 순환 참조 제거</h3>
           <div class="decision-row"><span class="decision-label">증상</span><p>종료 시 SDK·DB·파일 자원이 정리되지 않고 메모리가 반환되지 않았습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">원인</span><p>스트리밍 매니저와 카메라 매니저가 서로를 <span class="inline-code">shared_ptr</span>로 강하게 참조했습니다. 참조 카운트가 0이 되지 않아 소멸자가 영원히 호출되지 않습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">원인</span><p>스트리밍 매니저와 카메라 매니저가 서로를 <span class="inline-code">shared_ptr</span>로 강하게 참조했습니다. 참조 카운트가 0이 되지 않아 소멸자가 호출되지 않는 구조였습니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>소유 방향을 <span class="inline-code">main → 컴포넌트</span> 한 방향으로 강제하고, 컴포넌트끼리는 의존만 하되 역참조를 두지 않았습니다. 콜백에서 다른 객체가 필요하면 강한 멤버 대신 필요한 shared_ptr만 람다에 캡처합니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>누가 누구를 살려두는지가 한 방향으로 정리되어 lifetime 추적이 가능해졌고, 종료 시 자원이 순서대로 정리됩니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>객체의 소유 관계를 정리해 어떤 객체가 해제돼야 자원이 반환되는지 확인할 수 있게 했습니다.</p></div>
         </article>
 
         <article class="card decision-card">
@@ -235,7 +235,7 @@ pool_.post([this, camId, frame = std::move(frame), cb = std::move(cb)]() mutable
           <div class="decision-row"><span class="decision-label">증상</span><p>ROI 분석 중 같은 카메라의 다른 요청이 함께 지연됐습니다.</p></div>
           <div class="decision-row"><span class="decision-label">원인</span><p>락을 잡은 채로 CPU 집약 계산까지 수행하면 락 보유 시간이 계산 시간과 같아집니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>스냅샷 복사 → 락 없이 계산 → 결과만 반영, 3단계로 나눴습니다. 락은 앞뒤 두 구간에서만 짧게 잡습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>락 보유 시간이 맵 복사·반영 비용으로 줄어 계산량과 분리됐습니다. 결과 반영 단계에서 상태가 실제로 바뀐 ROI만 이벤트로 승격시켜 불필요한 알림도 함께 줄였습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>락 보유 시간이 맵 복사·반영 비용으로 줄어 계산량과 분리됐습니다. 결과 반영 단계에서 상태가 실제로 바뀐 ROI만 이벤트로 전달해 불필요한 알림도 함께 줄였습니다.</p></div>
           <pre class="code-block"><code>// Step1 — 짧은 락으로 스냅샷만 복사
 std::unordered_map&lt;int, ROIData&gt; snapshot;
 {
@@ -275,7 +275,7 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
           <div class="decision-row"><span class="decision-label">증상</span><p>비동기 흐름을 따라가기 어려웠고, 여러 경로에서 같은 WebSocket에 동시에 write를 시도할 수 있었습니다.</p></div>
           <div class="decision-row"><span class="decision-label">원인</span><p>accept 루프가 람다 안의 람다로 자기 자신을 캡처해 호출하는 형태였습니다. WebSocket은 한 번에 하나의 write만 허용하는데 이를 직렬화하는 장치가 없었습니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>Boost.Asio C++20 코루틴으로 비동기 로직을 선형 코드로 바꾸고, 세션마다 <span class="inline-code">asio::strand</span>를 둬 모든 write를 post했습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>주기 작업이 별도 스레드 없이 <span class="inline-code">io_context</span> 안에서 실행되고, write는 strand로 자동 직렬화되어 프로토콜 위반 가능성이 사라졌습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>주기 작업이 별도 스레드 없이 <span class="inline-code">io_context</span> 안에서 실행되고, 송신 관련 핸들러는 strand를 통해 실행하도록 했습니다. 비동기 송신 완료 전에 다음 송신을 시작하지 않는지도 별도로 확인해야 합니다.</p></div>
         </article>
 
         <article class="card decision-card">
@@ -283,7 +283,7 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
           <div class="decision-row"><span class="decision-label">증상</span><p>DB 쓰기가 지연되면 다른 hub의 메시지 수신까지 함께 밀렸습니다.</p></div>
           <div class="decision-row"><span class="decision-label">원인</span><p><span class="inline-code">asyncio</span> 이벤트 루프 안에서 동기 SQLAlchemy를 호출하면 그동안 루프 전체가 멈춥니다.</p></div>
           <div class="decision-row"><span class="decision-label">선택</span><p>hub는 큐에 넣는 producer 역할만 하고, 별도 worker가 sync DB 작업을 전담하도록 분리했습니다. 큐는 카테고리별로 독립시켜 head-of-line blocking을 막았습니다.</p></div>
-          <div class="decision-row"><span class="decision-label">효과</span><p>기존 sync 도메인 코드를 유지하면서 이벤트 루프를 보호했고, 큐 자체가 자연스러운 백프레셔 지점이 됐습니다. 비동기 전환에 드는 마이그레이션 비용도 피했습니다.</p></div>
+          <div class="decision-row"><span class="decision-label">효과</span><p>기존 동기 DB 코드를 유지하면서 수신과 저장 작업을 분리했습니다. 큐의 크기를 제한했으며, 큐가 가득 찬 경우 저장 요청이 누락될 수 있다는 제약이 있습니다.</p></div>
         </article>
 
       </div>
@@ -314,8 +314,7 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
           이벤트 상태를 여러 컬럼에 중복해서 저장하지 않아 상태 불일치 가능성을 줄이고, 관련 처리 로직도 event_et IS NULL이라는 하나의 기준으로 통일했습니다.
         </p>
         <p>
-          상태를 두 곳에 저장하면 반드시 어긋납니다. 표현 수단을 하나로 줄인 결과
-          도메인 규칙이 여러 함수로 흩어지지 않고 쿼리 조건 하나로 수렴했습니다.
+          조회와 종료 처리에서 같은 조건을 사용해, 진행 상태를 판단하는 기준을 통일했습니다.
         </p>
       </div>
 
@@ -326,7 +325,7 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
           <thead><tr><th>정책</th><th>C++ 서버</th><th>Python 서버</th></tr></thead>
           <tbody>
             <tr><td>백프레셔</td><td><span class="inline-code">MAX_QUEUE=2</span> + 오래된 프레임 폐기</td><td><span class="inline-code">Queue(maxsize=10)</span> + <span class="inline-code">QueueFull</span> drop</td></tr>
-            <tr><td>락프리 생산</td><td><span class="inline-code">compare_exchange_strong</span> 스킵</td><td><span class="inline-code">put_nowait</span> 실패 시 drop</td></tr>
+            <tr><td>대기 없는 작업 등록</td><td><span class="inline-code">compare_exchange_strong</span> 스킵</td><td><span class="inline-code">put_nowait</span> 실패 시 drop</td></tr>
             <tr><td>예외 복구</td><td><span class="inline-code">ioc.restart()</span> 후 run 재개</td><td>worker <span class="inline-code">while True</span> + try/except</td></tr>
             <tr><td>설정</td><td><span class="inline-code">CFG("server.ws_port", 9001)</span></td><td><span class="inline-code">cfg("cpp.ws_url", ...)</span></td></tr>
             <tr><td>소유권 명시</td><td>단방향 소유 트리 + <span class="inline-code">shared_from_this</span></td><td><span class="inline-code">app.state.*_task</span>로 핸들 보관</td></tr>
@@ -346,7 +345,7 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
         </article>
         <article class="card detail-card">
           <h3>지수 백오프와 자동 재구독</h3>
-          <p>C++ 서버가 재기동되어도 관리 서버는 살아 있어야 합니다. 3초에서 30초 cap까지 백오프하고, 재연결 직후 클라이언트가 구독했던 카메라를 자동 재구독해 단절을 감추었습니다.</p>
+          <p>C++ 서버와의 연결이 끊기면 재시도 간격을 3초부터 최대 30초까지 늘립니다. 연결이 복구되면 기존 카메라를 자동으로 재구독하도록 했습니다.</p>
         </article>
         <article class="card detail-card">
           <h3>Graceful Shutdown</h3>
@@ -359,9 +358,9 @@ Def_DrErrCode syncRet = SicSdkSyncConnect(devIdx);</code></pre>
       <h2>열화상 파이프라인의 Python 이관</h2>
       <div class="summary-box">
         <p>
-          재설계로 C++ 서버는 안정화됐지만, 기능이 늘어날수록 <strong>C++ 단독으로 감당하는 비용</strong>이 커졌습니다.
+          기능이 늘어나면서 <strong>장치 연동과 관리 기능을 두 서버에서 함께 변경하는 부담</strong>이 커졌습니다.
           복합 쿼리, 다중 클라이언트 세션 관리, FFmpeg 자식 프로세스 관리, Modbus·릴레이 보드 연동 같은 작업은
-          Python 쪽 생태계가 압도적으로 유리했습니다.
+          Python 관리 서버에서 처리하도록 모았습니다.
         </p>
         <p>
           그래서 열화상 SDK 입력 자체를 Python이 직접 받도록 이관했습니다.
@@ -409,8 +408,8 @@ ROI · 이상감지 · DB · WebSocket · 알람</code></pre>
       <div class="card detail-card">
         <p>
           카메라마다 shared memory와 named event를 하나씩 두고, 4개 슬롯을 순환하면서 ring buffer를 사용합니다.
-          producer(C++ 콜백)와 consumer(Python)가 서로 다른 프로세스에 있으므로 뮤텍스를 공유할 수 없습니다.
-          대신 <strong>sequence 번호를 이용한 검증</strong>으로 찢어진 프레임을 걸러냅니다.
+          프레임을 기록하는 C++ 콜백과 읽는 Python 코드가 동시에 같은 슬롯에 접근할 수 있습니다.
+          <strong>sequence 번호를 비교</strong>해 복사 중에 덮어쓴 프레임을 걸러냅니다.
         </p>
         <p>
           핵심은 <strong>슬롯을 쓰기 시작할 때 sequence를 0으로 낮추고, 다 쓴 뒤에 실제 값으로 올리는 것</strong>입니다.
@@ -498,9 +497,9 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
           <p>
             그래서 이벤트가 끝나도 <strong>다음 5분 경계까지 채운 뒤 stop</strong>하도록 예약합니다.
             경과 시간 계산에는 <span class="inline-code">time.monotonic()</span>을 썼습니다.
-            벽시계는 NTP 동기화로 뒤로 갈 수 있어 경과 시간 측정에 쓸 수 없습니다.
+            시스템 시각이 보정돼도 경과 시간 계산에 영향을 받지 않도록 했습니다.
             종료는 terminate 후 10초 대기, 그래도 안 되면 <span class="inline-code">taskkill /T /F</span> 순으로 처리해
-            trailer가 정상적으로 쓰이도록 했습니다.
+            종료되지 않은 프로세스를 정리했습니다. 강제 종료 시에는 녹화 파일이 정상적으로 마무리되지 않을 수 있습니다.
           </p>
         </article>
 
@@ -539,7 +538,6 @@ temperature = np.frombuffer(payload, dtype="&lt;f4").reshape((h, w)).copy()</cod
           C++과 Python 영역에서도 동일한 기준을 적용해 장애나 처리 지연 상황에서 일관된 방식으로 동작하도록 구성했습니다.
         </p>
         <p>
-          또한 발생한 오류를 개별적으로 수정하기보다 문제를 만드는 구조 자체를 개선하는 방향으로 접근했습니다. 
           공유 데이터마다 동기화 범위를 명확히 하고, 여러 락이 필요한 구조는 단순화해 교착 상태 가능성을 줄였습니다. 
           객체 간 참조 관계도 한쪽 방향으로 정리해 수명 관리 과정에서 발생할 수 있는 잘못된 메모리 접근을 방지했습니다.
         </p>
