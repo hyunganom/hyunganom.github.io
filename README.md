@@ -9,9 +9,6 @@ GitHub Pages 배포용 정적 웹사이트입니다.
 - `/portfolio/thermal-safety/` : 열화상·가스 안전관제 시스템
 - `/portfolio/city-signal/` : CITY_SIGNAL 도시 교통신호 최적화
 - `/portfolio/thermal-parking/` : 열화상 주차 감지 CV 알고리즘
-- `/portfolio/kafka-event-sync/` : Kafka 실시간 이벤트 데이터 동기화 전략
-- `/portfolio/kafka-es-search/` : Kafka 이벤트 동기화 기반 Elasticsearch 검색 아키텍처
-- `/portfolio/elk-log-tracking/` : ELK RequestId·MDC 로그 트래킹 전략
 
 ## PDF 출력
 

@@ -25,17 +25,14 @@
       <p class="eyebrow">Backend Portfolio</p>
       <h1>운영 환경의 문제를 구조적으로 해결한 프로젝트 기록입니다.</h1>
       <p>
-        실시간 데이터 처리, 외부 서버 연동, WebSocket 스트리밍, CV 알고리즘, Kafka 이벤트 동기화,
-        Elasticsearch 검색 구조, ELK 로그 추적처럼 직접 맡은 역할과 기술적 의사결정을 프로젝트별로 정리했습니다.
+        실시간 데이터 처리, 외부 서버 연동, WebSocket 스트리밍, CV 알고리즘 등
+        직접 맡은 역할과 기술적 의사결정을 프로젝트별로 정리했습니다.
       </p>
       <div class="portfolio-actions">
         <a class="button primary" href="thermal-safety/">열화상·가스 안전관제</a>
         <a class="button ghost" href="ev-fire-research/">전기차 전소실험 연구</a>
         <a class="button ghost" href="city-signal/">CITY_SIGNAL</a>
         <a class="button ghost" href="thermal-parking/">주차 감지</a>
-        <a class="button ghost" href="kafka-event-sync/">Kafka 동기화</a>
-        <a class="button ghost" href="kafka-es-search/">ES 검색</a>
-        <a class="button ghost" href="elk-log-tracking/">ELK 로그</a>
         <a class="button ghost" href="../">이력서로 돌아가기</a>
         <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
       </div>
@@ -79,33 +76,6 @@
           <div class="chips"><span>Python</span><span>NumPy</span><span>OpenCV</span><span>WebSocket</span><span>tkinter</span><span>matplotlib</span><span>npz</span><span>NCC</span></div>
           <div class="portfolio-actions"><a class="button primary" href="thermal-parking/">상세 보기</a><a class="button" href="../assets/html-pdf/열화상_주차감지_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">이전 버전 PDF</a></div>
         </div><time class="project-period">2026.04 ~ 2026.08</time>
-      </article>
-      <article class="card portfolio-card kafka-card">
-        <div>
-          <span class="tag">Kafka / MSA</span>
-          <h2>Kafka 실시간 이벤트 데이터 동기화 전략</h2>
-          <p>서비스별 DB 분리로 발생한 N+1 외부 호출과 정합성 문제를 Kafka 이벤트 동기화 구조로 개선했습니다. 멱등성, 키 기반 파티셔닝, 재처리 전략을 함께 설계했습니다.</p>
-          <div class="chips"><span>Spring Kafka</span><span>Kafka</span><span>Eureka</span><span>Gateway</span><span>JPA</span><span>MySQL</span><span>Redis</span><span>Docker</span></div>
-          <div class="portfolio-actions"><a class="button primary" href="kafka-event-sync/">상세 보기</a><a class="button" href="../assets/html-pdf/Kafka_이벤트_동기화_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML PDF</a></div>
-        </div><span class="project-period">개인 프로젝트</span>
-      </article>
-      <article class="card portfolio-card es-card">
-        <div>
-          <span class="tag">Kafka / Elasticsearch / CQRS</span>
-          <h2>Kafka 이벤트 동기화 기반 Elasticsearch 검색 아키텍처</h2>
-          <p>RDB 조인 기반 통합 조회를 Kafka 이벤트 동기화와 Elasticsearch 검색 전용 문서로 분리했습니다. productCode 문서 ID, clientCode 라우팅, version 멱등성을 적용했습니다.</p>
-          <div class="chips"><span>Elasticsearch</span><span>Spring Data ES</span><span>Kafka</span><span>CQRS</span><span>MySQL</span><span>search_after</span><span>MDC</span></div>
-          <div class="portfolio-actions"><a class="button primary" href="kafka-es-search/">상세 보기</a><a class="button" href="../assets/html-pdf/Kafka_ES_검색아키텍처_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML PDF</a></div>
-        </div><span class="project-period">개인 프로젝트</span>
-      </article>
-      <article class="card portfolio-card elk-card">
-        <div>
-          <span class="tag">ELK / Observability</span>
-          <h2>ELK RequestId·MDC 로그 트래킹 전략</h2>
-          <p>Spring Boot MSA에서 구조화 JSON 로그와 RequestLoggingFilter, MDC requestId, debug 히스토리를 결합해 요청 단위 원인 분석 흐름을 구축했습니다.</p>
-          <div class="chips"><span>ELK Stack</span><span>Filebeat</span><span>Kafka</span><span>Logstash</span><span>Kibana</span><span>MDC</span><span>Logback</span></div>
-          <div class="portfolio-actions"><a class="button primary" href="elk-log-tracking/">상세 보기</a><a class="button" href="../assets/html-pdf/ELK_로그트래킹_포트폴리오_HTML기준.pdf" target="_blank" rel="noopener noreferrer">HTML PDF</a></div>
-        </div><span class="project-period">개인 프로젝트</span>
       </article>
     </section>
   </main>
