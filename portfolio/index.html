@@ -16,6 +16,7 @@
       <a class="brand" href="../">이현재</a>
       <div class="nav-links">
         <a href="../">Resume</a>
+        <a href="../career/">경력기술서</a>
         <a href="./">Portfolio</a>
         <a href="../#contact">Contact</a>
       </div>
@@ -32,8 +33,10 @@
         <a class="button primary" href="thermal-safety/">열화상·가스 안전관제</a>
         <a class="button ghost" href="ev-fire-research/">전기차 전소실험 연구</a>
         <a class="button ghost" href="city-signal/">교통신호 최적화</a>
+        <a class="button ghost" href="database-design/">DB 설계 사례</a>
         <a class="button ghost" href="thermal-parking/">주차 감지</a>
         <a class="button ghost" href="../">이력서로 돌아가기</a>
+        <a class="button ghost" href="../career/">경력기술서 보기</a>
         <button class="button ghost print-button" type="button" onclick="window.print()">브라우저에서 PDF 저장</button>
       </div>
     </section>
@@ -41,6 +44,15 @@
 
   <main class="portfolio-main">
     <section class="portfolio-grid" aria-label="프로젝트 목록">
+      <article class="card portfolio-card">
+        <div>
+          <span class="tag">PostgreSQL / Data Modeling</span>
+          <h2>데이터 구조와 저장 흐름 설계</h2>
+          <p>V2X와 CITY_SIGNAL의 DB 설계를 함께 정리했습니다. 초 단위 교통 지표의 저장·복구·보존 정책과 도로축·교차로·신호 계획·실행 결과의 관계를 실제 코드에 근거해 설명합니다.</p>
+          <div class="chips"><span>PostgreSQL</span><span>복합키</span><span>트랜잭션</span><span>파티션</span><span>JPA</span><span>JSONB</span></div>
+          <div class="portfolio-actions"><a class="button primary" href="database-design/">DB 설계 상세 보기</a><a class="button" href="../assets/html-pdf/DB_설계_포트폴리오.pdf" target="_blank" rel="noopener">PDF 보기</a></div>
+        </div><span class="project-period">V2X · CITY_SIGNAL</span>
+      </article>
       <article class="card portfolio-card">
         <div>
           <span class="tag">Research / C++ / Python</span>

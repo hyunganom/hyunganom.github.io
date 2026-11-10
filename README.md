@@ -2,12 +2,19 @@
 
 GitHub Pages 배포용 정적 웹사이트입니다.
 
+## 경력 문서
+
+- [경력기술서 HTML](career/index.html): 기존 사이트 메뉴에서 열 수 있는 경력기술서 페이지입니다. 브라우저에서 PDF 저장·인쇄를 지원합니다.
+- [경력기술서 초안](docs/경력기술서.md): 회사별 담당 업무와 프로젝트별 주요 기여를 정리한 문서입니다. 제출 전 확인할 사항은 문서 하단의 검토 메모에 정리했습니다.
+
 ## 포함 페이지
 
 - `/` : 웹 이력서
+- `/career/` : 경력기술서
 - `/portfolio/` : 포트폴리오 목록
 - `/portfolio/thermal-safety/` : 열화상·가스 안전관제 시스템
 - `/portfolio/city-signal/` : 도시 교통신호 최적화 시스템
+- `/portfolio/database-design/` : V2X · 도시 교통신호 최적화 시스템 데이터 구조와 저장 흐름 설계 (확대 가능한 구조도·A4 PDF 포함)
 - `/portfolio/thermal-parking/` : 열화상 주차 감지 CV 알고리즘
 
 ## PDF 출력
