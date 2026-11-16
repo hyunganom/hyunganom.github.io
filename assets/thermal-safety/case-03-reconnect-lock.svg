@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="485" viewBox="0 0 1100 485" role="img" aria-labelledby="title desc">
+<title id="title">카메라 재연결의 글로벌 락 범위 변경</title><desc id="desc">변경 전에는 공유 상태 준비와 SDK 연결 대기를 모두 글로벌 락 안에서 수행합니다. 변경 후에는 공유 상태 준비와 접속 정보 복사 뒤 락을 해제한 다음 동기 SDK 연결을 호출합니다.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#63758c"/></marker></defs>
+<style>text{font-family:'Malgun Gothic','Noto Sans KR',sans-serif;fill:#20344e}.heading{font-size:18px;font-weight:700}.label{font-size:16px;font-weight:700}.detail{font-size:13px;fill:#526780}.blue{fill:#245ddb}.green{fill:#087f78}.red{fill:#a04431}</style>
+<rect width="1100" height="485" fill="#fff"/>
+<text x="280" y="35" class="heading red" text-anchor="middle">변경 전 · SDK 응답 대기까지 락 점유</text>
+<text x="820" y="35" class="heading green" text-anchor="middle">변경 후 · 공유 상태 보호 구간만 잠금</text>
+<rect x="55" y="65" width="450" height="250" rx="12" fill="#fff3ef" stroke="#e6b8ac" stroke-dasharray="6 4"/>
+<rect x="595" y="65" width="450" height="130" rx="12" fill="#edf8f4" stroke="#96c7bd" stroke-dasharray="6 4"/>
+<text x="280" y="95" class="label red" text-anchor="middle">글로벌 락 획득 · 보호 구간</text>
+<text x="820" y="95" class="label green" text-anchor="middle">글로벌 락 획득 · 보호 구간</text>
+<rect x="95" y="120" width="370" height="60" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="280.0" y="156.0" class="label" text-anchor="middle">공유 상태 · 장치 정보 준비</text>
+<rect x="635" y="120" width="370" height="60" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="820.0" y="156.0" class="label" text-anchor="middle">공유 상태 준비 · 접속 정보 복사</text>
+<rect x="95" y="230" width="370" height="60" rx="9" fill="#ffe3da" stroke="#dda48f" stroke-width="1.5"/>
+<text x="280.0" y="257.0" class="label" text-anchor="middle">동기 SDK 연결 · 응답 대기</text>
+<text x="280.0" y="280.0" class="detail" text-anchor="middle">대기 중에도 글로벌 락 유지</text>
+<rect x="635" y="230" width="370" height="60" rx="9" fill="#eaf6f3" stroke="#94c7bf" stroke-width="1.5"/>
+<text x="820.0" y="257.0" class="label" text-anchor="middle">글로벌 락 해제</text>
+<text x="820.0" y="280.0" class="detail" text-anchor="middle">공유 상태 보호 구간 종료</text>
+<rect x="95" y="340" width="370" height="60" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="280.0" y="376.0" class="label" text-anchor="middle">글로벌 락 해제</text>
+<rect x="635" y="340" width="370" height="60" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="820.0" y="367.0" class="label" text-anchor="middle">동기 SDK 연결 · 응답 대기</text>
+<text x="820.0" y="390.0" class="detail" text-anchor="middle">글로벌 락 밖에서 수행</text>
+<path d="M280 180 V230" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M280 290 V340" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M820 180 V230" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M820 290 V340" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<text x="280" y="440" class="detail red" text-anchor="middle">같은 락이 필요한 다른 API · 콜백도 대기</text>
+<text x="820" y="440" class="detail green" text-anchor="middle">SDK 연결을 기다리는 동안 공유 락을 점유하지 않음</text>
+<text x="550" y="472" class="detail" text-anchor="middle">SDK 호출 자체는 동기 방식 유지 · 취소 신호는 재시도 루프의 후속 작업을 중단</text>
+</svg>

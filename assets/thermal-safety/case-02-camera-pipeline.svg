@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="445" viewBox="0 0 1120 445" role="img" aria-labelledby="title desc">
+<title id="title">Python 다중 카메라 처리 구조</title><desc id="desc">카메라별 프레임 수신과 최신 프레임 큐, 순차 소비자를 두고 ROI 분석은 제한된 공유 워커 풀에 위임합니다. 분석 결과는 카메라별 락으로 상태를 갱신하고 DB와 관제 화면에 전달합니다.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#63758c"/></marker></defs>
+<style>text{font-family:'Malgun Gothic','Noto Sans KR',sans-serif;fill:#20344e}.heading{font-size:18px;font-weight:700}.label{font-size:16px;font-weight:700}.detail{font-size:13px;fill:#526780}.blue{fill:#245ddb}.green{fill:#087f78}.red{fill:#a04431}</style>
+<rect width="1120" height="445" fill="#fff"/>
+<text x="105" y="38" class="heading" text-anchor="middle">현장 입력</text>
+<text x="295" y="38" class="heading" text-anchor="middle">프레임 수신 풀</text>
+<text x="495" y="38" class="heading" text-anchor="middle">카메라별 대기 큐</text>
+<text x="700" y="38" class="heading" text-anchor="middle">asyncio 태스크</text>
+<text x="960" y="38" class="heading" text-anchor="middle">ROI 분석 풀</text>
+<rect x="30" y="75" width="150" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="105.0" y="107.0" class="label" text-anchor="middle">카메라 A</text>
+<text x="105.0" y="130.0" class="detail" text-anchor="middle">SDK · C++ DLL</text>
+<rect x="220" y="75" width="150" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="295.0" y="107.0" class="label" text-anchor="middle">A 프레임 수신</text>
+<text x="295.0" y="130.0" class="detail" text-anchor="middle">스레드 풀에서 실행</text>
+<rect x="410" y="75" width="170" height="70" rx="9" fill="#edf6ff" stroke="#9fbbec" stroke-width="1.5"/>
+<text x="495.0" y="107.0" class="label" text-anchor="middle">최신 프레임 1개</text>
+<text x="495.0" y="130.0" class="detail" text-anchor="middle">이전 대기 프레임 교체</text>
+<rect x="620" y="75" width="160" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="700.0" y="107.0" class="label" text-anchor="middle">A 순차 소비자</text>
+<text x="700.0" y="130.0" class="detail" text-anchor="middle">앞선 분석 후 다음 처리</text>
+<path d="M180 110 H220" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M370 110 H410" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M580 110 H620" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M780 110 H830" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="30" y="185" width="150" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="105.0" y="217.0" class="label" text-anchor="middle">카메라 B</text>
+<text x="105.0" y="240.0" class="detail" text-anchor="middle">SDK · C++ DLL</text>
+<rect x="220" y="185" width="150" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="295.0" y="217.0" class="label" text-anchor="middle">B 프레임 수신</text>
+<text x="295.0" y="240.0" class="detail" text-anchor="middle">스레드 풀에서 실행</text>
+<rect x="410" y="185" width="170" height="70" rx="9" fill="#edf6ff" stroke="#9fbbec" stroke-width="1.5"/>
+<text x="495.0" y="217.0" class="label" text-anchor="middle">최신 프레임 1개</text>
+<text x="495.0" y="240.0" class="detail" text-anchor="middle">이전 대기 프레임 교체</text>
+<rect x="620" y="185" width="160" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="700.0" y="217.0" class="label" text-anchor="middle">B 순차 소비자</text>
+<text x="700.0" y="240.0" class="detail" text-anchor="middle">앞선 분석 후 다음 처리</text>
+<path d="M180 220 H220" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M370 220 H410" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M580 220 H620" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M780 220 H830" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="830" y="75" width="260" height="180" rx="9" fill="#eaf6f3" stroke="#94c7bf" stroke-width="1.5"/>
+<text x="960.0" y="162.0" class="label" text-anchor="middle">공유 ROI 워커 풀</text>
+<text x="960.0" y="185.0" class="detail" text-anchor="middle">제한된 워커 · NumPy 연산</text>
+<rect x="830" y="335" width="260" height="70" rx="9" fill="#eaf6f3" stroke="#94c7bf" stroke-width="1.5"/>
+<text x="960.0" y="367.0" class="label" text-anchor="middle">카메라별 상태 갱신</text>
+<text x="960.0" y="390.0" class="detail" text-anchor="middle">카메라별 락으로 보호</text>
+<rect x="410" y="335" width="370" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="595.0" y="367.0" class="label" text-anchor="middle">DB 저장 · 관제 화면 전송</text>
+<text x="595.0" y="390.0" class="detail" text-anchor="middle">분석 결과를 상태 관리 흐름에 연결</text>
+<path d="M960 255 V335" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M830 370 H780" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<text x="940" y="300" class="detail" text-anchor="middle">분석 결과 반환</text>
+<rect x="30" y="335" width="340" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="200.0" y="367.0" class="label" text-anchor="middle">SDK 제어도 별도 풀에서 실행</text>
+<text x="200.0" y="390.0" class="detail" text-anchor="middle">장치 응답 대기와 분석 자원 분리</text>
+</svg>

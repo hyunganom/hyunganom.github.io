@@ -61,6 +61,18 @@
     .system-flow strong{font-size:14px;display:block;margin-bottom:6px}
     .system-flow p{font-size:12px;color:var(--muted);line-height:1.8;margin:0}
     .flow-caption{font-size:11px;color:var(--muted);margin-top:10px;margin-bottom:0}
+    .system-architecture{margin:0 0 28px;border:1px solid var(--line);border-radius:8px;background:var(--white);overflow:hidden}
+    .system-architecture a{display:block;padding:16px;cursor:zoom-in}
+    .system-architecture img{display:block;width:100%;height:auto}
+    .system-architecture figcaption{display:flex;justify-content:space-between;gap:16px;margin:0;padding:14px 20px;border-top:1px solid var(--line);font-size:12px;font-weight:400;letter-spacing:0;line-height:1.7}
+    .system-architecture figcaption span:last-child{flex-shrink:0;color:var(--blue)}
+    .architecture-notes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+    .architecture-notes article{padding:20px;border:1px solid var(--line);border-radius:8px;background:var(--white)}
+    .architecture-notes .small-label{margin-bottom:8px}
+    .architecture-notes h3{font-size:16px;margin-bottom:8px}
+    .architecture-notes p{font-size:13px;color:var(--muted);margin:0}
+    @media(max-width:600px){.system-architecture a{padding:6px}.system-architecture figcaption{display:block;padding:12px 14px;font-size:11px}.system-architecture figcaption span{display:block}.system-architecture figcaption span+span{margin-top:5px}.architecture-notes{grid-template-columns:1fr;gap:10px}.architecture-notes article{padding:18px}}
+    @media print{.system-architecture{break-inside:avoid;margin-bottom:4mm}.system-architecture a{padding:2mm}.system-architecture figcaption{padding:2mm 3mm;font-size:8pt}.system-architecture figcaption span:last-child{display:none}.architecture-notes{grid-template-columns:repeat(3,1fr);gap:3mm;margin-bottom:4mm}.architecture-notes article{padding:3mm;break-inside:avoid}.architecture-notes h3{font-size:10pt}.architecture-notes p{font-size:9pt}}
     .feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
     .feature{padding:28px;background:var(--white);border:1px solid var(--line);border-radius:8px}
     .feature-index{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:10px;letter-spacing:.09em;font-weight:800;color:var(--blue)}
@@ -167,6 +179,32 @@
       .chapter-head,h2,h3,h4,figcaption,.small-label{break-after:avoid}.feature,.comparison,.timeline,.pipeline,.result,.secondary,.system-flow,.meta{break-inside:avoid}
       thead{display:table-header-group}tr{break-inside:avoid}p,li{orphans:2;widows:2}
     }
+    /* Case studies: diagram, cause, solution, results. */
+    .case-sheet .case-heading{margin-bottom:24px}
+    .case-sheet .case-heading h2{font-size:27px;margin:0;line-height:1.5}
+    .case-figure{margin:0 0 28px}
+    .case-sheet h3{font-size:16px;color:var(--blue);margin:0 0 12px}
+    .case-figure>a{display:block;border:1px solid var(--line);border-radius:8px;background:#fff;padding:18px;cursor:zoom-in}
+    .case-figure img{display:block;width:100%;height:auto}
+    .case-figure figcaption{display:flex;justify-content:space-between;gap:20px;margin:9px 0 0;font-size:11px;font-weight:400;letter-spacing:0;line-height:1.7}
+    .case-figure figcaption span{flex-shrink:0;color:var(--blue)}
+    .case-notes{margin-top:23px}
+    .case-notes ul{margin:0;padding-left:23px}
+    .case-notes li{padding-left:4px;margin-bottom:8px;font-size:14px;line-height:1.85;color:#405167}
+    .case-notes li:last-child{margin-bottom:0}
+    .case-notes li::marker{color:#8598b1}
+    .case-notes strong{color:var(--ink)}
+    .case-notes code{font-family:Consolas,monospace;font-size:.95em}
+    @media(max-width:600px){.case-sheet .case-heading h2{font-size:23px}.case-sheet .case-heading{margin-bottom:20px}.case-figure>a{padding:6px}.case-figure figcaption{display:block}.case-figure figcaption span{display:block;margin-top:5px}.case-notes li{font-size:13px}.case-notes{margin-top:22px}}
+    @media print{.case-sheet .case-heading{margin-bottom:3mm}.case-sheet .case-heading h2{font-size:15pt}.case-sheet h3{font-size:10pt;margin-bottom:2mm}.case-figure{margin-bottom:3mm;break-inside:avoid}.case-figure>a{padding:2mm}.case-figure img{max-height:72mm;object-fit:contain}.case-figure figcaption{font-size:8pt;margin-top:1mm}.case-figure figcaption span{display:none}.case-notes{margin-top:3mm}.case-notes ul{padding-left:5mm}.case-notes li{font-size:9.5pt;line-height:1.55;margin-bottom:1.5mm;break-inside:avoid}.case-heading{break-after:avoid}}
+
+    /* Print chapters continuously; keep headings and diagrams together. */
+    @media print {
+      #backend, .case { break-before: auto; }
+      .case, .case + .case { padding: 6mm 0; }
+      .case-notes li { break-inside: auto; }
+      .system-architecture figcaption, .case-figure figcaption { break-after: auto; }
+    }
   </style>
 </head>
 <body id="top">
@@ -175,6 +213,7 @@
     <nav class="nav-inner" aria-label="포트폴리오 탐색">
       <a class="brand" href="#top">이현재<span>BACKEND DEVELOPER</span></a>
       <div class="nav-links">
+        <a href="#overview">아키텍처</a>
         <a href="#backend">처리 구조</a>
         <a href="#event-lifetime">문제 해결</a>
         <button class="print-button" type="button" onclick="window.print()">PDF / 인쇄</button>
@@ -201,8 +240,19 @@
   <main>
     <section class="chapter" id="overview" aria-labelledby="overview-title">
       <div class="chapter-head">
-        <div><p class="chapter-number">01</p><p class="chapter-label">프로젝트 개요</p></div>
-        <div><h2 id="overview-title">시스템 구성과 담당 업무</h2><p class="section-lead">열화상 온도와 가스 센서 값을 분석해 이상 징후를 감지하는 시스템입니다. 관제 담당자는 공간별 감지 상태와 발생 이력을 확인할 수 있으며, 설정에 따라 알람과 외부 장비를 연동합니다.</p></div>
+        <div><p class="chapter-number">01</p><p class="chapter-label">시스템 아키텍처</p></div>
+        <div><h2 id="overview-title">현장 데이터 수집부터 화재 징후 관제까지</h2><p class="section-lead">현장 카메라와 가스 센서의 데이터를 <strong>Python 관리 서버</strong>에서 통합하고, 별도 예측 서버의 화재 전조 등급을 관제 화면에 전달합니다. 영상은 HLS로 제공하고, 상태 조회와 실시간 알림은 REST API·WebSocket으로 처리합니다.</p></div>
+      </div>
+      <figure class="system-architecture">
+        <a href="../../assets/thermal-safety-architecture.png" target="_blank" rel="noopener" aria-label="시스템 아키텍처 그림 크게 보기 (새 탭)">
+          <img src="../../assets/thermal-safety-architecture.png" width="1038" height="669" alt="현장 장비의 RTSP 영상은 HLS 서버를 거쳐 React Electron 관제 클라이언트로 전달됩니다. FastAPI 관리 서버는 핵심 서비스, 메모리 캐시, 비동기 DB 워커와 SQLAlchemy로 상태와 이력을 관리하며 PostgreSQL과 로컬 파일에 저장합니다. 별도 FastAPI 예측 서버는 센서·주차 데이터를 분석하고 XGBoost 화재 전조 등급을 관리 서버에 반환합니다." fetchpriority="high">
+        </a>
+        <figcaption><span>관제 클라이언트 · Python 관리 서버 · 예측 서버 · 현장 장비의 연동 구조</span><span>그림을 선택하면 크게 볼 수 있습니다 ↗</span></figcaption>
+      </figure>
+      <div class="architecture-notes">
+        <article><span class="small-label">수집 · 관제</span><h3>영상과 상태 정보 전달</h3><p>AI 카메라·열화상 카메라·가스 센서를 연동합니다. React Electron 클라이언트는 HLS 영상을 재생하고, REST API 요청과 WebSocket 알림으로 현장 상태를 확인합니다.</p></article>
+        <article><span class="small-label">관리 · 저장</span><h3>실시간 상태와 이벤트 이력 관리</h3><p>FastAPI 핵심 서비스와 메모리 캐시가 카메라·센서·공간·ROI 상태를 관리합니다. 센서·감지·주차 이벤트는 asyncio.Queue와 DB 워커를 거쳐 PostgreSQL에 저장하고, 스냅샷·녹화·로그는 로컬 파일로 관리합니다.</p></article>
+        <article><span class="small-label">분석 · 예측</span><h3>화재 전조 등급 연동</h3><p>별도 FastAPI 서버가 센서·주차 데이터를 받아 baseline과 모델로 분석합니다. XGBoost 기반 화재 전조 등급은 관리 서버의 예측 이벤트 API로 전달됩니다.</p></article>
       </div>
       <div class="role"><p><strong>담당 업무</strong> — 카메라·센서 연동, 감지 이벤트 저장·상태 관리, WebSocket 스트리밍과 외부 장비 연동을 담당했습니다. C++ 수집·분석 서버의 구조 개선과 Python 기반 다중 카메라 처리 구조 설계에도 참여했습니다.</p></div>
       <ol class="system-flow" aria-label="수집부터 관제까지 데이터 흐름">
@@ -248,126 +298,120 @@
       </div>
       <h2 class="case-index-title">주요 개선 사례</h2>
       <div class="case-index" aria-label="문제 해결 사례 바로가기">
-        <a href="#event-lifetime"><small>사례 01</small><strong>온도 이상 감지 이력의 조기 종료 수정 ↗</strong><p>이상 판정은 47초간 유지됐지만 DB에는 11초로 기록된 문제</p></a>
+        <a href="#event-lifetime"><small>사례 01</small><strong>AI가 생성한 주차 감지 코드의 병목 발견 및 개선 &#8599;</strong><p>지속적인 프레임 폐기 발견 &#8594; 별도 작업 풀</p></a>
         <a href="#migration"><small>사례 02</small><strong>Python 다중 카메라 동시 처리 설계 ↗</strong><p>코루틴과 스레드 풀로 수신·분석 작업을 분리</p></a>
         <a href="#reconnect"><small>사례 03</small><strong>카메라 재연결 중 다른 API까지 지연 ↗</strong><p>SDK 연결 대기를 글로벌 락 밖으로 이동</p></a>
       </div>
     </section>
 
-    <section class="chapter case" id="event-lifetime" aria-labelledby="event-title">
-      <div class="chapter-head">
-        <div><p class="chapter-number">사례 01</p><p class="chapter-label">온도 이상 감지 이력</p></div>
-        <div><h2 id="event-title">차량 온도 이상 감지 중 DB 이벤트 조기 종료</h2><p class="section-lead">열화상 분석에서 온도 이상 판정이 유지되는데 감지 이력이 먼저 종료되는 오류를 수정했습니다. 화면 전송을 생략해도 진행 중인 온도 이상 이벤트는 유지하도록 처리 순서를 바꿨습니다.</p><div class="tags"><span class="tag">감지 상태·DB 이력 일치</span><span class="tag">상태 갱신 순서 수정</span><span class="tag">회귀 테스트</span></div></div>
-      </div>
-      <div class="case-body">
-        <div class="case-block">
-          <span class="small-label">문제</span><h3>47초간 이어진 온도 이상 판정이 DB에는 11초로 기록</h3>
-          <p>이 시스템은 열화상 카메라로 주차 차량의 온도 이상을 감시합니다. 서버가 관심 영역(ROI)의 온도를 분석해 이상으로 판정하면, 해당 공간의 감지 이력을 DB 이벤트로 생성하고 시작·종료 시각을 기록합니다.</p>
-          <p>장치 동작과 서버 로그를 대조하니 <strong>온도 이상 판정은 13:36:17부터 13:37:04까지 유지됐지만, DB 이벤트는 13:36:28에 종료</strong>돼 있었습니다. 진행 중인 이상 상태가 기록상 이미 끝난 것으로 처리되는 문제였습니다.</p>
-          <div class="timeline" aria-label="수정 전 온도 이상 판정과 DB 감지 이력의 불일치">
-            <div><time>13:36:17</time><p>온도 이상 판정 시작<br><strong>DB 이벤트 생성</strong></p></div>
-            <div class="issue"><time>13:36:28</time><p>온도 이상 판정 유지<br><strong>DB 이벤트만 종료</strong></p></div>
-            <div><time>13:37:01</time><p>서버 로그에서도<br><strong>온도 이상 판정 유지</strong></p></div>
-            <div><time>13:37:04</time><p>감지 로직에서<br><strong>온도 이상 판정 해제</strong></p></div>
-          </div>
-        </div>
-        <div class="case-block">
-          <span class="small-label">원인과 수정</span><h3>화면 전송을 생략하면서 감지 상태 갱신까지 건너뜀</h3>
-          <p>온도 이상 판정을 유지·해제하는 조건과 화면용 스트리밍의 온도 기준은 서로 달랐습니다. 따라서 현재 온도가 화면 전송 기준보다 낮아도 온도 이상 판정은 유지될 수 있었습니다.</p>
-          <p>그런데 화면 전송을 건너뛰는 분기가 마지막 감지 시각 갱신보다 앞에 있었습니다. 전송을 생략한 프레임은 상태 갱신도 빠졌고, 종료 모니터는 이를 감지 입력이 끊긴 것으로 판단해 DB 이벤트를 닫았습니다.</p>
-          <p>주차 조건을 통과한 온도 이상 감지 결과는 <strong>마지막 감지 시각부터 갱신</strong>하도록 순서를 바꿨습니다. 이후 온도 단계와 화면 전송 여부를 판단해, 전송을 생략해도 같은 DB 이벤트를 진행 상태로 유지하도록 했습니다.</p>
-          <div class="comparison">
-            <figure><figcaption>변경 전</figcaption><ol><li>주차 조건 확인</li><li>화면 전송 기준 미만이면 처리 중단</li><li>마지막 감지 시각 갱신</li></ol><p>상태 갱신 누락 → 타임아웃 → DB 이벤트 조기 종료</p></figure>
-            <figure class="after"><figcaption>변경 후</figcaption><ol><li>주차 조건 확인</li><li class="accent">마지막 감지 시각 갱신</li><li>온도 단계·화면 전송 여부 판단</li></ol><p>온도 이상 판정이 이어지는 동안 같은 DB 이벤트 유지</p></figure>
-          </div>
-          <p>저는 “온도 이상 판정이 유지되는 동안 같은 DB 이벤트가 열려 있어야 한다”는 요구사항을 명시했습니다. AI 에이전트에 원인 분석·코드 수정·회귀 테스트 작성을 맡기고, 수정된 코드 흐름과 테스트 결과를 검토했습니다.</p>
-        </div>
-        <div class="case-block">
-          <span class="small-label">검증과 결과</span><h3>화면 전송이 없어도 진행 중인 감지 이력을 유지</h3>
-          <div class="table-wrap"><table><caption>회귀 테스트 · 감지 결과와 시간을 제어하고 메모리 DB의 이벤트 상태 확인</caption><thead><tr><th scope="col">입력 조건</th><th scope="col">확인한 동작</th></tr></thead><tbody>
-            <tr><td>화면 전송 기준 미만의 온도에서 이상 판정 유지</td><td>화면 전송 없이도 마지막 감지 시각을 갱신하고, 같은 DB 이벤트를 진행 상태로 유지</td></tr>
-            <tr><td>활성 감지 결과가 없어지거나 카메라 프레임 수신 중단</td><td>마지막 감지 시각 갱신이 멈추면 기존 타임아웃에 따라 DB 이벤트 종료</td></tr>
-            <tr><td>주차가 확인되지 않거나 해당 주차 상태에서 시작된 이벤트가 아님</td><td>이벤트 유지 대상에서 제외하고, 갱신이 끊긴 기존 이벤트는 타임아웃으로 종료</td></tr>
-          </tbody></table></div>
-          <div class="result"><span>실제 장비에서 확인</span><div>수정 후 실제 열화상 카메라를 연결해 <strong>온도 이상 판정이 유지되는 동안 DB 이벤트도 진행 상태로 유지</strong>되는 것을 확인했습니다. 판정이 끝나기 전에 감지 이력이 종료되던 오류를 수정했습니다.</div></div>
-        </div>
-      </div>
+    <section class="chapter case case-sheet" id="event-lifetime" aria-labelledby="event-title">
+      <header class="case-heading"><p class="chapter-number">사례 01</p><h2 id="event-title">AI가 생성한 주차 감지 코드의 병목 발견 및 개선</h2></header>
+      <figure class="case-figure">
+        <h3>처리 구조</h3>
+        <a href="../../assets/thermal-safety/case-01-parking-user.png" target="_blank" rel="noopener" aria-label="사례 01 구조 그림 크게 보기 (새 탭)"><img src="../../assets/thermal-safety/case-01-parking-user.png" width="767" height="550" alt="변경 전에는 주차 이벤트 처리를 동기로 기다린 뒤 온도를 분석합니다. 변경 후에는 온도를 우선 분석하고 주차 분석 대기 프레임을 별도 작업 풀에서 처리합니다." loading="lazy"></a>
+        <figcaption>온도 분석을 먼저 수행하고, 주차 계산은 카메라별 대기 공간과 별도 작업 풀로 분리<span>그림을 선택하면 크게 볼 수 있습니다 ↗</span></figcaption>
+      </figure>
+
+      <div class="case-notes case-problem"><h3>문제·원인</h3><ul>
+
+        <li>AI가 작성한 주차 감지 기능을 적용한 뒤, 서버 로그에서 <strong>열화상 프레임이 지속적으로 폐기되는 현상</strong>을 발견했습니다.</li>
+
+        <li>온도 처리 누락이 이벤트 유지에 영향을 줄 수 있다고 예상했고, 실제 장비에서 <strong>이상온도가 유지돼도 이벤트가 조기 종료되는 문제</strong>를 재현했습니다.</li>
+
+        <li>소스 추적 결과, 주차 계산이 열화상 처리 경로에서 동기적으로 실행돼 <strong>온도 분석과 이벤트 유지 시각 갱신을 지연</strong>시키고 있었습니다.</li>
+
+      </ul></div>
+
+      <div class="case-notes case-solution"><h3>해결 과정</h3><ul>
+
+        <li>열화상 처리 경로에서 온도 분석을 먼저 수행하도록 순서를 조정했습니다.</li>
+
+        <li>주차 계산 완료를 기다리던 동기 호출을 제거하고, <strong>주차 감지 전용 작업 풀</strong>에서 비동기로 실행하도록 분리했습니다.</li>
+
+        <li>카메라별로 주차 분석 대기 프레임을 최대 1개만 유지하고, 처리가 밀릴 때는 기존 프레임을 최신 입력으로 교체해 오래된 프레임이 누적되지 않도록 했습니다.</li>
+
+        <li>장비 테스트로 증상을 재현한 뒤 변경 전후 코드를 비교해, 동기 호출 제거와 별도 작업 풀로의 실행 경로 분리를 확인했습니다.</li>
+
+      </ul></div>
+
+      <div class="case-notes case-result"><h3>결과</h3><ul>
+
+        <li>프레임 폐기 로그를 이벤트 유지 문제와 연결해 추적하고, <strong>실제 장비 테스트로 조기 종료 현상과 병목을 확인</strong>했습니다.</li>
+
+        <li><strong>온도 분석이 주차 계산 완료를 기다리던 구조를 제거</strong>하고, 별도 작업 풀로 분리된 것을 코드 비교로 확인했습니다.</li>
+
+        <li>카메라별 대기 프레임을 최신 입력으로 교체해, 주차 처리 지연 시 오래된 입력이 누적되지 않도록 구성했습니다.</li>
+
+      </ul></div>
+
     </section>
 
-    <section class="chapter case" id="migration" aria-labelledby="migration-title">
-      <div class="chapter-head">
-        <div><p class="chapter-number">사례 02</p><p class="chapter-label">동시성과 병렬 처리</p></div>
-        <div><h2 id="migration-title">Python 기반 다중 카메라 동시 처리 구조 설계</h2><p class="section-lead">카메라별 수신·분석 순서는 코루틴으로 관리하고, SDK 호출과 온도 분석은 별도 스레드 풀에서 실행했습니다. 여러 카메라를 함께 처리하면서 각 카메라의 분석 순서와 대기열 크기를 제어했습니다.</p><div class="tags"><span class="tag">asyncio · 코루틴</span><span class="tag">ThreadPoolExecutor</span><span class="tag">카메라별 순차 처리</span><span class="tag">최신 프레임 큐</span></div></div>
-      </div>
-      <div class="case-body">
-        <div class="case-block">
-          <span class="small-label">설계 과제</span><h3>장치 응답 대기와 온도 분석을 함께 처리하는 실행 구조</h3>
-          <p>C++의 카메라 수집·분석 기능을 Python 관리 서버와 통합했습니다. SDK 응답 대기와 온도 계산이 이벤트 루프를 오래 점유하면 다른 카메라의 처리도 지연될 수 있어, 작업별 실행 방식을 나눌 필요가 있었습니다.</p>
-          <p>저는 다중 카메라 지원, 공유 상태 보호와 작업 충돌 방지를 요구사항으로 제시했습니다. 가스 센서의 연결·파싱·재연결도 통합 범위에 포함했습니다.</p>
-          <div class="architecture" aria-label="서버 통합 전후 역할 분담">
-            <div><span class="arch-label">기존 구성</span><p>장치 SDK → <b>C++ 수집·분석 서버</b> → Python 상태 관리·저장 → 관제 화면</p></div>
-            <div><span class="arch-label">통합 구성</span><p>장치 SDK → C++ DLL·공유메모리 → <b>Python 수신·분석·상태 관리</b> → DB 저장·관제 화면</p></div>
-          </div>
-        </div>
-        <div class="case-block">
-          <span class="small-label">핵심 설계</span><h3>카메라 간에는 동시 처리, 같은 카메라 안에서는 순서 보장</h3>
-          <div class="pipeline" aria-label="동시 처리와 실행 자원·처리 순서 제어">
-            <div><small>동시성 · 코루틴</small><strong>카메라별 수신·분석 순서 관리</strong><p>카메라마다 독립적인 asyncio 태스크를 두고, 입력이나 분석 완료를 기다리는 동안 다른 카메라의 작업을 진행합니다.</p></div>
-            <div><small>병렬 작업 · 스레드 풀</small><strong>SDK 대기와 분석 자원 분리</strong><p>SDK 제어, 카메라별 프레임 수신, ROI 분석에 별도 스레드 풀을 사용해 장치 응답 대기가 분석 워커를 점유하지 않도록 했습니다.</p></div>
-            <div><small>순서 제어 · 프레임 큐</small><strong>같은 카메라는 순서대로 분석</strong><p>앞선 분석이 끝난 뒤 다음 프레임을 처리합니다. 대기 큐에는 최신 프레임 1개만 보관해 오래된 입력이 쌓이지 않도록 했습니다.</p></div>
-          </div>
-          <p>여러 카메라의 ROI 분석은 제한된 워커 스레드에 분산하고, 온도 계산은 NumPy 배열 연산으로 처리했습니다. 감지 상태는 카메라별 락으로 보호했습니다. 입력이 분석보다 빠르면 중간 프레임을 일부 생략해 대기열에 오래된 영상이 쌓이는 것을 막았습니다.</p>
-          <p>가스 센서도 통신 스레드에서 받은 데이터를 비동기 큐로 전달해, 같은 서버의 상태 관리·화면 전송 흐름에 연결했습니다.</p>
-        </div>
-        <div class="case-block">
-          <span class="small-label">구현 결과와 검증</span><h3>장치 대기와 분석을 분리한 Python 처리 구조 구현</h3>
-          <p>단일 실제 카메라의 온도값 수신과 가스 라우터 테스트를 확인했습니다. 별도 부하 시험에는 카메라 1대의 프레임을 40개 논리 채널로 복제해 입력했습니다. 여러 실제 카메라의 동시 연결과 관제 화면을 포함한 통합 검증은 추가로 필요합니다.</p>
-          <div class="result"><span>구현 결과</span><div>SDK 응답을 기다리는 작업이 분석 워커를 점유하지 않고, <strong>각 카메라의 감지 상태는 프레임 순서대로 갱신</strong>되도록 구성했습니다.</div></div>
-        </div>
-      </div>
+    <section class="chapter case case-sheet" id="migration" aria-labelledby="migration-title">
+      <header class="case-heading"><p class="chapter-number">사례 02</p><h2 id="migration-title">Python 기반 다중 카메라 동시 처리 구조 설계</h2></header>
+      <figure class="case-figure">
+        <h3>처리 구조</h3>
+        <a href="../../assets/thermal-safety/case-02-camera-user.png" target="_blank" rel="noopener" aria-label="사례 02 구조 그림 크게 보기 (새 탭)"><img src="../../assets/thermal-safety/case-02-camera-user.png" width="1035" height="432" alt="열화상 카메라의 독립적인 비동기 태스크가 수신 풀을 통해 카메라별 프레임 큐에 입력하고, 프레임을 한 장씩 처리해 카메라별 락으로 감지 상태를 갱신한 뒤 서버 상태 관리와 관제 화면에 전달하는 구조" loading="lazy"></a>
+        <figcaption>Python 관리 서버의 카메라 수신·분석·상태 갱신 흐름<span>그림을 선택하면 크게 볼 수 있습니다 ↗</span></figcaption>
+      </figure>
+
+      <div class="case-notes case-problem"><h3>문제·원인</h3><ul>
+
+        <li>C++의 카메라 수집·분석 기능을 Python 관리 서버로 통합하면서, <strong>여러 카메라를 동시에 처리할 실행 구조</strong>가 필요했습니다.</li>
+
+        <li>동기 SDK 호출이나 온도 계산을 이벤트 루프에서 직접 실행하면, 해당 작업이 끝날 때까지 다른 카메라의 처리도 지연될 수 있었습니다.</li>
+
+        <li>동시 처리 과정에서 같은 카메라의 상태 갱신이 충돌하거나, 분석 속도보다 빠른 입력이 대기열에 누적되는 상황도 고려해야 했습니다.</li>
+
+      </ul></div>
+
+      <div class="case-notes case-solution"><h3>해결 과정</h3><ul>
+
+        <li>카메라마다 <strong>독립적인 asyncio 태스크</strong>를 두어 수신·분석 순서를 관리하고, 대기 중에는 다른 카메라의 작업이 진행되도록 구성했습니다.</li>
+
+        <li><strong>SDK 제어·프레임 수신·ROI 분석을 각각 별도 스레드 풀에 위임</strong>했습니다. ROI 계산에는 제한된 수의 워커와 NumPy 배열 연산을 사용했습니다.</li>
+
+        <li>카메라별 대기 큐는 <strong>최신 프레임 1개</strong>만 유지하고, 앞선 분석이 끝난 뒤 다음 프레임을 꺼내 처리하도록 했습니다.</li>
+
+        <li>감지 상태를 변경하는 구간에는 카메라별 락을 적용해, 동일 카메라의 공유 상태에 대한 동시 접근을 제어했습니다.</li>
+
+      </ul></div>
+
+      <div class="case-notes case-result"><h3>결과</h3><ul>
+
+        <li>통합한 Python 서버에서 <strong>실제 카메라 1대의 온도값 수신과 가스 라우터 연동</strong>을 테스트했습니다.</li>
+
+        <li>동일 카메라의 프레임을 <strong>40개 논리 채널로 복제</strong>해 입력하는 부하 시험을 진행했습니다.</li>
+
+        <li>검증 범위는 단일 실장치와 복제 입력까지이며, 여러 실제 카메라의 동시 연결 및 관제 화면을 포함한 통합 검증은 추가로 필요합니다.</li>
+
+      </ul></div>
+
     </section>
 
-    <section class="chapter case" id="reconnect" aria-labelledby="reconnect-title">
-      <div class="chapter-head">
-        <div><p class="chapter-number">사례 03</p><p class="chapter-label">공유 자원과 동시성 제어</p></div>
-        <div><h2 id="reconnect-title">카메라 재연결 중 다른 카메라 API까지 지연된 문제</h2><p class="section-lead">기존 C++ 수집 서버에서 동기 SDK 연결을 기다리는 동안 글로벌 락을 유지하던 구간을 변경했습니다. 공유 상태를 보호하는 구간과 외부 장치의 응답을 기다리는 구간을 분리했습니다.</p><div class="tags"><span class="tag">C++ · Mutex</span><span class="tag">글로벌 락 범위 축소</span><span class="tag">재연결 작업의 시작·종료 관리</span></div></div>
-      </div>
-      <div class="case-body">
-        <div class="case-block">
-          <span class="small-label">발생 조건과 증상</span><h3>한 카메라의 연결 대기가 다른 카메라 제어에도 영향</h3>
-          <p>응답이 늦은 카메라에 재연결을 시도할 때 다른 카메라 API까지 지연되는 문제가 있었습니다. 저는 <strong>카메라 재연결을 직접 실행하고 서버 로그를 확인하면서</strong> 문제를 파악했습니다.</p>
-        </div>
-        <div class="case-block">
-          <span class="small-label">원인</span><h3>외부 SDK의 응답을 기다리는 동안 글로벌 락을 계속 점유</h3>
-          <p>기존 최초 연결과 자동 재연결 경로는 여러 카메라의 장치 정보를 보호하는 글로벌 락을 잡은 상태에서 동기 SDK 연결을 호출했습니다. 연결 호출이 반환될 때까지 락이 해제되지 않아, 같은 락이 필요한 다른 카메라의 제어 요청과 연결 상태 콜백도 대기할 수 있었습니다.</p>
-          <p>문제의 핵심은 <strong>공유 상태를 변경하는 데 필요한 보호 구간이 장치의 응답 대기까지 포함</strong>하고 있었다는 점입니다.</p>
-        </div>
-        <div class="case-block">
-          <span class="small-label">락 범위 변경</span><h3>공유 상태를 준비한 뒤 락을 해제하고 연결 응답 대기</h3>
-          <p>최초 연결에서는 공유 상태 준비를 마친 뒤 락을 명시적으로 해제하고 SDK 연결을 호출하도록 변경했습니다. 자동 재연결에서는 접속 정보를 락 안에서 값으로 복사하고, 장치 정보 갱신과 연결 대기의 락 범위를 나눴습니다.</p>
-          <div class="comparison" aria-label="SDK 연결 대기와 글로벌 락의 변경 전후 처리 순서">
-            <figure><figcaption>변경 전</figcaption><ol><li>글로벌 락 획득</li><li>공유 상태·장치 정보 준비</li><li>SDK 연결 응답 대기</li><li>글로벌 락 해제</li></ol><p>장치 응답 대기까지 공유 락을 점유</p></figure>
-            <figure class="after"><figcaption>변경 후</figcaption><ol><li>글로벌 락 획득</li><li>공유 상태 준비·접속 정보 복사</li><li class="accent">글로벌 락 해제</li><li>SDK 연결 응답 대기</li></ol><p>동기 연결 대기를 공유 상태 보호 구간에서 분리</p></figure>
-          </div>
-          <p>SDK 연결 호출 자체는 동기 방식으로 유지했습니다. 이 변경의 범위는 <strong>연결을 기다리는 동안 글로벌 락을 점유하지 않도록 하는 것</strong>입니다.</p>
-        </div>
-        <div class="case-block">
-          <span class="small-label">재연결 작업의 시작·종료 관리</span><h3>새 연결·삭제 요청과 이전 재시도 작업의 충돌 제어</h3>
-          <p>새 연결이나 장치 삭제·연결 해제 시 이전 재시도 루프에 취소 신호를 전달하고, 루프가 신호를 확인하면 종료하도록 구성했습니다. 연결 실패 처리와 콜백이 같은 장치의 재연결을 중복으로 시작하지 않도록 상태 전이도 제어했습니다.</p>
-          <p>접속 정보는 공유 컨테이너의 항목을 계속 참조하지 않고 값으로 복사해 사용합니다. 취소 신호는 <strong>재시도 루프의 후속 작업을 중단</strong>하기 위한 것으로, 이미 실행 중인 SDK 연결 호출을 즉시 취소하는 기능은 아닙니다.</p>
-        </div>
-        <div class="case-block">
-          <span class="small-label">구현 결과와 확인 범위</span><h3>Git 변경 전후에서 연결 대기가 락 밖으로 이동한 것을 확인</h3>
-          <p>2026년 3월 11일 커밋 <span class="inline-code">c13ca89</span>와 직전 코드를 비교해, 최초 연결과 자동 재연결 모두에서 동기 SDK 연결 호출이 글로벌 락 밖으로 이동한 것을 확인했습니다.</p>
-          <div class="result"><span>코드에서 확인</span><div>공유 상태를 준비·갱신하는 구간은 락으로 보호하면서, <strong>외부 SDK의 연결 응답 대기는 글로벌 락 밖에서 수행</strong>하도록 변경했습니다.</div></div>
-          <div class="table-wrap"><table><caption>구현 근거와 실제 동작 검증의 범위</caption><thead><tr><th scope="col">확인 항목</th><th scope="col">근거와 범위</th></tr></thead><tbody>
-            <tr><td>문제 파악</td><td>본인이 카메라 재연결을 직접 실행하고 서버 로그를 점검</td></tr>
-            <tr><td>락 범위 변경</td><td>Git 변경 전후에서 최초 연결·자동 재연결 경로의 호출 위치 확인</td></tr>
-            <tr><td>수정 후 동작·운영 검증</td><td>[확인 필요] API 응답시간 비교, 수정 버전의 실장치 검증 및 현장 배포 여부</td></tr>
-            <tr><td>설계·구현 기여</td><td>[확인 필요] 최초 제안·구현 주체와 당시 AI 활용 범위</td></tr>
-          </tbody></table></div>
-        </div>
-      </div>
+    <section class="chapter case case-sheet" id="reconnect" aria-labelledby="reconnect-title">
+      <header class="case-heading"><p class="chapter-number">사례 03</p><h2 id="reconnect-title">카메라 재연결 중 다른 카메라 API까지 지연된 문제</h2></header>
+      <figure class="case-figure">
+        <h3>처리 구조</h3>
+        <a href="../../assets/thermal-safety/case-03-reconnect-lock.svg" target="_blank" rel="noopener" aria-label="사례 03 구조 그림 크게 보기 (새 탭)"><img src="../../assets/thermal-safety/case-03-reconnect-lock.svg" width="1100" height="485" alt="SDK 연결을 기다린 뒤 락을 해제하던 구조에서 공유 상태 준비 직후 락을 해제하고 SDK를 호출하는 구조로 변경" loading="lazy"></a>
+        <figcaption>최초 연결과 자동 재연결에서 SDK 응답 대기를 글로벌 락 밖으로 이동<span>그림을 선택하면 크게 볼 수 있습니다 ↗</span></figcaption>
+      </figure>
+
+      <div class="case-notes case-problem"><h3>문제·원인</h3><ul>
+        <li>응답이 느린 카메라에 재연결을 시도할 때 다른 카메라의 제어 API까지 지연되는 현상을 확인했습니다.</li>
+        <li>직접 재연결을 시도한 뒤 서버 로그와 코드를 확인했습니다. 최초 연결과 자동 재연결 모두 <strong>글로벌 락을 잡은 채 동기 SDK를 호출</strong>하고 있었습니다.</li>
+        <li>한 카메라의 연결 응답을 기다리는 동안 락이 유지돼, 같은 락이 필요한 다른 카메라의 제어 요청과 연결 상태 콜백도 대기할 수 있었습니다.</li>
+      </ul></div>
+
+      <div class="case-notes case-solution"><h3>해결 과정</h3><ul>
+        <li>최초 연결에서는 공유 상태 준비를 마치면 락을 해제하고 SDK를 호출하도록 변경했습니다.</li>
+        <li>자동 재연결에서는 락 안에서 접속 정보를 복사하고 장치 상태를 갱신한 뒤, 복사한 정보로 락 밖에서 SDK를 호출하도록 변경했습니다.</li>
+        <li>새 연결·장치 삭제·연결 해제 시 기존 루프에 취소 신호를 보내 후속 재시도를 중단하도록 했습니다. 같은 장치에서 재연결 루프가 중복으로 시작되지 않도록 상태 전이도 제어했습니다.</li>
+      </ul></div>
+
+      <div class="case-notes case-result"><h3>결과</h3><ul>
+        <li>두 연결 경로 모두 공유 상태를 락으로 보호하면서, <strong>카메라 한 대의 응답 대기 시간이 다른 카메라의 글로벌 락 대기로 이어지는 원인을 제거</strong>했습니다.</li>
+      </ul></div>
+
     </section>
 
   </main>

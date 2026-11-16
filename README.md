@@ -12,6 +12,7 @@ GitHub Pages 배포용 정적 웹사이트입니다.
 - `/` : 웹 이력서
 - `/career/` : 경력기술서
 - `/portfolio/` : 포트폴리오 목록
+- `/portfolio/ai-development-workflow/` : AI 활용 개발 규칙·Agent Skill 설계와 수동 QA 문서 작성 자동화
 - `/portfolio/thermal-safety/` : 열화상·가스 안전관제 시스템
 - `/portfolio/city-signal/` : 도시 교통신호 최적화 시스템
 - `/portfolio/database-design/` : V2X · 도시 교통신호 최적화 시스템 데이터 구조와 저장 흐름 설계 (확대 가능한 구조도·A4 PDF 포함)

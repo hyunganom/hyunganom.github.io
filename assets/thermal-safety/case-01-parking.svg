@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470" role="img" aria-labelledby="title desc">
+<title id="title">주차 감지 병목 개선 전후</title><desc id="desc">변경 전에는 주차 계산 완료를 기다린 뒤 온도를 분석합니다. 변경 후에는 온도를 먼저 분석하고 주차 프레임은 카메라별 대기 공간을 거쳐 별도 작업 풀로 전달합니다.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="#63758c"/></marker></defs>
+<style>text{font-family:'Malgun Gothic','Noto Sans KR',sans-serif;fill:#20344e}.heading{font-size:18px;font-weight:700}.label{font-size:16px;font-weight:700}.detail{font-size:13px;fill:#526780}.blue{fill:#245ddb}.green{fill:#087f78}.red{fill:#a04431}</style>
+<rect width="1100" height="470" fill="#fff"/>
+<text x="35" y="35" class="heading red" text-anchor="start">변경 전 · 주차 계산 완료까지 열화상 처리 경로 대기</text>
+<rect x="35" y="60" width="215" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="142.5" y="92.0" class="label" text-anchor="middle">열화상 프레임</text>
+<text x="142.5" y="115.0" class="detail" text-anchor="middle">카메라 입력</text>
+<rect x="390" y="60" width="265" height="70" rx="9" fill="#fff0eb" stroke="#e7b6a9" stroke-width="1.5"/>
+<text x="522.5" y="92.0" class="label" text-anchor="middle">주차 계산 · 동기 호출</text>
+<text x="522.5" y="115.0" class="detail" text-anchor="middle">계산이 끝날 때까지 대기</text>
+<rect x="805" y="60" width="260" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="935.0" y="92.0" class="label" text-anchor="middle">온도 분석 · 이벤트 갱신</text>
+<text x="935.0" y="115.0" class="detail" text-anchor="middle">앞선 계산 지연의 영향</text>
+<path d="M250 95 H390" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M655 95 H805" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M35 165 H1065" stroke="#e2e8f0"/>
+<text x="35" y="205" class="heading green" text-anchor="start">변경 후 · 온도 분석 우선, 주차 계산은 별도 실행</text>
+<rect x="35" y="235" width="215" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="142.5" y="267.0" class="label" text-anchor="middle">열화상 프레임</text>
+<text x="142.5" y="290.0" class="detail" text-anchor="middle">카메라 입력</text>
+<rect x="390" y="235" width="265" height="70" rx="9" fill="#edf6ff" stroke="#9fbbec" stroke-width="1.5"/>
+<text x="522.5" y="267.0" class="label" text-anchor="middle">온도 분석 우선 수행</text>
+<text x="522.5" y="290.0" class="detail" text-anchor="middle">주차 계산 완료를 기다리지 않음</text>
+<rect x="805" y="235" width="260" height="70" rx="9" fill="#eaf6f3" stroke="#94c7bf" stroke-width="1.5"/>
+<text x="935.0" y="267.0" class="label" text-anchor="middle">감지 상태 · 이벤트 관리</text>
+<text x="935.0" y="290.0" class="detail" text-anchor="middle">온도 분석 결과 처리</text>
+<path d="M250 270 H390" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M655 270 H805" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<rect x="390" y="365" width="265" height="70" rx="9" fill="#f5f8fc" stroke="#c5d0df" stroke-width="1.5"/>
+<text x="522.5" y="397.0" class="label" text-anchor="middle">카메라별 대기 공간</text>
+<text x="522.5" y="420.0" class="detail" text-anchor="middle">대기 프레임을 최신 입력으로 교체</text>
+<rect x="805" y="365" width="260" height="70" rx="9" fill="#eaf6f3" stroke="#94c7bf" stroke-width="1.5"/>
+<text x="935.0" y="397.0" class="label" text-anchor="middle">주차 감지 전용 작업 풀</text>
+<text x="935.0" y="420.0" class="detail" text-anchor="middle">주차 계산 비동기 실행</text>
+<path d="M522 305 V365" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<path d="M655 400 H805" fill="none" stroke="#63758c" stroke-width="1.8" marker-end="url(#arrow)"/>
+<text x="540" y="341" class="detail" text-anchor="start">분석할 프레임 전달</text>
+</svg>

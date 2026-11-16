@@ -445,6 +445,15 @@ time {
 .resume-company-head p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
 .resume-period { flex-shrink: 0; color: var(--muted); font-size: 12px; white-space: nowrap; }
 .resume-project { margin-top: 22px; }
+.resume #career .resume-company-head h3 { font-size: 22px; }
+.resume #career .resume-project { margin-top: 28px; }
+.resume #career .resume-project-head {
+  padding: 10px 14px;
+  border-left: 3px solid #345579;
+  background: #f2f5f9;
+}
+.resume #career .resume-project-head h4 { font-size: 18px; font-weight: 750; }
+.resume #career .resume-project + .resume-project { padding-top: 22px; border-top: 1px solid var(--line); }
 .resume h4 { margin: 0; font-size: 16px; line-height: 1.6; }
 .resume h4 span { display: inline; margin-left: 8px; font-size: 13px; font-weight: 500; color: var(--muted); }
 .resume-project p { margin: 8px 0 0; }
@@ -479,6 +488,8 @@ time {
   .resume-contact { gap: 4px 14px; font-size: 12px; }
   .resume-company-head, .resume-project-head, .resume-other-head { flex-direction: column; gap: 3px; }
   .resume h4 span { display: block; margin-left: 0; }
+  .resume #career .resume-project-head { padding: 10px 12px; }
+  .resume #career .resume-project-head h4 { font-size: 17px; }
   .resume-skills > div, .resume-history > div { grid-template-columns: 1fr; gap: 0; padding: 7px 0; }
 }
 @media print {
@@ -499,11 +510,16 @@ time {
   .resume-company-head p { font-size: 9pt; }
   .resume-period { font-size: 8pt; }
   .resume-company-head, .resume-project-head, .resume-other-head { flex-direction: row; gap: 8px 12px; }
-  .resume-project { margin-top: 13px; break-inside: avoid; }
+  .resume-project { margin-top: 13px; break-inside: auto; }
   .resume h4 { font-size: 10.5pt; }
+  .resume #career .resume-company-head h3 { font-size: 13pt; }
+  .resume #career .resume-project { margin-top: 15px; }
+  .resume #career .resume-project-head { padding: 6px 9px; border-left-width: 2px; background: #f2f5f9; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .resume #career .resume-project-head h4 { font-size: 11.5pt; }
+  .resume #career .resume-project + .resume-project { padding-top: 12px; }
   .resume h4 span { display: inline; margin-left: 6px; font-size: 9pt; }
   .resume-project p { margin-top: 5px; }
-  .resume-case { margin-top: 9px; break-inside: avoid; }
+  .resume-case { margin-top: 9px; break-inside: auto; }
   .resume-case-list { margin-top: 4px; }
   .resume-case-list li + li { margin-top: 3px; }
   .resume-case-list li { orphans: 3; widows: 3; }
